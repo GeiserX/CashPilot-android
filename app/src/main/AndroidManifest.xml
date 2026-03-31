@@ -64,7 +64,11 @@
         <service
             android:name=".service.HeartbeatService"
             android:exported="false"
-            android:foregroundServiceType="specialUse" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Periodic heartbeat to CashPilot server reporting passive income app status" />
+        </service>
 
         <!-- Boot receiver — restart heartbeat after reboot -->
         <receiver
