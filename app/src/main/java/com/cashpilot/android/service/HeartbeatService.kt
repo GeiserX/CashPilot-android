@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.provider.Settings.Secure
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.cashpilot.android.R
@@ -86,7 +87,7 @@ class HeartbeatService : Service() {
             }
 
             val heartbeat = WorkerHeartbeat(
-                name = "${Build.MANUFACTURER} ${Build.MODEL}",
+                name = "${Build.MANUFACTURER} ${Build.MODEL} (${deviceId()})",
                 containers = containers,
                 systemInfo = SystemInfo(
                     os = "Android",
@@ -143,6 +144,10 @@ class HeartbeatService : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         manager.notify(NOTIFICATION_ID, buildNotification(text))
     }
+
+    /** Short unique device ID from ANDROID_ID (per app+device, no permissions needed). */
+    private fun deviceId(): String =
+        Secure.getString(contentResolver, Secure.ANDROID_ID)?.take(8) ?: "unknown"
 
     override fun onBind(intent: Intent?): IBinder? = null
 
