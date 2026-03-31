@@ -10,8 +10,10 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.cashpilot.android.R
-import com.cashpilot.android.model.Heartbeat
+import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.Settings
+import com.cashpilot.android.model.SystemInfo
+import com.cashpilot.android.model.WorkerHeartbeat
 import com.cashpilot.android.util.SettingsStore
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -19,8 +21,10 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +60,7 @@ class HeartbeatService : Service() {
         heartbeatJob = scope.launch {
             while (true) {
                 val settings = SettingsStore.settings(applicationContext).first()
-                if (settings.serverUrl.isNotBlank() && settings.joinToken.isNotBlank()) {
+                if (settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank()) {
                     sendHeartbeat(settings)
                 }
                 delay(settings.heartbeatIntervalSeconds * 1000L)
@@ -68,23 +72,45 @@ class HeartbeatService : Service() {
     private suspend fun sendHeartbeat(settings: Settings) {
         try {
             val apps = detector.detectAll(settings.enabledSlugs)
-            val heartbeat = Heartbeat(
-                hostname = Build.MODEL,
-                os = "Android",
-                arch = Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown",
-                osVersion = "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})",
-                apps = apps,
+
+            // Map app statuses to the server's container-like format
+            val containers = apps.map { app ->
+                AppContainer(
+                    name = app.slug,
+                    status = if (app.running) "running" else "stopped",
+                    labels = mapOf(
+                        "cashpilot.managed" to "true",
+                        "cashpilot.service" to app.slug,
+                    ),
+                )
+            }
+
+            val heartbeat = WorkerHeartbeat(
+                name = "${Build.MANUFACTURER} ${Build.MODEL}",
+                containers = containers,
+                systemInfo = SystemInfo(
+                    os = "Android",
+                    arch = Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown",
+                    osVersion = "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})",
+                    deviceType = "android",
+                    apps = apps,
+                ),
             )
 
-            val url = settings.serverUrl.trimEnd('/') + "/api/worker/heartbeat"
-            httpClient.post(url) {
+            val url = settings.serverUrl.trimEnd('/') + "/api/workers/heartbeat"
+            val response: HttpResponse = httpClient.post(url) {
                 contentType(ContentType.Application.Json)
-                bearerAuth(settings.joinToken)
+                bearerAuth(settings.apiKey)
                 setBody(heartbeat)
             }
 
-            val runningCount = apps.count { it.running }
-            updateNotification("$runningCount/${apps.size} apps running")
+            if (response.status.isSuccess()) {
+                val runningCount = apps.count { it.running }
+                updateNotification("$runningCount/${apps.size} apps running")
+            } else {
+                Log.w(TAG, "Heartbeat rejected: HTTP ${response.status.value}")
+                updateNotification("Server rejected heartbeat (${response.status.value})")
+            }
         } catch (e: Exception) {
             Log.w(TAG, "Heartbeat failed: ${e.message}")
             updateNotification("Heartbeat failed — retrying...")

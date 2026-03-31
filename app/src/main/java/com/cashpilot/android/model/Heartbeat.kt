@@ -3,15 +3,35 @@ package com.cashpilot.android.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/** Heartbeat payload sent to CashPilot master. Matches /api/worker/heartbeat schema. */
+/**
+ * Heartbeat payload sent to CashPilot server.
+ * Matches the WorkerHeartbeat schema at POST /api/workers/heartbeat.
+ */
 @Serializable
-data class Heartbeat(
+data class WorkerHeartbeat(
+    val name: String,
+    val url: String = "",
+    val containers: List<AppContainer> = emptyList(),
+    @SerialName("system_info") val systemInfo: SystemInfo = SystemInfo(),
+)
+
+/** Maps an Android app to the server's container-like representation. */
+@Serializable
+data class AppContainer(
+    val name: String,
+    val status: String,
+    val image: String = "",
+    /** Extra Android-specific fields packed here for forward compatibility. */
+    val labels: Map<String, String> = emptyMap(),
+)
+
+@Serializable
+data class SystemInfo(
+    val os: String = "",
+    val arch: String = "",
+    @SerialName("os_version") val osVersion: String = "",
     @SerialName("device_type") val deviceType: String = "android",
-    val hostname: String,
-    val os: String,
-    val arch: String,
-    @SerialName("os_version") val osVersion: String,
-    val apps: List<AppStatus>,
+    val apps: List<AppStatus> = emptyList(),
 )
 
 @Serializable

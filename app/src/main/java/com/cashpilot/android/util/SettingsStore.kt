@@ -17,7 +17,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 object SettingsStore {
     private val SERVER_URL = stringPreferencesKey("server_url")
-    private val JOIN_TOKEN = stringPreferencesKey("join_token")
+    private val API_KEY = stringPreferencesKey("api_key")
     private val HEARTBEAT_INTERVAL = intPreferencesKey("heartbeat_interval")
     private val ENABLED_SLUGS = stringSetPreferencesKey("enabled_slugs")
 
@@ -25,7 +25,7 @@ object SettingsStore {
         context.dataStore.data.map { prefs ->
             Settings(
                 serverUrl = prefs[SERVER_URL] ?: "",
-                joinToken = prefs[JOIN_TOKEN] ?: "",
+                apiKey = prefs[API_KEY] ?: "",
                 heartbeatIntervalSeconds = prefs[HEARTBEAT_INTERVAL] ?: 30,
                 enabledSlugs = prefs[ENABLED_SLUGS] ?: KnownApps.all.map { it.slug }.toSet(),
             )
@@ -35,13 +35,13 @@ object SettingsStore {
         context.dataStore.edit { prefs ->
             val current = Settings(
                 serverUrl = prefs[SERVER_URL] ?: "",
-                joinToken = prefs[JOIN_TOKEN] ?: "",
+                apiKey = prefs[API_KEY] ?: "",
                 heartbeatIntervalSeconds = prefs[HEARTBEAT_INTERVAL] ?: 30,
                 enabledSlugs = prefs[ENABLED_SLUGS] ?: KnownApps.all.map { it.slug }.toSet(),
             )
             val updated = transform(current)
             prefs[SERVER_URL] = updated.serverUrl
-            prefs[JOIN_TOKEN] = updated.joinToken
+            prefs[API_KEY] = updated.apiKey
             prefs[HEARTBEAT_INTERVAL] = updated.heartbeatIntervalSeconds
             prefs[ENABLED_SLUGS] = updated.enabledSlugs
         }

@@ -18,7 +18,7 @@ object KnownApps {
     val all = listOf(
         MonitoredApp("honeygain", "com.honeygain.app", "Honeygain"),
         MonitoredApp("earnapp", "com.bright.earnapp", "EarnApp"),
-        MonitoredApp("iproyal-pawns", "com.iproyal.pawns", "IPRoyal Pawns"),
+        MonitoredApp("iproyal", "com.iproyal.pawns", "IPRoyal Pawns"),
         MonitoredApp("mysterium", "network.mysterium.vpn", "Mysterium"),
         MonitoredApp("packetstream", "com.packetstream.android", "PacketStream"),
         MonitoredApp("traffmonetizer", "com.traffmonetizer.client", "Traffmonetizer"),
@@ -30,7 +30,7 @@ object KnownApps {
         MonitoredApp("gaganode", "com.gaga.gaganode", "GagaNode"),
         MonitoredApp("titan", "com.titan.network", "Titan Network"),
         MonitoredApp("nodle", "io.nodle.cash", "Nodle Cash"),
-        MonitoredApp("passive-app", "com.passiveincome.app", "PassiveApp"),
+        MonitoredApp("passiveapp", "com.passiveincome.app", "PassiveApp"),
         MonitoredApp("uprock", "com.uprock.android", "Uprock"),
         MonitoredApp("wipter", "com.wipter.app", "Wipter"),
     )

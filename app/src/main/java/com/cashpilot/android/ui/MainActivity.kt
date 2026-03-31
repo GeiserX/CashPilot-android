@@ -3,7 +3,6 @@ package com.cashpilot.android.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -58,15 +57,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    /** Opens system Notification Listener settings. */
-    fun openNotificationListenerSettings() {
-        startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-    }
-
-    /** Opens system Usage Access settings. */
-    fun openUsageAccessSettings() {
-        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
     }
 }

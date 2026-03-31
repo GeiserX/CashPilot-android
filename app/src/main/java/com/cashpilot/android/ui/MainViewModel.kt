@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.cashpilot.android.model.AppStatus
-import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.service.AppDetector
 import com.cashpilot.android.util.SettingsStore
@@ -42,11 +41,5 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (slug in new) new.remove(slug) else new.add(slug)
             s.copy(enabledSlugs = new)
         }
-    }
-
-    /** All known apps with installed status. */
-    fun installedApps(): List<Pair<KnownApps, Boolean>> {
-        // This is a simplified check; full implementation uses PackageManager
-        return emptyList()
     }
 }
