@@ -29,14 +29,14 @@ Honeygain, EarnApp, IPRoyal Pawns, Mysterium, PacketStream, Traffmonetizer, Repo
    - **Battery Optimization exemption** — prevents Android from killing the heartbeat service
 3. Open Settings in the app and enter:
    - Your CashPilot server URL (e.g., `https://cashpilot.example.com`)
-   - A join token from the CashPilot Fleet page
+   - Your fleet API key (`CASHPILOT_API_KEY` from the server's environment)
 
 ## Architecture
 
 ```
 CashPilot Server (fleet dashboard)
         ^
-        | HTTPS POST /api/worker/heartbeat
+        | HTTPS POST /api/workers/heartbeat (Bearer auth)
         |
 CashPilot Android
 ├── HeartbeatService (foreground, periodic POST)

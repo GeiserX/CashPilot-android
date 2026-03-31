@@ -1,5 +1,6 @@
 package com.cashpilot.android.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +16,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,7 +46,14 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("CashPilot") })
+            TopAppBar(
+                title = { Text("CashPilot") },
+                actions = {
+                    IconButton(onClick = onNavigateToSettings) {
+                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+                    }
+                },
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.refreshStatuses() }) {
@@ -57,10 +67,15 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                 .padding(padding)
                 .padding(16.dp),
         ) {
-            // Connection status
-            val connected = settings.serverUrl.isNotBlank() && settings.joinToken.isNotBlank()
+            // Connection status — clickable to navigate to settings when not configured
+            val connected = settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank()
             Card(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(
+                        if (!connected) Modifier.clickable { onNavigateToSettings() }
+                        else Modifier,
+                    ),
                 colors = CardDefaults.cardColors(
                     containerColor = if (connected)
                         MaterialTheme.colorScheme.primaryContainer
@@ -86,7 +101,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.error,
                         )
-                        Text("Not configured — tap Settings to connect")
+                        Text("Not configured — tap here to connect")
                     }
                 }
             }

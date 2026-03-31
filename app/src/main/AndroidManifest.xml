@@ -11,9 +11,30 @@
         android:protectionLevel="signature|privileged|development|appop|retailDemo" />
     <uses-permission android:name="android.permission.READ_NETWORK_USAGE_HISTORY" />
 
+    <!-- Package visibility: required on Android 11+ to query third-party apps -->
+    <queries>
+        <package android:name="com.honeygain.app" />
+        <package android:name="com.bright.earnapp" />
+        <package android:name="com.iproyal.pawns" />
+        <package android:name="network.mysterium.vpn" />
+        <package android:name="com.packetstream.android" />
+        <package android:name="com.traffmonetizer.client" />
+        <package android:name="com.repocket.android" />
+        <package android:name="com.peer2profit.app" />
+        <package android:name="com.bytelixir.app" />
+        <package android:name="com.bytebenefit.app" />
+        <package android:name="com.getgrass.android" />
+        <package android:name="com.gaga.gaganode" />
+        <package android:name="com.titan.network" />
+        <package android:name="io.nodle.cash" />
+        <package android:name="com.passiveincome.app" />
+        <package android:name="com.uprock.android" />
+        <package android:name="com.wipter.app" />
+    </queries>
+
     <application
         android:name=".CashPilotApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -43,7 +64,11 @@
         <service
             android:name=".service.HeartbeatService"
             android:exported="false"
-            android:foregroundServiceType="specialUse" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Periodic heartbeat to CashPilot server reporting passive income app status" />
+        </service>
 
         <!-- Boot receiver — restart heartbeat after reboot -->
         <receiver

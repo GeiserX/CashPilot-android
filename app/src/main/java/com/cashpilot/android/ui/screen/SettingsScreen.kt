@@ -1,5 +1,8 @@
 package com.cashpilot.android.ui.screen
 
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,10 +15,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -26,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.ui.MainViewModel
@@ -34,6 +40,7 @@ import com.cashpilot.android.ui.MainViewModel
 @Composable
 fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     val settings by viewModel.settings.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -71,17 +78,51 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
             }
             item {
                 OutlinedTextField(
-                    value = settings.joinToken,
-                    onValueChange = { token ->
-                        viewModel.updateSettings { it.copy(joinToken = token) }
+                    value = settings.apiKey,
+                    onValueChange = { key ->
+                        viewModel.updateSettings { it.copy(apiKey = key) }
                     },
-                    label = { Text("Join Token") },
-                    placeholder = { Text("Paste token from CashPilot Fleet page") },
+                    label = { Text("Fleet API Key") },
+                    placeholder = { Text("Paste CASHPILOT_API_KEY from your server") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
             }
 
+            // Permissions section
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Permissions", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    "Grant these permissions for full app detection.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = { openNotificationListenerSettings(context) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Grant Notification Access")
+                    }
+                    OutlinedButton(
+                        onClick = { openUsageAccessSettings(context) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Grant Usage Access")
+                    }
+                    OutlinedButton(
+                        onClick = { openBatteryOptimizationSettings(context) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Disable Battery Optimization")
+                    }
+                }
+            }
+
+            // Monitored apps section
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Monitored Apps", style = MaterialTheme.typography.titleMedium)
@@ -113,4 +154,25 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
             }
         }
     }
+}
+
+private fun openNotificationListenerSettings(context: Context) {
+    context.startActivity(
+        Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
+}
+
+private fun openUsageAccessSettings(context: Context) {
+    context.startActivity(
+        Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
+}
+
+private fun openBatteryOptimizationSettings(context: Context) {
+    context.startActivity(
+        Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
 }

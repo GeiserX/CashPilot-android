@@ -4,6 +4,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.cashpilot.android.model.KnownApps
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Listens for status bar notifications from monitored passive income apps.
@@ -28,7 +29,9 @@ class AppNotificationListener : NotificationListenerService() {
     }
 
     override fun onListenerConnected() {
-        // Scan existing notifications on connect
+        connected.set(true)
+        // Full resync: clear stale state, then scan current notifications
+        activeNotifications_.clear()
         activeNotifications?.forEach { sbn ->
             val pkg = sbn.packageName
             if (pkg in KnownApps.byPackage) {
@@ -37,11 +40,24 @@ class AppNotificationListener : NotificationListenerService() {
         }
     }
 
+    override fun onListenerDisconnected() {
+        connected.set(false)
+        // Clear all state — we can no longer trust notification presence
+        activeNotifications_.clear()
+    }
+
     companion object {
         /** Package name → timestamp when notification was last seen. */
         val activeNotifications_ = ConcurrentHashMap<String, Long>()
 
-        fun isAppNotificationActive(packageName: String): Boolean =
-            packageName in activeNotifications_
+        /** Whether the listener is currently connected to the system. */
+        private val connected = AtomicBoolean(false)
+
+        fun isAppNotificationActive(packageName: String): Boolean {
+            if (!connected.get()) return false
+            return packageName in activeNotifications_
+        }
+
+        fun isConnected(): Boolean = connected.get()
     }
 }
