@@ -1,0 +1,1 @@
+Initial release with notification monitoring, heartbeat service, and earnings tracking.
