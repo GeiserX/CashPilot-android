@@ -13,8 +13,31 @@ android {
         applicationId = "com.cashpilot.android"
         minSdk = 26 // Android 8.0 — NotificationListenerService, NetworkStatsManager
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+
+        val ciVersionName = findProperty("VERSION_NAME") as String? ?: "0.1.0"
+        val ciVersionCode = (findProperty("VERSION_CODE") as String?)?.toIntOrNull() ?: 1
+        versionCode = ciVersionCode
+        versionName = ciVersionName
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = findProperty("CASHPILOT_KEYSTORE_PATH") as String?
+                ?: System.getenv("CASHPILOT_KEYSTORE_PATH")
+            val keystorePass = findProperty("CASHPILOT_KEYSTORE_PASSWORD") as String?
+                ?: System.getenv("CASHPILOT_KEYSTORE_PASSWORD")
+            val keyAliasValue = findProperty("CASHPILOT_KEY_ALIAS") as String?
+                ?: System.getenv("CASHPILOT_KEY_ALIAS")
+            val keyPass = findProperty("CASHPILOT_KEY_PASSWORD") as String?
+                ?: System.getenv("CASHPILOT_KEY_PASSWORD")
+
+            if (keystorePath != null && keystorePass != null && keyAliasValue != null && keyPass != null) {
+                storeFile = file(keystorePath)
+                storePassword = keystorePass
+                keyAlias = keyAliasValue
+                keyPassword = keyPass
+            }
+        }
     }
 
     buildTypes {
@@ -25,6 +48,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            val releaseConfig = signingConfigs.findByName("release")
+            if (releaseConfig?.storeFile != null) {
+                signingConfig = releaseConfig
+            }
         }
     }
 
@@ -33,11 +60,18 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
+    }
+
+    lint {
+        baseline = file("lint-baseline.xml")
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }

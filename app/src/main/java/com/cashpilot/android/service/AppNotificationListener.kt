@@ -55,7 +55,7 @@ class AppNotificationListener : NotificationListenerService() {
 
         fun isAppNotificationActive(packageName: String): Boolean {
             if (!connected.get()) return false
-            return packageName in activeNotifications_
+            return activeNotifications_.containsKey(packageName)
         }
 
         fun isConnected(): Boolean = connected.get()
