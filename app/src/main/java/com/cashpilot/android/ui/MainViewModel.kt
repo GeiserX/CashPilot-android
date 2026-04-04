@@ -52,6 +52,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val detector = AppDetector(application)
 
+    companion object {
+        private const val PUBLIC_IP_URL = "https://api.ipify.org"
+    }
+
     val settings: StateFlow<Settings> = SettingsStore.settings(application)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Settings())
 
@@ -177,7 +181,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val ip = withContext(Dispatchers.IO) {
                 try {
-                    URL("https://api.ipify.org").readText().trim()
+                    URL(PUBLIC_IP_URL).readText().trim()
                 } catch (_: Exception) {
                     null
                 }

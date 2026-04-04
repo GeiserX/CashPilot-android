@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         (settings.serverUrl.isBlank() || settings.apiKey.isBlank() || !hasNotif || !hasUsage)
 
                     // Handle system Back from Settings → return to Dashboard
-                    BackHandler(enabled = showSettings) {
+                    BackHandler(enabled = showSettings && !needsSetup) {
                         showSettings = false
                     }
 

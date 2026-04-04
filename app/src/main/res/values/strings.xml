@@ -46,4 +46,10 @@
 
     <!-- Warnings -->
     <string name="cleartext_warning">Insecure: API key and app data will be sent unencrypted. Use https:// if possible.</string>
+
+    <!-- About section -->
+    <string name="about">About</string>
+    <string name="about_github_android">GitHub — CashPilot Android</string>
+    <string name="about_github_server">GitHub — CashPilot Server</string>
+    <string name="about_donate">Sponsor / Donate</string>
 </resources>

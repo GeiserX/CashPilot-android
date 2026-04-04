@@ -102,8 +102,8 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                     placeholder = { Text("https://cashpilot.example.com") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    isError = localUrl.startsWith("http://"),
-                    supportingText = if (localUrl.startsWith("http://")) {
+                    isError = localUrl.trim().startsWith("http://", ignoreCase = true),
+                    supportingText = if (localUrl.trim().startsWith("http://", ignoreCase = true)) {
                         { Text(stringResource(R.string.cleartext_warning)) }
                     } else null,
                 )
@@ -189,7 +189,7 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
             // About section
             item {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("About", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.about), style = MaterialTheme.typography.titleMedium)
             }
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -197,19 +197,19 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                         onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot-android") },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text("GitHub — CashPilot Android")
+                        Text(stringResource(R.string.about_github_android))
                     }
                     OutlinedButton(
                         onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot") },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text("GitHub — CashPilot Server")
+                        Text(stringResource(R.string.about_github_server))
                     }
                     Button(
                         onClick = { openUrl(context, "https://github.com/sponsors/GeiserX") },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text("Sponsor / Donate")
+                        Text(stringResource(R.string.about_donate))
                     }
                 }
             }

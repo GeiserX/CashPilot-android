@@ -114,8 +114,8 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                     placeholder = { Text("https://cashpilot.example.com") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    isError = localUrl.startsWith("http://"),
-                    supportingText = if (localUrl.startsWith("http://")) {
+                    isError = localUrl.trim().startsWith("http://", ignoreCase = true),
+                    supportingText = if (localUrl.trim().startsWith("http://", ignoreCase = true)) {
                         { Text(stringResource(R.string.cleartext_warning)) }
                     } else null,
                 )
