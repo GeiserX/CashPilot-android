@@ -1,8 +1,13 @@
 package com.cashpilot.android.ui.screen
 
-import androidx.compose.foundation.clickable
+import android.content.Intent
+import android.provider.Settings as AndroidSettings
+import android.text.format.DateUtils
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,115 +15,284 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.cashpilot.android.model.AppStatus
-import com.cashpilot.android.model.KnownApps
+import com.cashpilot.android.R
+import com.cashpilot.android.ui.AppDisplayInfo
+import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.MainViewModel
+import kotlinx.coroutines.delay
+
+private val RunningGreen = Color(0xFF22C55E)
+private val StoppedRed = Color(0xFFEF4444)
+private val DisabledGray = Color(0xFF9CA3AF)
+private val NotInstalledGray = Color(0xFF6B7280)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) {
-    val statuses by viewModel.appStatuses.collectAsState()
+    val apps by viewModel.apps.collectAsState()
+    val summary by viewModel.summary.collectAsState()
     val settings by viewModel.settings.collectAsState()
+    val lastHeartbeat by viewModel.lastHeartbeat.collectAsState()
+    val lastHeartbeatFailed by viewModel.lastHeartbeatFailed.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
+    // Auto-refresh every 30s while visible
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(30_000)
+            viewModel.refreshStatuses()
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("CashPilot") },
+                title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings))
                     }
                 },
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.refreshStatuses() }) {
-                Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-            }
-        },
     ) { padding ->
-        Column(
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = { viewModel.refreshStatuses() },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
+                .padding(padding),
         ) {
-            // Connection status — clickable to navigate to settings when not configured
-            val connected = settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank()
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(
-                        if (!connected) Modifier.clickable { onNavigateToSettings() }
-                        else Modifier,
-                    ),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (connected)
-                        MaterialTheme.colorScheme.primaryContainer
-                    else
-                        MaterialTheme.colorScheme.errorContainer,
-                ),
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    if (connected) {
-                        Icon(
-                            Icons.Default.CheckCircle,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                        Text("Connected to ${settings.serverUrl}")
-                    } else {
-                        Icon(
-                            Icons.Default.Error,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error,
-                        )
-                        Text("Not configured — tap here to connect")
-                    }
+                // -- Summary header (full width) --
+                item(span = { GridItemSpan(2) }) {
+                    SummaryHeader(
+                        summary = summary,
+                        serverConfigured = settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank(),
+                        lastHeartbeat = lastHeartbeat,
+                        heartbeatFailed = lastHeartbeatFailed,
+                        onNavigateToSettings = onNavigateToSettings,
+                    )
+                }
+
+                // -- Permission banner (full width) --
+                item(span = { GridItemSpan(2) }) {
+                    PermissionBanner(viewModel)
+                }
+
+                // -- App grid --
+                items(apps, key = { it.app.slug }) { info ->
+                    AppCard(info)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SummaryHeader(
+    summary: com.cashpilot.android.ui.FleetSummary,
+    serverConfigured: Boolean,
+    lastHeartbeat: Long,
+    heartbeatFailed: Boolean,
+    onNavigateToSettings: () -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            // Status counts row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                // Running
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.Circle,
+                        contentDescription = null,
+                        tint = RunningGreen,
+                        modifier = Modifier.size(10.dp),
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        stringResource(R.string.summary_running, summary.running),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+                // Stopped
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.Circle,
+                        contentDescription = null,
+                        tint = StoppedRed,
+                        modifier = Modifier.size(10.dp),
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        stringResource(R.string.summary_stopped, summary.stopped),
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
+                // Not installed
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.Circle,
+                        contentDescription = null,
+                        tint = NotInstalledGray,
+                        modifier = Modifier.size(10.dp),
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        stringResource(R.string.summary_na, summary.notInstalled),
+                        style = MaterialTheme.typography.labelMedium,
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
 
-            // App list
-            if (statuses.isEmpty()) {
-                Text(
-                    "No monitored apps detected. Tap refresh to scan.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(statuses) { status ->
-                        AppStatusCard(status)
+            // Bandwidth row
+            if (summary.totalTx > 0 || summary.totalRx > 0) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.ArrowUpward,
+                            contentDescription = stringResource(R.string.upload),
+                            modifier = Modifier.size(14.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(Modifier.width(2.dp))
+                        Text(
+                            formatBytes(summary.totalTx),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.ArrowDownward,
+                            contentDescription = stringResource(R.string.download),
+                            modifier = Modifier.size(14.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(Modifier.width(2.dp))
+                        Text(
+                            formatBytes(summary.totalRx),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Text(
+                        stringResource(R.string.bandwidth_24h),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+
+            // Server / heartbeat row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                if (!serverConfigured) {
+                    TextButton(onClick = onNavigateToSettings) {
+                        Icon(
+                            Icons.Default.CloudOff,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.error,
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.not_connected),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        val dotColor by animateColorAsState(
+                            targetValue = when {
+                                heartbeatFailed -> StoppedRed
+                                lastHeartbeat > 0 -> RunningGreen
+                                else -> DisabledGray
+                            },
+                            label = "heartbeat-dot",
+                        )
+                        Icon(
+                            Icons.Default.Circle,
+                            contentDescription = null,
+                            tint = dotColor,
+                            modifier = Modifier.size(8.dp),
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            when {
+                                lastHeartbeat == 0L -> stringResource(R.string.no_heartbeat_yet)
+                                else -> stringResource(R.string.last_heartbeat, relativeTime(lastHeartbeat))
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 }
             }
@@ -127,35 +301,189 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
 }
 
 @Composable
-private fun AppStatusCard(status: AppStatus) {
-    val app = KnownApps.bySlug[status.slug]
-    Card(modifier = Modifier.fillMaxWidth()) {
+private fun PermissionBanner(viewModel: MainViewModel) {
+    val hasNotif by viewModel.hasNotificationAccess.collectAsState()
+    val hasUsage by viewModel.hasUsageAccess.collectAsState()
+    var dismissed by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    if (dismissed || (hasNotif && hasUsage)) return
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+        ),
+    ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Icon(
-                imageVector = if (status.running) Icons.Default.CheckCircle else Icons.Default.Error,
-                contentDescription = if (status.running) "Running" else "Stopped",
-                tint = if (status.running) Color(0xFF22C55E) else Color(0xFFEF4444),
-                modifier = Modifier.size(32.dp),
+                Icons.Default.Warning,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+                tint = MaterialTheme.colorScheme.onTertiaryContainer,
             )
+            Spacer(Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    app?.displayName ?: status.slug,
-                    style = MaterialTheme.typography.titleSmall,
+                    stringResource(R.string.permissions_needed),
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
                 )
+                if (!hasNotif) {
+                    TextButton(
+                        onClick = {
+                            context.startActivity(
+                                Intent(AndroidSettings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            )
+                        },
+                        contentPadding = PaddingValues(0.dp),
+                    ) {
+                        Icon(Icons.Default.Notifications, null, Modifier.size(14.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text(stringResource(R.string.grant_notification_access), style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+                if (!hasUsage) {
+                    TextButton(
+                        onClick = {
+                            context.startActivity(
+                                Intent(AndroidSettings.ACTION_USAGE_ACCESS_SETTINGS)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            )
+                        },
+                        contentPadding = PaddingValues(0.dp),
+                    ) {
+                        Icon(Icons.Default.VisibilityOff, null, Modifier.size(14.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text(stringResource(R.string.grant_usage_access), style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            }
+            IconButton(onClick = { dismissed = true }) {
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = stringResource(R.string.dismiss),
+                    modifier = Modifier.size(18.dp),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppCard(info: AppDisplayInfo) {
+    val borderColor = when (info.state) {
+        AppState.RUNNING -> RunningGreen
+        AppState.STOPPED -> StoppedRed
+        AppState.DISABLED -> DisabledGray
+        AppState.NOT_INSTALLED -> Color.Transparent
+    }
+    val cardAlpha = when (info.state) {
+        AppState.NOT_INSTALLED -> 0.5f
+        AppState.DISABLED -> 0.65f
+        else -> 1f
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .alpha(cardAlpha),
+        border = if (info.state != AppState.NOT_INSTALLED) {
+            BorderStroke(1.5.dp, borderColor)
+        } else {
+            BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+        },
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            // Status dot + app name
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.Circle,
+                    contentDescription = null,
+                    tint = when (info.state) {
+                        AppState.RUNNING -> RunningGreen
+                        AppState.STOPPED -> StoppedRed
+                        AppState.DISABLED -> DisabledGray
+                        AppState.NOT_INSTALLED -> NotInstalledGray
+                    },
+                    modifier = Modifier.size(10.dp),
+                )
+                Spacer(Modifier.width(6.dp))
                 Text(
-                    if (status.running) "Running" else "Not detected",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    info.app.displayName,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = if (info.state == AppState.RUNNING) FontWeight.SemiBold else FontWeight.Normal,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
-                if (status.netTx24h > 0 || status.netRx24h > 0) {
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            // State label
+            Text(
+                when (info.state) {
+                    AppState.RUNNING -> stringResource(R.string.state_running)
+                    AppState.STOPPED -> info.status?.lastActive?.let { stringResource(R.string.state_last_active, relativeTime(parseIso(it))) } ?: stringResource(R.string.state_stopped)
+                    AppState.DISABLED -> stringResource(R.string.state_disabled)
+                    AppState.NOT_INSTALLED -> stringResource(R.string.state_not_installed)
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            // Notification indicator for running apps
+            if (info.state == AppState.RUNNING && info.status?.notificationActive == true) {
+                Spacer(Modifier.height(2.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.Notifications,
+                        contentDescription = stringResource(R.string.notification_active),
+                        modifier = Modifier.size(12.dp),
+                        tint = RunningGreen.copy(alpha = 0.7f),
+                    )
+                    Spacer(Modifier.width(2.dp))
                     Text(
-                        "24h: ${formatBytes(status.netTx24h)} up / ${formatBytes(status.netRx24h)} down",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        stringResource(R.string.notification_active),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    )
+                }
+            }
+
+            // Bandwidth for apps with data
+            val tx = info.status?.netTx24h ?: 0
+            val rx = info.status?.netRx24h ?: 0
+            if (tx > 0 || rx > 0) {
+                Spacer(Modifier.height(4.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.ArrowUpward,
+                        contentDescription = null,
+                        modifier = Modifier.size(10.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    )
+                    Text(
+                        formatBytes(tx),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Icon(
+                        Icons.Default.ArrowDownward,
+                        contentDescription = null,
+                        modifier = Modifier.size(10.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    )
+                    Text(
+                        formatBytes(rx),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                     )
                 }
             }
@@ -169,3 +497,20 @@ private fun formatBytes(bytes: Long): String = when {
     bytes < 1024 * 1024 * 1024 -> "${"%.1f".format(bytes / (1024.0 * 1024.0))} MB"
     else -> "${"%.2f".format(bytes / (1024.0 * 1024.0 * 1024.0))} GB"
 }
+
+private fun relativeTime(millis: Long): String {
+    if (millis == 0L) return "never"
+    return DateUtils.getRelativeTimeSpanString(
+        millis,
+        System.currentTimeMillis(),
+        DateUtils.SECOND_IN_MILLIS,
+        DateUtils.FORMAT_ABBREV_RELATIVE,
+    ).toString()
+}
+
+private fun parseIso(iso: String): Long =
+    try {
+        java.time.Instant.parse(iso).toEpochMilli()
+    } catch (_: Exception) {
+        0L
+    }

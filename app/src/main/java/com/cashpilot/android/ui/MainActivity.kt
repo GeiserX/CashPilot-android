@@ -7,6 +7,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
@@ -35,8 +39,12 @@ class MainActivity : ComponentActivity() {
             startService(serviceIntent)
         }
 
-        // Initial scan
-        viewModel.refreshStatuses()
+        // Refresh statuses every time the activity resumes (e.g. returning from permission screens)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.refreshStatuses()
+            }
+        }
 
         setContent {
             CashPilotTheme {

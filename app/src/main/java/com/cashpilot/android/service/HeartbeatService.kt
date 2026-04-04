@@ -33,6 +33,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -106,13 +109,17 @@ class HeartbeatService : Service() {
             }
 
             if (response.status.isSuccess()) {
+                _lastHeartbeat.value = System.currentTimeMillis()
+                _lastHeartbeatFailed.value = false
                 val runningCount = apps.count { it.running }
                 updateNotification("$runningCount/${apps.size} apps running")
             } else {
+                _lastHeartbeatFailed.value = true
                 Log.w(TAG, "Heartbeat rejected: HTTP ${response.status.value}")
                 updateNotification("Server rejected heartbeat (${response.status.value})")
             }
         } catch (e: Exception) {
+            _lastHeartbeatFailed.value = true
             Log.w(TAG, "Heartbeat failed: ${e.message}")
             updateNotification("Heartbeat failed — retrying...")
         }
@@ -162,5 +169,13 @@ class HeartbeatService : Service() {
         private const val TAG = "HeartbeatService"
         private const val CHANNEL_ID = "cashpilot_agent"
         private const val NOTIFICATION_ID = 1
+
+        /** Timestamp of last successful heartbeat (0 = never). */
+        private val _lastHeartbeat = MutableStateFlow(0L)
+        val lastHeartbeat: StateFlow<Long> = _lastHeartbeat.asStateFlow()
+
+        /** Whether the last heartbeat attempt failed. */
+        private val _lastHeartbeatFailed = MutableStateFlow(false)
+        val lastHeartbeatFailed: StateFlow<Boolean> = _lastHeartbeatFailed.asStateFlow()
     }
 }
