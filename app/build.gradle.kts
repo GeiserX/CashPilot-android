@@ -14,10 +14,8 @@ android {
         minSdk = 26 // Android 8.0 — NotificationListenerService, NetworkStatsManager
         targetSdk = 35
 
-        val ciVersionName = findProperty("VERSION_NAME") as String? ?: "0.1.0"
-        val ciVersionCode = (findProperty("VERSION_CODE") as String?)?.toIntOrNull() ?: 1
-        versionCode = ciVersionCode
-        versionName = ciVersionName
+        versionCode = (findProperty("VERSION_CODE") as String).toInt()
+        versionName = findProperty("VERSION_NAME") as String
     }
 
     signingConfigs {
