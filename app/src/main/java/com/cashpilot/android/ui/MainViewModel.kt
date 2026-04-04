@@ -19,6 +19,7 @@ import com.cashpilot.android.util.SettingsStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -134,6 +135,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updateSettings(transform: (Settings) -> Settings) {
         viewModelScope.launch {
             SettingsStore.update(getApplication(), transform)
+        }
+    }
+
+    private var serverUrlJob: Job? = null
+    private var apiKeyJob: Job? = null
+
+    fun updateServerUrl(url: String) {
+        serverUrlJob?.cancel()
+        serverUrlJob = viewModelScope.launch {
+            delay(500)
+            SettingsStore.update(getApplication()) { it.copy(serverUrl = url) }
+        }
+    }
+
+    fun updateApiKey(key: String) {
+        apiKeyJob?.cancel()
+        apiKeyJob = viewModelScope.launch {
+            delay(500)
+            SettingsStore.update(getApplication()) { it.copy(apiKey = key) }
         }
     }
 
