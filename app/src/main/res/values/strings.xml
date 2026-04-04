@@ -43,4 +43,7 @@
     <string name="state_not_installed">Not installed — tap to install</string>
     <string name="state_last_active">Last: %s</string>
     <string name="notification_active">Notification active</string>
+
+    <!-- Warnings -->
+    <string name="cleartext_warning">Insecure: API key and app data will be sent unencrypted. Use https:// if possible.</string>
 </resources>

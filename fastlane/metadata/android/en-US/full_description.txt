@@ -8,4 +8,6 @@ Features:
 - Material Design 3 UI with Jetpack Compose
 - No accounts required — connects to your own CashPilot instance
 
+Privacy: All data is sent only to your own server. A single request to api.ipify.org fetches your public IP for display — this only happens after setup is complete.
+
 Requires a self-hosted CashPilot server to function. CashPilot is free and open-source software licensed under GPL-3.0.

@@ -36,7 +36,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.cashpilot.android.R
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.ui.MainViewModel
 
@@ -99,6 +101,10 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                     placeholder = { Text("https://cashpilot.example.com") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    isError = localUrl.startsWith("http://"),
+                    supportingText = if (localUrl.startsWith("http://")) {
+                        { Text(stringResource(R.string.cleartext_warning)) }
+                    } else null,
                 )
             }
             item {

@@ -61,6 +61,10 @@ CashPilot Android
 - WorkManager (future: periodic sync when app is backgrounded)
 - Material 3 + Dynamic Color
 
+## Privacy
+
+All app status data is sent **only to your own CashPilot server**. The app makes one additional request to `api.ipify.org` to display your public IP on the dashboard — this only happens after both server URL and API key are configured. No other third-party services are contacted.
+
 ## Requirements
 
 - Android 8.0+ (API 26)
