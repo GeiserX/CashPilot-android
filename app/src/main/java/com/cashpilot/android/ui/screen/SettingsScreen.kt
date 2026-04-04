@@ -29,6 +29,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +44,18 @@ import com.cashpilot.android.ui.MainViewModel
 fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     val settings by viewModel.settings.collectAsState()
     val context = LocalContext.current
+
+    // Local state for text fields — avoids per-keystroke DataStore writes
+    var localUrl by rememberSaveable { mutableStateOf(settings.serverUrl) }
+    var localKey by rememberSaveable { mutableStateOf(settings.apiKey) }
+
+    // Sync once when DataStore loads real values (initial state is empty)
+    var synced by rememberSaveable { mutableStateOf(false) }
+    if (!synced && (settings.serverUrl.isNotEmpty() || settings.apiKey.isNotEmpty())) {
+        localUrl = settings.serverUrl
+        localKey = settings.apiKey
+        synced = true
+    }
 
     Scaffold(
         topBar = {
@@ -66,9 +81,10 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
             }
             item {
                 OutlinedTextField(
-                    value = settings.serverUrl,
+                    value = localUrl,
                     onValueChange = { url ->
-                        viewModel.updateSettings { it.copy(serverUrl = url) }
+                        localUrl = url
+                        viewModel.updateServerUrl(url)
                     },
                     label = { Text("CashPilot Server URL") },
                     placeholder = { Text("https://cashpilot.example.com") },
@@ -78,9 +94,10 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
             }
             item {
                 OutlinedTextField(
-                    value = settings.apiKey,
+                    value = localKey,
                     onValueChange = { key ->
-                        viewModel.updateSettings { it.copy(apiKey = key) }
+                        localKey = key
+                        viewModel.updateApiKey(key)
                     },
                     label = { Text("Fleet API Key") },
                     placeholder = { Text("Paste CASHPILOT_API_KEY from your server") },

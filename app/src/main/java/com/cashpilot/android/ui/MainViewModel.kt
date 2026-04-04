@@ -4,6 +4,7 @@ import android.app.AppOpsManager
 import android.app.Application
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
 import android.os.Process
 import android.provider.Settings as SystemSettings
 import androidx.lifecycle.AndroidViewModel
@@ -19,6 +20,7 @@ import com.cashpilot.android.util.SettingsStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -137,6 +139,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    private var serverUrlJob: Job? = null
+    private var apiKeyJob: Job? = null
+
+    fun updateServerUrl(url: String) {
+        serverUrlJob?.cancel()
+        serverUrlJob = viewModelScope.launch {
+            delay(500)
+            SettingsStore.update(getApplication()) { it.copy(serverUrl = url) }
+        }
+    }
+
+    fun updateApiKey(key: String) {
+        apiKeyJob?.cancel()
+        apiKeyJob = viewModelScope.launch {
+            delay(500)
+            SettingsStore.update(getApplication()) { it.copy(apiKey = key) }
+        }
+    }
+
     private fun checkPermissions() {
         val ctx = getApplication<Application>()
 
@@ -149,11 +170,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         val appOps = ctx.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager
         _hasUsageAccess.value = if (appOps != null) {
-            val mode = appOps.unsafeCheckOpNoThrow(
-                AppOpsManager.OPSTR_GET_USAGE_STATS,
-                Process.myUid(),
-                ctx.packageName,
-            )
+            val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                appOps.unsafeCheckOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    Process.myUid(),
+                    ctx.packageName,
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                appOps.checkOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    Process.myUid(),
+                    ctx.packageName,
+                )
+            }
             mode == AppOpsManager.MODE_ALLOWED
         } else {
             false
