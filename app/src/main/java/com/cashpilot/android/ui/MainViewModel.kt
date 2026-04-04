@@ -1,9 +1,10 @@
 package com.cashpilot.android.ui
 
+import android.app.AppOpsManager
 import android.app.Application
-import android.app.usage.UsageStatsManager
 import android.content.ComponentName
 import android.content.Context
+import android.os.Process
 import android.provider.Settings as SystemSettings
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,7 @@ import com.cashpilot.android.service.HeartbeatService
 import com.cashpilot.android.util.SettingsStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.coroutineContext
 
 enum class AppState { RUNNING, STOPPED, NOT_INSTALLED, DISABLED }
 
@@ -92,7 +95,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private suspend fun doRefresh() {
         _isRefreshing.value = true
-        withContext(Dispatchers.IO) {
+        val result = withContext(Dispatchers.IO) {
             val enabled = settings.value.enabledSlugs
             val detected = detector.detectAll(enabled).associateBy { it.slug }
 
@@ -111,18 +114,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 AppDisplayInfo(app = app, state = state, status = status)
             }
 
-            val sorted = displayList.sortedBy { it.state.ordinal }
-
-            _apps.value = sorted
-            _summary.value = FleetSummary(
-                running = sorted.count { it.state == AppState.RUNNING },
-                stopped = sorted.count { it.state == AppState.STOPPED },
-                notInstalled = sorted.count { it.state == AppState.NOT_INSTALLED },
-                disabled = sorted.count { it.state == AppState.DISABLED },
-                totalTx = sorted.mapNotNull { it.status?.netTx24h }.sum(),
-                totalRx = sorted.mapNotNull { it.status?.netRx24h }.sum(),
-            )
+            displayList.sortedBy { it.state.ordinal }
         }
+        // If this job was cancelled while IO work ran, don't write stale results
+        coroutineContext.ensureActive()
+        _apps.value = result
+        _summary.value = FleetSummary(
+            running = result.count { it.state == AppState.RUNNING },
+            stopped = result.count { it.state == AppState.STOPPED },
+            notInstalled = result.count { it.state == AppState.NOT_INSTALLED },
+            disabled = result.count { it.state == AppState.DISABLED },
+            totalTx = result.mapNotNull { it.status?.netTx24h }.sum(),
+            totalRx = result.mapNotNull { it.status?.netRx24h }.sum(),
+        )
         checkPermissions()
         _isRefreshing.value = false
     }
@@ -143,15 +147,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val myComponent = ComponentName(ctx, AppNotificationListener::class.java).flattenToString()
         _hasNotificationAccess.value = myComponent in flat
 
-        val usm = ctx.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager
-        _hasUsageAccess.value = if (usm != null) {
-            val now = System.currentTimeMillis()
-            val stats = usm.queryUsageStats(
-                UsageStatsManager.INTERVAL_DAILY,
-                now - 60_000,
-                now,
+        val appOps = ctx.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager
+        _hasUsageAccess.value = if (appOps != null) {
+            val mode = appOps.unsafeCheckOpNoThrow(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                Process.myUid(),
+                ctx.packageName,
             )
-            stats != null && stats.isNotEmpty()
+            mode == AppOpsManager.MODE_ALLOWED
         } else {
             false
         }
