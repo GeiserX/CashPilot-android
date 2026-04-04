@@ -31,6 +31,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,15 +54,17 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
     val hasUsage by viewModel.hasUsageAccess.collectAsState()
     val context = LocalContext.current
 
-    var localUrl by rememberSaveable { mutableStateOf(settings.serverUrl) }
-    var localKey by rememberSaveable { mutableStateOf(settings.apiKey) }
+    var localUrl by rememberSaveable { mutableStateOf("") }
+    var localKey by rememberSaveable { mutableStateOf("") }
 
-    // Sync once when DataStore loads
+    // Sync once when DataStore loads real values (won't re-trigger after)
     var synced by rememberSaveable { mutableStateOf(false) }
-    if (!synced && (settings.serverUrl.isNotEmpty() || settings.apiKey.isNotEmpty())) {
-        localUrl = settings.serverUrl
-        localKey = settings.apiKey
-        synced = true
+    LaunchedEffect(settings.serverUrl, settings.apiKey) {
+        if (!synced && (settings.serverUrl.isNotEmpty() || settings.apiKey.isNotEmpty())) {
+            localUrl = settings.serverUrl
+            localKey = settings.apiKey
+            synced = true
+        }
     }
 
     val serverDone = localUrl.isNotBlank() && localKey.isNotBlank()
@@ -231,10 +234,8 @@ private fun SetupCard(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            if (!done) {
-                Spacer(Modifier.height(12.dp))
-                content()
-            }
+            Spacer(Modifier.height(12.dp))
+            content()
         }
     }
 }

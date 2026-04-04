@@ -27,6 +27,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,15 +47,17 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
 
     // Local state for text fields — avoids per-keystroke DataStore writes
-    var localUrl by rememberSaveable { mutableStateOf(settings.serverUrl) }
-    var localKey by rememberSaveable { mutableStateOf(settings.apiKey) }
+    var localUrl by rememberSaveable { mutableStateOf("") }
+    var localKey by rememberSaveable { mutableStateOf("") }
 
-    // Sync once when DataStore loads real values (initial state is empty)
+    // Sync once when DataStore loads real values (won't re-trigger after)
     var synced by rememberSaveable { mutableStateOf(false) }
-    if (!synced && (settings.serverUrl.isNotEmpty() || settings.apiKey.isNotEmpty())) {
-        localUrl = settings.serverUrl
-        localKey = settings.apiKey
-        synced = true
+    LaunchedEffect(settings.serverUrl, settings.apiKey) {
+        if (!synced && (settings.serverUrl.isNotEmpty() || settings.apiKey.isNotEmpty())) {
+            localUrl = settings.serverUrl
+            localKey = settings.apiKey
+            synced = true
+        }
     }
 
     Scaffold(
