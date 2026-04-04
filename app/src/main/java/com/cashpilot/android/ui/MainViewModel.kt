@@ -134,9 +134,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             totalRx = result.mapNotNull { it.status?.netRx24h }.sum(),
         )
         checkPermissions()
-        // Only fetch public IP once the server is configured (post-setup)
-        if (_publicIp.value == null && settings.value.serverUrl.isNotBlank()) {
+        // Only fetch public IP when fully configured (both URL + key = setup complete)
+        val serverReady = settings.value.serverUrl.isNotBlank() && settings.value.apiKey.isNotBlank()
+        if (serverReady && _publicIp.value == null) {
             fetchPublicIp()
+        } else if (!serverReady) {
+            _publicIp.value = null
         }
         _isRefreshing.value = false
     }

@@ -1,8 +1,8 @@
 CashPilot Android is a monitoring agent for CashPilot, the self-hosted passive income orchestrator. It tracks earnings from bandwidth sharing, DePIN, storage, and GPU compute services running on your phone — without root access.
 
 Features:
-- Monitors passive income apps (Honeygain, EarnApp, Grass, etc.) via NotificationListenerService
-- Reports earnings and app status to your self-hosted CashPilot server
+- Monitors passive income apps (EarnApp, Grass, MystNodes, etc.) via NotificationListenerService
+- Reports app status to your self-hosted CashPilot server
 - Lightweight foreground service with minimal battery impact
 - Usage statistics and network bandwidth tracking
 - Material Design 3 UI with Jetpack Compose

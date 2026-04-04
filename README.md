@@ -16,9 +16,9 @@ It sends periodic heartbeats to your CashPilot server, so you get a unified flee
 
 ## Supported Apps
 
-17 passive income services with Android apps:
+11 passive income services with Android apps:
 
-Honeygain, EarnApp, IPRoyal Pawns, Mysterium, PacketStream, Traffmonetizer, Repocket, Peer2Profit, Bytelixir, ByteBenefit, Grass, GagaNode, Titan Network, Nodle Cash, PassiveApp, Uprock, Wipter
+EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, Uprock, Wipter
 
 ## Setup
 
