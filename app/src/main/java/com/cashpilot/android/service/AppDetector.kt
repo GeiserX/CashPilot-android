@@ -48,15 +48,18 @@ class AppDetector(private val context: Context) {
         val lastActive = getLastActiveTime(app.packageName)
         val (tx, rx) = getNetworkStats(app.packageName)
 
-        // App is "running" if it has an active foreground notification
-        // OR was active within the last 15 minutes
+        // App is "running" if:
+        // 1. It has an active foreground notification, OR
+        // 2. It was in foreground within the last 15 minutes, OR
+        // 3. It has network activity in the last 24h (bandwidth apps run as background services)
         val recentlyActive = lastActive?.let {
             (System.currentTimeMillis() - it) < 15 * 60 * 1000
         } ?: false
+        val hasNetworkActivity = (tx + rx) > 1024 // >1KB to filter noise
 
         return AppStatus(
             slug = app.slug,
-            running = notificationActive || recentlyActive,
+            running = notificationActive || recentlyActive || hasNetworkActivity,
             notificationActive = notificationActive,
             netTx24h = tx,
             netRx24h = rx,
