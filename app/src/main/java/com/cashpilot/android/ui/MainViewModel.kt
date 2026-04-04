@@ -16,6 +16,7 @@ import com.cashpilot.android.service.AppNotificationListener
 import com.cashpilot.android.service.HeartbeatService
 import com.cashpilot.android.util.SettingsStore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -66,18 +67,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val lastHeartbeat: StateFlow<Long> = HeartbeatService.lastHeartbeat
     val lastHeartbeatFailed: StateFlow<Boolean> = HeartbeatService.lastHeartbeatFailed
 
+    private var refreshJob: Job? = null
+
+    init {
+        checkPermissions()
+    }
+
     fun refreshStatuses() {
-        viewModelScope.launch { doRefresh() }
+        refreshJob?.cancel()
+        refreshJob = viewModelScope.launch { doRefresh() }
     }
 
     fun toggleApp(slug: String) {
-        viewModelScope.launch {
+        refreshJob?.cancel()
+        refreshJob = viewModelScope.launch {
             SettingsStore.update(getApplication()) { s ->
                 val new = s.enabledSlugs.toMutableSet()
                 if (slug in new) new.remove(slug) else new.add(slug)
                 s.copy(enabledSlugs = new)
             }
-            // withContext(IO) yields to main, letting the settings StateFlow update
             doRefresh()
         }
     }
