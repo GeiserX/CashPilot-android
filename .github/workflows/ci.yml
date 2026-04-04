@@ -31,9 +31,11 @@ jobs:
         run: ./gradlew lintDebug
 
       - name: Decode keystore
+        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/release.keystore
 
       - name: Build release APK
+        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
         run: ./gradlew assembleRelease
         env:
           CASHPILOT_KEYSTORE_PATH: release.keystore

@@ -97,7 +97,8 @@ class HeartbeatService : Service() {
             // - `containers` (legacy): simplified format so older servers still show the worker
             val containers = apps.map { app ->
                 AppContainer(
-                    name = app.slug,
+                    slug = app.slug,
+                    name = "cashpilot-${app.slug}",
                     status = if (app.running) "running" else "stopped",
                     labels = mapOf(
                         "cashpilot.managed" to "true",
