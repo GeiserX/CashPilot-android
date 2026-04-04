@@ -1,7 +1,7 @@
 package com.cashpilot.android.ui.screen
 
 import android.content.Intent
-import android.provider.Settings
+import android.provider.Settings as AndroidSettings
 import android.text.format.DateUtils
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
@@ -28,8 +28,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.filled.Settings as SettingsIcon
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -90,7 +90,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                 title = { Text("CashPilot") },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(SettingsIcon, contentDescription = "Settings")
+                        Icon(Icons.Default.Settings, contentDescription = "Settings")
                     }
                 },
             )
@@ -339,7 +339,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
                     TextButton(
                         onClick = {
                             context.startActivity(
-                                Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+                                Intent(AndroidSettings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             )
                         },
@@ -354,7 +354,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
                     TextButton(
                         onClick = {
                             context.startActivity(
-                                Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                                Intent(AndroidSettings.ACTION_USAGE_ACCESS_SETTINGS)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             )
                         },
