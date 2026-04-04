@@ -2,6 +2,7 @@ package com.cashpilot.android.ui.screen
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -184,8 +185,45 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                     )
                 }
             }
+
+            // About section
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("About", style = MaterialTheme.typography.titleMedium)
+            }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot-android") },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("GitHub — CashPilot Android")
+                    }
+                    OutlinedButton(
+                        onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot") },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("GitHub — CashPilot Server")
+                    }
+                    Button(
+                        onClick = { openUrl(context, "https://github.com/sponsors/GeiserX") },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Sponsor / Donate")
+                    }
+                }
+            }
+
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
+}
+
+private fun openUrl(context: Context, url: String) {
+    context.startActivity(
+        Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
 }
 
 private fun openNotificationListenerSettings(context: Context) {

@@ -427,20 +427,28 @@ private fun AppCard(info: AppDisplayInfo) {
             .then(
                 if (info.state == AppState.NOT_INSTALLED) {
                     Modifier.clickable {
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=${info.app.packageName}"),
-                        )
-                        try {
-                            context.startActivity(intent)
-                        } catch (_: Exception) {
-                            // Fall back to browser if Play Store not available
+                        // Use referral URL if available (opens browser with referral tracking)
+                        val url = info.app.referralUrl
+                        if (url != null) {
                             context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("https://play.google.com/store/apps/details?id=${info.app.packageName}"),
-                                ),
+                                Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                             )
+                        } else {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=${info.app.packageName}"),
+                            )
+                            try {
+                                context.startActivity(intent)
+                            } catch (_: Exception) {
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://play.google.com/store/apps/details?id=${info.app.packageName}"),
+                                    ),
+                                )
+                            }
                         }
                     }
                 } else {
