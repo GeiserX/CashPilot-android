@@ -24,10 +24,15 @@ You assist developers working on CashPilot-android, a lightweight Android agent 
 
 ## Repository & Infrastructure
 
-- **License:** GPL-3.0-or-later
+- **License:** GPL-3.0-only
 - **Commits:** Follow [Conventional Commits](https://conventionalcommits.org) format
 - **Versioning:** Follow [Semantic Versioning](https://semver.org) (semver)
 - **Package:** `com.cashpilot.android`
+- **Version source of truth:** `gradle.properties` (`VERSION_NAME`, `VERSION_CODE`). CI overrides via `-P` flags.
+- **Release workflow:** Push a `v*` tag → GitHub Actions builds signed APK+AAB, creates GitHub Release with artifacts
+- **CI workflow:** On push to main or PR → build debug APK + lint. Debug APK uploaded as artifact.
+- **Signing keystore:** JKS at `~/repos/personal/keystores/cashpilot-release.jks` (alias: `cashpilot`, password: `cashpilot-release-2026`). Base64-encoded in GitHub secret `KEYSTORE_BASE64`.
+- **F-Droid:** MR !35850 at gitlab.com/fdroid/fdroiddata. Metadata at `metadata/com.cashpilot.android.yml`. Uses `UpdateCheckData` to read version from `gradle.properties`. No `VercodeOperation` (VERSION_CODE is explicit).
 
 ## AI Behavior Rules
 
@@ -38,6 +43,12 @@ You assist developers working on CashPilot-android, a lightweight Android agent 
 - All network calls must handle offline/timeout gracefully
 - Never hardcode server URLs or tokens
 - All strings must go through `strings.xml` for future i18n
+- minSdk is 26 — guard any API 29+ calls with `Build.VERSION.SDK_INT` checks (lint enforces this)
+- Use cancel-and-replace Job pattern for concurrent coroutine operations (see `refreshJob` in MainViewModel)
+- Use `ensureActive()` after `withContext(Dispatchers.IO)` blocks to discard stale results from cancelled jobs
+- Use `AppOpsManager` to check usage access permission (not `UsageStatsManager.queryUsageStats` heuristic)
+- DataStore text field writes should be debounced (500ms per-field cancel-and-replace) to avoid writes on every keystroke
+- POST_NOTIFICATIONS runtime permission must be requested on Android 13+ for foreground service notifications
 
 ## Architecture
 
@@ -84,6 +95,13 @@ POST to `{serverUrl}/api/workers/heartbeat` with bearer auth (fleet API key via 
 - Unit tests go in `app/src/test/`
 - Instrumented tests go in `app/src/androidTest/`
 - Test detection logic with mock UsageStats/NetworkStats data
+
+## Lint & Build Notes
+
+- No local Java on macOS dev machine — all compilation is via GitHub Actions CI
+- Lint baseline at `app/lint-baseline.xml` — new lint errors are fatal
+- compileSdk=36, targetSdk=35, minSdk=26
+- ProGuard enabled for release builds (`isMinifyEnabled = true`, `isShrinkResources = true`)
 
 ## What NOT to Build Yet
 
