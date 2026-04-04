@@ -30,7 +30,7 @@ You assist developers working on CashPilot-android, a lightweight Android agent 
 - **Package:** `com.cashpilot.android`
 - **Version source of truth:** `gradle.properties` (`VERSION_NAME`, `VERSION_CODE`). CI overrides via `-P` flags.
 - **Release workflow:** Push a `v*` tag → GitHub Actions builds signed APK+AAB, creates GitHub Release with artifacts
-- **CI workflow:** On push to main or PR → build debug APK + lint. Debug APK uploaded as artifact.
+- **CI workflow:** On push to main → build debug APK + lint + signed release APK. On PR → debug + lint only (no keystore access). Both APKs uploaded as artifacts. Always download `app-release` for installation (debug APK has different signature).
 - **Signing keystore:** JKS at `~/repos/personal/keystores/cashpilot-release.jks` (alias: `cashpilot`, password: `cashpilot-release-2026`). Base64-encoded in GitHub secret `KEYSTORE_BASE64`.
 - **F-Droid:** MR !35850 at gitlab.com/fdroid/fdroiddata. Metadata at `metadata/com.cashpilot.android.yml`. Uses `UpdateCheckData` to read version from `gradle.properties`. No `VercodeOperation` (VERSION_CODE is explicit).
 
@@ -84,11 +84,16 @@ POST to `{serverUrl}/api/workers/heartbeat` with bearer auth (fleet API key via 
 
 ## Known Apps
 
-17 passive income apps with known Android package names are defined in `KnownApps.kt`. When adding new apps:
+11 passive income apps with verified Android package names are defined in `KnownApps.kt`. All package names were verified via `adb shell pm list packages` on a real device.
 
-1. Add to the `all` list in `KnownApps`
-2. Verify the exact package name from the Play Store URL or APK
-3. Update the README app count
+When adding new apps:
+
+1. **Verify the exact package name** via `adb shell pm list packages | grep -i <name>` — Play Store URLs and web searches are unreliable (many apps are delisted or have wrong IDs online)
+2. Add to the `all` list in `KnownApps`
+3. Add the package to `<queries>` in `AndroidManifest.xml` (required for Android 11+ package visibility)
+4. Update the README app count
+
+Apps removed (not on Play Store, APK-only distribution): Honeygain, PacketStream, Peer2Profit, GagaNode, PassiveApp, Repocket. Can be re-added if their real package names are confirmed via adb.
 
 ## Testing
 
@@ -102,6 +107,13 @@ POST to `{serverUrl}/api/workers/heartbeat` with bearer auth (fleet API key via 
 - Lint baseline at `app/lint-baseline.xml` — new lint errors are fatal
 - compileSdk=36, targetSdk=35, minSdk=26
 - ProGuard enabled for release builds (`isMinifyEnabled = true`, `isShrinkResources = true`)
+
+## APK Installation via adb
+
+- `adb install -r <apk>` installs over existing app **only if signatures match**
+- Debug and release APKs have different signing keys — installing debug over release (or vice versa) fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`
+- To switch signing type: `adb uninstall com.cashpilot.android` first (loses app data)
+- CI release APK matches the keystore used for GitHub Releases and F-Droid — always prefer `app-release` artifact
 
 ## What NOT to Build Yet
 

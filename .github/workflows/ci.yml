@@ -27,8 +27,32 @@ jobs:
       - name: Run lint
         run: ./gradlew lintDebug
 
+      - name: Decode keystore
+        if: github.event_name == 'push'
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/release.keystore
+
+      - name: Build release APK
+        if: github.event_name == 'push'
+        run: ./gradlew assembleRelease
+        env:
+          CASHPILOT_KEYSTORE_PATH: release.keystore
+          CASHPILOT_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          CASHPILOT_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          CASHPILOT_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Remove keystore
+        if: always()
+        run: rm -f app/release.keystore
+
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload release APK
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: app/build/outputs/apk/release/app-release.apk
