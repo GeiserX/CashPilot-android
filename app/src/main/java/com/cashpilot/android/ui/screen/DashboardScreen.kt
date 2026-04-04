@@ -1,10 +1,12 @@
 package com.cashpilot.android.ui.screen
 
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings as AndroidSettings
 import android.text.format.DateUtils
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -377,6 +379,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
 
 @Composable
 private fun AppCard(info: AppDisplayInfo) {
+    val context = LocalContext.current
     val borderColor = when (info.state) {
         AppState.RUNNING -> RunningGreen
         AppState.STOPPED -> StoppedRed
@@ -392,7 +395,30 @@ private fun AppCard(info: AppDisplayInfo) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .alpha(cardAlpha),
+            .alpha(cardAlpha)
+            .then(
+                if (info.state == AppState.NOT_INSTALLED) {
+                    Modifier.clickable {
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=${info.app.packageName}"),
+                        )
+                        try {
+                            context.startActivity(intent)
+                        } catch (_: Exception) {
+                            // Fall back to browser if Play Store not available
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://play.google.com/store/apps/details?id=${info.app.packageName}"),
+                                ),
+                            )
+                        }
+                    }
+                } else {
+                    Modifier
+                },
+            ),
         border = if (info.state != AppState.NOT_INSTALLED) {
             BorderStroke(1.5.dp, borderColor)
         } else {

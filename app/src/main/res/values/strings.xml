@@ -40,7 +40,7 @@
     <string name="state_running">Running</string>
     <string name="state_stopped">Stopped</string>
     <string name="state_disabled">Disabled</string>
-    <string name="state_not_installed">Not installed</string>
+    <string name="state_not_installed">Not installed — tap to install</string>
     <string name="state_last_active">Last: %s</string>
     <string name="notification_active">Notification active</string>
 </resources>
