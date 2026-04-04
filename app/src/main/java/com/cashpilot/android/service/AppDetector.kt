@@ -34,6 +34,15 @@ class AppDetector(private val context: Context) {
             .filter { isInstalled(it.packageName) }
             .map { detect(it) }
 
+    /** Check whether a package is installed on this device. */
+    fun isInstalled(packageName: String): Boolean =
+        try {
+            packageManager.getPackageInfo(packageName, 0)
+            true
+        } catch (_: PackageManager.NameNotFoundException) {
+            false
+        }
+
     private fun detect(app: MonitoredApp): AppStatus {
         val notificationActive = AppNotificationListener.isAppNotificationActive(app.packageName)
         val lastActive = getLastActiveTime(app.packageName)
@@ -58,14 +67,6 @@ class AppDetector(private val context: Context) {
             },
         )
     }
-
-    private fun isInstalled(packageName: String): Boolean =
-        try {
-            packageManager.getPackageInfo(packageName, 0)
-            true
-        } catch (_: PackageManager.NameNotFoundException) {
-            false
-        }
 
     private fun getLastActiveTime(packageName: String): Long? {
         val usm = usageStatsManager ?: return null
