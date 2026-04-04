@@ -54,6 +54,10 @@ jobs:
           CASHPILOT_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           CASHPILOT_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
+      - name: Remove keystore
+        if: always()
+        run: rm -f app/release.keystore
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
