@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CashPilot</string>
+
+    <!-- Dashboard -->
+    <string name="settings">Settings</string>
+    <string name="summary_running">%d Running</string>
+    <string name="summary_stopped">%d Stopped</string>
+    <string name="summary_na">%d N/A</string>
+    <string name="upload">Upload</string>
+    <string name="download">Download</string>
+    <string name="bandwidth_24h">24h</string>
+    <string name="not_connected">Not connected — configure server</string>
+    <string name="no_heartbeat_yet">No heartbeat yet</string>
+    <string name="last_heartbeat">Last heartbeat %s</string>
+
+    <!-- Permission banner -->
+    <string name="permissions_needed">Permissions needed</string>
+    <string name="grant_notification_access">Grant Notification Access</string>
+    <string name="grant_usage_access">Grant Usage Access</string>
+    <string name="dismiss">Dismiss</string>
+
+    <!-- App states -->
+    <string name="state_running">Running</string>
+    <string name="state_stopped">Stopped</string>
+    <string name="state_disabled">Disabled</string>
+    <string name="state_not_installed">Not installed</string>
+    <string name="state_last_active">Last: %s</string>
+    <string name="notification_active">Notification active</string>
 </resources>

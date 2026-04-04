@@ -53,9 +53,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.cashpilot.android.R
 import com.cashpilot.android.ui.AppDisplayInfo
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.MainViewModel
@@ -87,10 +89,10 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("CashPilot") },
+                title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings))
                     }
                 },
             )
@@ -165,7 +167,7 @@ private fun SummaryHeader(
                     )
                     Spacer(Modifier.width(4.dp))
                     Text(
-                        "${summary.running} Running",
+                        stringResource(R.string.summary_running, summary.running),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -180,7 +182,7 @@ private fun SummaryHeader(
                     )
                     Spacer(Modifier.width(4.dp))
                     Text(
-                        "${summary.stopped} Stopped",
+                        stringResource(R.string.summary_stopped, summary.stopped),
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
@@ -194,7 +196,7 @@ private fun SummaryHeader(
                     )
                     Spacer(Modifier.width(4.dp))
                     Text(
-                        "${summary.notInstalled} N/A",
+                        stringResource(R.string.summary_na, summary.notInstalled),
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
@@ -211,7 +213,7 @@ private fun SummaryHeader(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             Icons.Default.ArrowUpward,
-                            contentDescription = "Upload",
+                            contentDescription = stringResource(R.string.upload),
                             modifier = Modifier.size(14.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -225,7 +227,7 @@ private fun SummaryHeader(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             Icons.Default.ArrowDownward,
-                            contentDescription = "Download",
+                            contentDescription = stringResource(R.string.download),
                             modifier = Modifier.size(14.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -237,7 +239,7 @@ private fun SummaryHeader(
                         )
                     }
                     Text(
-                        "24h",
+                        stringResource(R.string.bandwidth_24h),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                     )
@@ -261,7 +263,7 @@ private fun SummaryHeader(
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
-                            "Not connected — configure server",
+                            stringResource(R.string.not_connected),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.error,
                         )
@@ -285,8 +287,8 @@ private fun SummaryHeader(
                         Spacer(Modifier.width(6.dp))
                         Text(
                             when {
-                                lastHeartbeat == 0L -> "No heartbeat yet"
-                                else -> "Last heartbeat ${relativeTime(lastHeartbeat)}"
+                                lastHeartbeat == 0L -> stringResource(R.string.no_heartbeat_yet)
+                                else -> stringResource(R.string.last_heartbeat, relativeTime(lastHeartbeat))
                             },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -326,7 +328,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
             Spacer(Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    "Permissions needed",
+                    stringResource(R.string.permissions_needed),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -343,7 +345,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
                     ) {
                         Icon(Icons.Default.Notifications, null, Modifier.size(14.dp))
                         Spacer(Modifier.width(4.dp))
-                        Text("Grant Notification Access", style = MaterialTheme.typography.bodySmall)
+                        Text(stringResource(R.string.grant_notification_access), style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 if (!hasUsage) {
@@ -358,14 +360,14 @@ private fun PermissionBanner(viewModel: MainViewModel) {
                     ) {
                         Icon(Icons.Default.VisibilityOff, null, Modifier.size(14.dp))
                         Spacer(Modifier.width(4.dp))
-                        Text("Grant Usage Access", style = MaterialTheme.typography.bodySmall)
+                        Text(stringResource(R.string.grant_usage_access), style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
             IconButton(onClick = { dismissed = true }) {
                 Icon(
                     Icons.Default.Close,
-                    contentDescription = "Dismiss",
+                    contentDescription = stringResource(R.string.dismiss),
                     modifier = Modifier.size(18.dp),
                 )
             }
@@ -426,10 +428,10 @@ private fun AppCard(info: AppDisplayInfo) {
             // State label
             Text(
                 when (info.state) {
-                    AppState.RUNNING -> "Running"
-                    AppState.STOPPED -> info.status?.lastActive?.let { "Last: ${relativeTime(parseIso(it))}" } ?: "Stopped"
-                    AppState.DISABLED -> "Disabled"
-                    AppState.NOT_INSTALLED -> "Not installed"
+                    AppState.RUNNING -> stringResource(R.string.state_running)
+                    AppState.STOPPED -> info.status?.lastActive?.let { stringResource(R.string.state_last_active, relativeTime(parseIso(it))) } ?: stringResource(R.string.state_stopped)
+                    AppState.DISABLED -> stringResource(R.string.state_disabled)
+                    AppState.NOT_INSTALLED -> stringResource(R.string.state_not_installed)
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -441,13 +443,13 @@ private fun AppCard(info: AppDisplayInfo) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Default.Notifications,
-                        contentDescription = "Active notification",
+                        contentDescription = stringResource(R.string.notification_active),
                         modifier = Modifier.size(12.dp),
                         tint = RunningGreen.copy(alpha = 0.7f),
                     )
                     Spacer(Modifier.width(2.dp))
                     Text(
-                        "Notification active",
+                        stringResource(R.string.notification_active),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     )
