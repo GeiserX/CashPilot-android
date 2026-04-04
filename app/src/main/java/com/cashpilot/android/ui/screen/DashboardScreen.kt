@@ -74,7 +74,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
     val settings by viewModel.settings.collectAsState()
     val lastHeartbeat by viewModel.lastHeartbeat.collectAsState()
     val lastHeartbeatFailed by viewModel.lastHeartbeatFailed.collectAsState()
-    var isRefreshing by rememberSaveable { mutableStateOf(false) }
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     // Auto-refresh every 30s while visible
     LaunchedEffect(Unit) {
@@ -98,11 +98,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
     ) { padding ->
         PullToRefreshBox(
             isRefreshing = isRefreshing,
-            onRefresh = {
-                isRefreshing = true
-                viewModel.refreshStatuses()
-                isRefreshing = false
-            },
+            onRefresh = { viewModel.refreshStatuses() },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
@@ -304,8 +300,8 @@ private fun SummaryHeader(
 
 @Composable
 private fun PermissionBanner(viewModel: MainViewModel) {
-    val hasNotif = viewModel.hasNotificationAccess()
-    val hasUsage = viewModel.hasUsageAccess()
+    val hasNotif by viewModel.hasNotificationAccess.collectAsState()
+    val hasUsage by viewModel.hasUsageAccess.collectAsState()
     var dismissed by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
