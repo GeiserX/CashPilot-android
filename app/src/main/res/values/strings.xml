@@ -46,12 +46,16 @@
     <string name="state_last_active">Last: %s</string>
     <string name="notification_active">Notification active</string>
 
+    <!-- Battery -->
+    <string name="battery_unrestricted">Battery optimization disabled</string>
+    <string name="battery_disable_optimization">Disable Battery Optimization</string>
+
     <!-- Warnings -->
     <string name="cleartext_warning">Insecure: API key and app data will be sent unencrypted. Use https:// if possible.</string>
 
     <!-- About section -->
     <string name="about">About</string>
-    <string name="about_github_android">GitHub — CashPilot Android</string>
-    <string name="about_github_server">GitHub — CashPilot Server</string>
+    <string name="about_github_android">CashPilot Android</string>
+    <string name="about_github_server">CashPilot Server</string>
     <string name="about_donate">Sponsor / Donate</string>
 </resources>

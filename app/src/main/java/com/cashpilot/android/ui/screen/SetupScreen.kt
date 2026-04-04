@@ -187,8 +187,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
 
             Button(
                 onClick = {
-                    // Persist any pending text field values
-                    viewModel.updateSettings { it.copy(serverUrl = localUrl, apiKey = localKey) }
+                    viewModel.updateSettings { it.copy(serverUrl = localUrl, apiKey = localKey, setupCompleted = true) }
                     onComplete()
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -199,7 +198,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
 
             TextButton(
                 onClick = {
-                    viewModel.updateSettings { it.copy(serverUrl = localUrl, apiKey = localKey) }
+                    viewModel.updateSettings { it.copy(serverUrl = localUrl, apiKey = localKey, setupCompleted = true) }
                     onComplete()
                 },
                 modifier = Modifier.fillMaxWidth(),
