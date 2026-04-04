@@ -1,5 +1,6 @@
 package com.cashpilot.android.ui.screen
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings as AndroidSettings
@@ -61,6 +62,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cashpilot.android.R
+import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.ui.AppDisplayInfo
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.MainViewModel
@@ -332,6 +334,11 @@ private fun PermissionBanner(viewModel: MainViewModel) {
     var dismissed by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
+    // Reset dismissal if permissions were revoked after user dismissed the banner
+    LaunchedEffect(hasNotif, hasUsage) {
+        if (!hasNotif || !hasUsage) dismissed = false
+    }
+
     if (dismissed || (hasNotif && hasUsage)) return
 
     Card(
@@ -422,21 +429,7 @@ private fun AppCard(info: AppDisplayInfo) {
             .then(
                 if (info.state == AppState.NOT_INSTALLED) {
                     Modifier.clickable {
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=${info.app.packageName}"),
-                        )
-                        try {
-                            context.startActivity(intent)
-                        } catch (_: Exception) {
-                            // Fall back to browser if Play Store not available
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("https://play.google.com/store/apps/details?id=${info.app.packageName}"),
-                                ),
-                            )
-                        }
+                        openAppInstall(context, info.app)
                     }
                 } else {
                     Modifier
@@ -563,3 +556,26 @@ private fun parseIso(iso: String): Long =
     } catch (_: Exception) {
         0L
     }
+
+private fun openAppInstall(context: Context, app: MonitoredApp) {
+    // Try referral URL first, fall back to Play Store on any failure
+    val referral = app.referralUrl
+    if (referral != null) {
+        try {
+            context.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(referral))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+            return
+        } catch (_: Exception) { /* fall through to Play Store */ }
+    }
+    try {
+        context.startActivity(
+            Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${app.packageName}")),
+        )
+    } catch (_: Exception) {
+        context.startActivity(
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${app.packageName}")),
+        )
+    }
+}

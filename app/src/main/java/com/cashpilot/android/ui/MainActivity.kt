@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -73,6 +74,11 @@ class MainActivity : ComponentActivity() {
 
                     val needsSetup = !setupDismissed &&
                         (settings.serverUrl.isBlank() || settings.apiKey.isBlank() || !hasNotif || !hasUsage)
+
+                    // Handle system Back from Settings → return to Dashboard
+                    BackHandler(enabled = showSettings && !needsSetup) {
+                        showSettings = false
+                    }
 
                     when {
                         needsSetup -> SetupScreen(

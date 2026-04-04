@@ -2,6 +2,7 @@ package com.cashpilot.android.ui.screen
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.cashpilot.android.R
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.ui.MainViewModel
 
@@ -99,6 +102,10 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                     placeholder = { Text("https://cashpilot.example.com") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    isError = localUrl.trim().startsWith("http://", ignoreCase = true),
+                    supportingText = if (localUrl.trim().startsWith("http://", ignoreCase = true)) {
+                        { Text(stringResource(R.string.cleartext_warning)) }
+                    } else null,
                 )
             }
             item {
@@ -178,8 +185,45 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                     )
                 }
             }
+
+            // About section
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(stringResource(R.string.about), style = MaterialTheme.typography.titleMedium)
+            }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot-android") },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(stringResource(R.string.about_github_android))
+                    }
+                    OutlinedButton(
+                        onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot") },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(stringResource(R.string.about_github_server))
+                    }
+                    Button(
+                        onClick = { openUrl(context, "https://github.com/sponsors/GeiserX") },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(stringResource(R.string.about_donate))
+                    }
+                }
+            }
+
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
+}
+
+private fun openUrl(context: Context, url: String) {
+    context.startActivity(
+        Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
 }
 
 private fun openNotificationListenerSettings(context: Context) {

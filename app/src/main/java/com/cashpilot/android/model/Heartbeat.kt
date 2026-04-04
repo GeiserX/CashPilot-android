@@ -11,17 +11,21 @@ import kotlinx.serialization.Serializable
 data class WorkerHeartbeat(
     val name: String,
     val url: String = "",
+    /** Docker containers (empty for Android workers). */
     val containers: List<AppContainer> = emptyList(),
+    /** Android app statuses (empty for Docker workers). */
+    val apps: List<AppStatus> = emptyList(),
     @SerialName("system_info") val systemInfo: SystemInfo = SystemInfo(),
 )
 
-/** Maps an Android app to the server's container-like representation. */
+/** Maps an Android app to the server's container-like representation.
+ *  Must include `slug` — the server discovers worker items via `containers[*].slug`. */
 @Serializable
 data class AppContainer(
+    val slug: String,
     val name: String,
     val status: String,
     val image: String = "",
-    /** Extra Android-specific fields packed here for forward compatibility. */
     val labels: Map<String, String> = emptyMap(),
 )
 

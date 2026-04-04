@@ -18,6 +18,7 @@ import com.cashpilot.android.model.WorkerHeartbeat
 import com.cashpilot.android.util.SettingsStore
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.post
@@ -50,7 +51,13 @@ class HeartbeatService : Service() {
         install(ContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 15_000
+            connectTimeoutMillis = 10_000
+            socketTimeoutMillis = 10_000
+        }
     }
+    private var consecutiveFailures = 0
 
     override fun onCreate() {
         super.onCreate()
@@ -67,7 +74,15 @@ class HeartbeatService : Service() {
                 if (settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank()) {
                     sendHeartbeat(settings)
                 }
-                delay(settings.heartbeatIntervalSeconds * 1000L)
+                // Exponential backoff on consecutive failures (30s → 60s → 120s, max 5min)
+                val baseDelay = (settings.heartbeatIntervalSeconds * 1000L).coerceAtLeast(5_000L)
+                val backoff = if (consecutiveFailures > 0) {
+                    (baseDelay * (1L shl consecutiveFailures.coerceAtMost(3)))
+                        .coerceAtMost(300_000L)
+                } else {
+                    baseDelay
+                }
+                delay(backoff)
             }
         }
         return START_STICKY
@@ -77,10 +92,13 @@ class HeartbeatService : Service() {
         try {
             val apps = detector.detectAll(settings.enabledSlugs)
 
-            // Map app statuses to the server's container-like format
+            // Send apps in both formats for backward compatibility:
+            // - `apps` (new): rich app data for servers that understand Android workers
+            // - `containers` (legacy): simplified format so older servers still show the worker
             val containers = apps.map { app ->
                 AppContainer(
-                    name = app.slug,
+                    slug = app.slug,
+                    name = "cashpilot-${app.slug}",
                     status = if (app.running) "running" else "stopped",
                     labels = mapOf(
                         "cashpilot.managed" to "true",
@@ -92,12 +110,12 @@ class HeartbeatService : Service() {
             val heartbeat = WorkerHeartbeat(
                 name = "${Build.MANUFACTURER} ${Build.MODEL} (${deviceId()})",
                 containers = containers,
+                apps = apps,
                 systemInfo = SystemInfo(
                     os = "Android",
                     arch = Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown",
                     osVersion = "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})",
                     deviceType = "android",
-                    apps = apps,
                 ),
             )
 
@@ -109,16 +127,19 @@ class HeartbeatService : Service() {
             }
 
             if (response.status.isSuccess()) {
+                consecutiveFailures = 0
                 _lastHeartbeat.value = System.currentTimeMillis()
                 _lastHeartbeatFailed.value = false
                 val runningCount = apps.count { it.running }
                 updateNotification("$runningCount/${apps.size} apps running")
             } else {
+                consecutiveFailures++
                 _lastHeartbeatFailed.value = true
                 Log.w(TAG, "Heartbeat rejected: HTTP ${response.status.value}")
                 updateNotification("Server rejected heartbeat (${response.status.value})")
             }
         } catch (e: Exception) {
+            consecutiveFailures++
             _lastHeartbeatFailed.value = true
             Log.w(TAG, "Heartbeat failed: ${e.message}")
             updateNotification("Heartbeat failed — retrying...")
