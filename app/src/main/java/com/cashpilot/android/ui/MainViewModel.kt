@@ -95,11 +95,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun toggleApp(slug: String) {
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
-            // Compute new slugs locally to avoid StateFlow lag after DataStore write
-            val currentSlugs = settings.value.enabledSlugs.toMutableSet()
-            if (slug in currentSlugs) currentSlugs.remove(slug) else currentSlugs.add(slug)
-            val newSlugs = currentSlugs.toSet()
+            // Toggle inside the DataStore transaction to avoid TOCTOU races
+            var newSlugs = emptySet<String>()
             SettingsStore.update(getApplication()) { s ->
+                val updated = s.enabledSlugs.toMutableSet()
+                if (slug in updated) updated.remove(slug) else updated.add(slug)
+                newSlugs = updated.toSet()
                 s.copy(enabledSlugs = newSlugs)
             }
             doRefresh(enabledOverride = newSlugs)

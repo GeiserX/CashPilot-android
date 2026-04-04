@@ -75,7 +75,7 @@ class HeartbeatService : Service() {
                     sendHeartbeat(settings)
                 }
                 // Exponential backoff on consecutive failures (30s → 60s → 120s, max 5min)
-                val baseDelay = settings.heartbeatIntervalSeconds * 1000L
+                val baseDelay = (settings.heartbeatIntervalSeconds * 1000L).coerceAtLeast(5_000L)
                 val backoff = if (consecutiveFailures > 0) {
                     (baseDelay * (1L shl consecutiveFailures.coerceAtMost(3)))
                         .coerceAtMost(300_000L)
