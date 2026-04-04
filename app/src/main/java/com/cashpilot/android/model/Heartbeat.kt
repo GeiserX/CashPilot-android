@@ -11,7 +11,10 @@ import kotlinx.serialization.Serializable
 data class WorkerHeartbeat(
     val name: String,
     val url: String = "",
+    /** Docker containers (empty for Android workers). */
     val containers: List<AppContainer> = emptyList(),
+    /** Android app statuses (empty for Docker workers). */
+    val apps: List<AppStatus> = emptyList(),
     @SerialName("system_info") val systemInfo: SystemInfo = SystemInfo(),
 )
 

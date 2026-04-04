@@ -75,6 +75,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _publicIp = MutableStateFlow<String?>(null)
     val publicIp: StateFlow<String?> = _publicIp.asStateFlow()
+    private var publicIpFailed = false
 
     private var refreshJob: Job? = null
 
@@ -90,19 +91,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun toggleApp(slug: String) {
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
+            // Compute new slugs locally to avoid StateFlow lag after DataStore write
+            val currentSlugs = settings.value.enabledSlugs.toMutableSet()
+            if (slug in currentSlugs) currentSlugs.remove(slug) else currentSlugs.add(slug)
+            val newSlugs = currentSlugs.toSet()
             SettingsStore.update(getApplication()) { s ->
-                val new = s.enabledSlugs.toMutableSet()
-                if (slug in new) new.remove(slug) else new.add(slug)
-                s.copy(enabledSlugs = new)
+                s.copy(enabledSlugs = newSlugs)
             }
-            doRefresh()
+            doRefresh(enabledOverride = newSlugs)
         }
     }
 
-    private suspend fun doRefresh() {
+    private suspend fun doRefresh(enabledOverride: Set<String>? = null) {
         _isRefreshing.value = true
         val result = withContext(Dispatchers.IO) {
-            val enabled = settings.value.enabledSlugs
+            val enabled = enabledOverride ?: settings.value.enabledSlugs
             val detected = detector.detectAll(enabled).associateBy { it.slug }
 
             val displayList = KnownApps.all.map { app ->
@@ -134,12 +137,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             totalRx = result.mapNotNull { it.status?.netRx24h }.sum(),
         )
         checkPermissions()
-        // Only fetch public IP when fully configured (both URL + key = setup complete)
+        // Only fetch public IP when fully configured, and don't retry on failure
         val serverReady = settings.value.serverUrl.isNotBlank() && settings.value.apiKey.isNotBlank()
-        if (serverReady && _publicIp.value == null) {
+        if (serverReady && _publicIp.value == null && !publicIpFailed) {
             fetchPublicIp()
         } else if (!serverReady) {
             _publicIp.value = null
+            publicIpFailed = false
         }
         _isRefreshing.value = false
     }
@@ -171,12 +175,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun fetchPublicIp() {
         viewModelScope.launch {
-            _publicIp.value = withContext(Dispatchers.IO) {
+            val ip = withContext(Dispatchers.IO) {
                 try {
                     URL("https://api.ipify.org").readText().trim()
                 } catch (_: Exception) {
                     null
                 }
+            }
+            if (ip != null) {
+                _publicIp.value = ip
+            } else {
+                publicIpFailed = true
             }
         }
     }

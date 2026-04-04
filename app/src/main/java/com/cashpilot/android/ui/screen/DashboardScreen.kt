@@ -332,6 +332,11 @@ private fun PermissionBanner(viewModel: MainViewModel) {
     var dismissed by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
+    // Reset dismissal if permissions were revoked after user dismissed the banner
+    LaunchedEffect(hasNotif, hasUsage) {
+        if (!hasNotif || !hasUsage) dismissed = false
+    }
+
     if (dismissed || (hasNotif && hasUsage)) return
 
     Card(

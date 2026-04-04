@@ -11,7 +11,6 @@ import android.provider.Settings.Secure
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.cashpilot.android.R
-import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.model.SystemInfo
 import com.cashpilot.android.model.WorkerHeartbeat
@@ -77,27 +76,14 @@ class HeartbeatService : Service() {
         try {
             val apps = detector.detectAll(settings.enabledSlugs)
 
-            // Map app statuses to the server's container-like format
-            val containers = apps.map { app ->
-                AppContainer(
-                    name = app.slug,
-                    status = if (app.running) "running" else "stopped",
-                    labels = mapOf(
-                        "cashpilot.managed" to "true",
-                        "cashpilot.service" to app.slug,
-                    ),
-                )
-            }
-
             val heartbeat = WorkerHeartbeat(
                 name = "${Build.MANUFACTURER} ${Build.MODEL} (${deviceId()})",
-                containers = containers,
+                apps = apps,
                 systemInfo = SystemInfo(
                     os = "Android",
                     arch = Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown",
                     osVersion = "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})",
                     deviceType = "android",
-                    apps = apps,
                 ),
             )
 
