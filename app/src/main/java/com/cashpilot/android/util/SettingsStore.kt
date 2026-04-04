@@ -30,8 +30,9 @@ object SettingsStore {
                 apiKey = prefs[API_KEY] ?: "",
                 heartbeatIntervalSeconds = prefs[HEARTBEAT_INTERVAL] ?: 30,
                 enabledSlugs = prefs[ENABLED_SLUGS] ?: KnownApps.all.map { it.slug }.toSet(),
-                // Migration: if server URL was set before setupCompleted existed, mark as completed
-                setupCompleted = prefs[SETUP_COMPLETED] ?: (prefs[SERVER_URL]?.isNotEmpty() == true),
+                // Migration: mark as completed only if both URL and key were configured before this field existed
+                setupCompleted = prefs[SETUP_COMPLETED]
+                    ?: (prefs[SERVER_URL]?.isNotEmpty() == true && prefs[API_KEY]?.isNotEmpty() == true),
             )
         }
 
@@ -42,7 +43,8 @@ object SettingsStore {
                 apiKey = prefs[API_KEY] ?: "",
                 heartbeatIntervalSeconds = prefs[HEARTBEAT_INTERVAL] ?: 30,
                 enabledSlugs = prefs[ENABLED_SLUGS] ?: KnownApps.all.map { it.slug }.toSet(),
-                setupCompleted = prefs[SETUP_COMPLETED] ?: (prefs[SERVER_URL]?.isNotEmpty() == true),
+                setupCompleted = prefs[SETUP_COMPLETED]
+                    ?: (prefs[SERVER_URL]?.isNotEmpty() == true && prefs[API_KEY]?.isNotEmpty() == true),
             )
             val updated = transform(current)
             prefs[SERVER_URL] = updated.serverUrl
