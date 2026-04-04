@@ -80,7 +80,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         checkPermissions()
-        fetchPublicIp()
     }
 
     fun refreshStatuses() {
@@ -135,6 +134,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             totalRx = result.mapNotNull { it.status?.netRx24h }.sum(),
         )
         checkPermissions()
+        // Only fetch public IP once the server is configured (post-setup)
+        if (_publicIp.value == null && settings.value.serverUrl.isNotBlank()) {
+            fetchPublicIp()
+        }
         _isRefreshing.value = false
     }
 

@@ -50,13 +50,19 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     var localUrl by rememberSaveable { mutableStateOf("") }
     var localKey by rememberSaveable { mutableStateOf("") }
 
-    // Sync once when DataStore loads real values (won't re-trigger after)
-    var synced by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(settings.serverUrl, settings.apiKey) {
-        if (!synced && (settings.serverUrl.isNotEmpty() || settings.apiKey.isNotEmpty())) {
+    // Sync each field independently so a partial DataStore write doesn't clobber the other
+    var urlSynced by rememberSaveable { mutableStateOf(false) }
+    var keySynced by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(settings.serverUrl) {
+        if (!urlSynced && settings.serverUrl.isNotEmpty()) {
             localUrl = settings.serverUrl
+            urlSynced = true
+        }
+    }
+    LaunchedEffect(settings.apiKey) {
+        if (!keySynced && settings.apiKey.isNotEmpty()) {
             localKey = settings.apiKey
-            synced = true
+            keySynced = true
         }
     }
 

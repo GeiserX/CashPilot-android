@@ -46,23 +46,25 @@ class AppDetector(private val context: Context) {
     private fun detect(app: MonitoredApp): AppStatus {
         val notificationActive = AppNotificationListener.isAppNotificationActive(app.packageName)
         val lastActive = getLastActiveTime(app.packageName)
-        val (tx, rx) = getNetworkStats(app.packageName)
+        val (tx24h, rx24h) = getNetworkStats(app.packageName, hours = 24)
+        // Use a 2h window for the "running" heuristic to avoid stale 24h false positives
+        val (tx2h, rx2h) = getNetworkStats(app.packageName, hours = 2)
 
         // App is "running" if:
         // 1. It has an active foreground notification, OR
         // 2. It was in foreground within the last 15 minutes, OR
-        // 3. It has network activity in the last 24h (bandwidth apps run as background services)
+        // 3. It has network activity in the last 2h (bandwidth apps run as background services)
         val recentlyActive = lastActive?.let {
             (System.currentTimeMillis() - it) < 15 * 60 * 1000
         } ?: false
-        val hasNetworkActivity = (tx + rx) > 1024 // >1KB to filter noise
+        val hasRecentNetworkActivity = (tx2h + rx2h) > 1024 // >1KB in last 2h
 
         return AppStatus(
             slug = app.slug,
-            running = notificationActive || recentlyActive || hasNetworkActivity,
+            running = notificationActive || recentlyActive || hasRecentNetworkActivity,
             notificationActive = notificationActive,
-            netTx24h = tx,
-            netRx24h = rx,
+            netTx24h = tx24h,
+            netRx24h = rx24h,
             lastActive = lastActive?.let {
                 Instant.ofEpochMilli(it)
                     .atOffset(ZoneOffset.UTC)
@@ -87,7 +89,7 @@ class AppDetector(private val context: Context) {
     }
 
     @Suppress("DEPRECATION")
-    private fun getNetworkStats(packageName: String): Pair<Long, Long> {
+    private fun getNetworkStats(packageName: String, hours: Int = 24): Pair<Long, Long> {
         val nsm = networkStatsManager ?: return 0L to 0L
         val uid = try {
             packageManager.getApplicationInfo(packageName, 0).uid
@@ -96,7 +98,7 @@ class AppDetector(private val context: Context) {
         }
 
         val now = System.currentTimeMillis()
-        val dayAgo = now - 24 * 60 * 60 * 1000
+        val start = now - hours.toLong() * 60 * 60 * 1000
         var tx = 0L
         var rx = 0L
 
@@ -106,9 +108,8 @@ class AppDetector(private val context: Context) {
             ConnectivityManager.TYPE_MOBILE,
         )) {
             try {
-                val bucket = nsm.querySummaryForDevice(networkType, null, dayAgo, now)
                 // querySummary gives per-app breakdowns
-                val summary = nsm.querySummary(networkType, null, dayAgo, now)
+                val summary = nsm.querySummary(networkType, null, start, now)
                 val b = android.app.usage.NetworkStats.Bucket()
                 while (summary.hasNextBucket()) {
                     summary.getNextBucket(b)
