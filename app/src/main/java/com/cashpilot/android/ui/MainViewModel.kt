@@ -4,6 +4,7 @@ import android.app.AppOpsManager
 import android.app.Application
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
 import android.os.Process
 import android.provider.Settings as SystemSettings
 import androidx.lifecycle.AndroidViewModel
@@ -169,11 +170,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         val appOps = ctx.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager
         _hasUsageAccess.value = if (appOps != null) {
-            val mode = appOps.unsafeCheckOpNoThrow(
-                AppOpsManager.OPSTR_GET_USAGE_STATS,
-                Process.myUid(),
-                ctx.packageName,
-            )
+            val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                appOps.unsafeCheckOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    Process.myUid(),
+                    ctx.packageName,
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                appOps.checkOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    Process.myUid(),
+                    ctx.packageName,
+                )
+            }
             mode == AppOpsManager.MODE_ALLOWED
         } else {
             false
