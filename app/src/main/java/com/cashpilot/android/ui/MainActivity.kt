@@ -21,9 +21,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.collectAsState
 import com.cashpilot.android.service.HeartbeatService
 import com.cashpilot.android.ui.screen.DashboardScreen
 import com.cashpilot.android.ui.screen.SettingsScreen
+import com.cashpilot.android.ui.screen.SetupScreen
 import com.cashpilot.android.ui.theme.CashPilotTheme
 
 class MainActivity : ComponentActivity() {
@@ -63,15 +65,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             CashPilotTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
+                    val settings by viewModel.settings.collectAsState()
+                    val hasNotif by viewModel.hasNotificationAccess.collectAsState()
+                    val hasUsage by viewModel.hasUsageAccess.collectAsState()
                     var showSettings by rememberSaveable { mutableStateOf(false) }
+                    var setupDismissed by rememberSaveable { mutableStateOf(false) }
 
-                    if (showSettings) {
-                        SettingsScreen(
+                    val needsSetup = !setupDismissed &&
+                        (settings.serverUrl.isBlank() || settings.apiKey.isBlank() || !hasNotif || !hasUsage)
+
+                    when {
+                        needsSetup -> SetupScreen(
+                            viewModel = viewModel,
+                            onComplete = { setupDismissed = true },
+                        )
+                        showSettings -> SettingsScreen(
                             viewModel = viewModel,
                             onBack = { showSettings = false },
                         )
-                    } else {
-                        DashboardScreen(
+                        else -> DashboardScreen(
                             viewModel = viewModel,
                             onNavigateToSettings = { showSettings = true },
                         )

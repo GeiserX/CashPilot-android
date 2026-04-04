@@ -20,6 +20,22 @@
     <string name="grant_usage_access">Grant Usage Access</string>
     <string name="dismiss">Dismiss</string>
 
+    <!-- Setup screen -->
+    <string name="setup_title">Welcome to CashPilot</string>
+    <string name="setup_subtitle">Complete these steps to start monitoring your passive income apps.</string>
+    <string name="setup_server_title">Server Connection</string>
+    <string name="setup_server_desc">Connect to your CashPilot server so the app can report which passive income apps are running on this device.</string>
+    <string name="setup_server_url_label">CashPilot Server URL</string>
+    <string name="setup_api_key_label">Fleet API Key</string>
+    <string name="setup_notif_title">Notification Access</string>
+    <string name="setup_notif_desc">CashPilot reads foreground notifications to detect when passive income apps are running. No notification content is collected — only presence is checked.</string>
+    <string name="setup_usage_title">Usage Access</string>
+    <string name="setup_usage_desc">Allows CashPilot to check when apps were last active and measure per-app network usage. This data stays on your device and is only sent to your own server.</string>
+    <string name="setup_grant_access">Open Settings</string>
+    <string name="setup_continue">Continue to Dashboard</string>
+    <string name="setup_skip">Skip for now</string>
+    <string name="setup_step">Step %1$d: %2$s</string>
+
     <!-- App states -->
     <string name="state_running">Running</string>
     <string name="state_stopped">Stopped</string>
