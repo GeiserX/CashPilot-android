@@ -1,14 +1,14 @@
 [versions]
-agp = "8.7.3"
-kotlin = "2.1.0"
-coreKtx = "1.15.0"
-lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.9.3"
+agp = "8.13.2"
+kotlin = "2.3.20"
+coreKtx = "1.18.0"
+lifecycleRuntimeKtx = "2.10.0"
+activityCompose = "1.13.0"
 composeBom = "2024.12.01"
-ktor = "3.0.3"
-serialization = "1.7.3"
-datastore = "1.1.1"
-workManager = "2.10.0"
+ktor = "3.4.2"
+serialization = "1.10.0"
+datastore = "1.2.1"
+workManager = "2.11.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
