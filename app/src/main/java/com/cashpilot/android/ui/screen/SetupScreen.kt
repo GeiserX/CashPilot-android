@@ -77,6 +77,11 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
 
     val serverDone = localUrl.isNotBlank() && localKey.isNotBlank()
 
+    val finishSetup = {
+        viewModel.updateSettings { it.copy(serverUrl = localUrl, apiKey = localKey, setupCompleted = true) }
+        onComplete()
+    }
+
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -186,11 +191,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
             Spacer(Modifier.height(8.dp))
 
             Button(
-                onClick = {
-                    // Persist any pending text field values
-                    viewModel.updateSettings { it.copy(serverUrl = localUrl, apiKey = localKey) }
-                    onComplete()
-                },
+                onClick = finishSetup,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = serverDone && hasNotif && hasUsage,
             ) {
@@ -198,10 +199,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
             }
 
             TextButton(
-                onClick = {
-                    viewModel.updateSettings { it.copy(serverUrl = localUrl, apiKey = localKey) }
-                    onComplete()
-                },
+                onClick = finishSetup,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(R.string.setup_skip))

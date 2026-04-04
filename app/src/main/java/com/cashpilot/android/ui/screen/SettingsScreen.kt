@@ -12,10 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.cashpilot.android.R
 import com.cashpilot.android.model.KnownApps
@@ -47,6 +51,7 @@ import com.cashpilot.android.ui.MainViewModel
 @Composable
 fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     val settings by viewModel.settings.collectAsState()
+    val hasBattery by viewModel.hasBatteryOptOut.collectAsState()
     val context = LocalContext.current
 
     // Local state for text fields — avoids per-keystroke DataStore writes
@@ -122,35 +127,34 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                 )
             }
 
-            // Permissions section
+            // Battery optimization
             item {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Permissions", style = MaterialTheme.typography.titleMedium)
-                Text(
-                    "Grant these permissions for full app detection.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(
-                        onClick = { openNotificationListenerSettings(context) },
-                        modifier = Modifier.fillMaxWidth(),
+                if (hasBattery) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text("Grant Notification Access")
+                        Icon(
+                            Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            stringResource(R.string.battery_unrestricted),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
                     }
-                    OutlinedButton(
-                        onClick = { openUsageAccessSettings(context) },
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text("Grant Usage Access")
-                    }
+                } else {
                     OutlinedButton(
                         onClick = { openBatteryOptimizationSettings(context) },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text("Disable Battery Optimization")
+                        Text(stringResource(R.string.battery_disable_optimization))
                     }
                 }
             }
@@ -197,12 +201,24 @@ fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                         onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot-android") },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_github),
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
                         Text(stringResource(R.string.about_github_android))
                     }
                     OutlinedButton(
                         onClick = { openUrl(context, "https://github.com/GeiserX/CashPilot") },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_github),
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
                         Text(stringResource(R.string.about_github_server))
                     }
                     Button(
@@ -226,23 +242,18 @@ private fun openUrl(context: Context, url: String) {
     )
 }
 
-private fun openNotificationListenerSettings(context: Context) {
-    context.startActivity(
-        Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-    )
-}
-
-private fun openUsageAccessSettings(context: Context) {
-    context.startActivity(
-        Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-    )
-}
-
 private fun openBatteryOptimizationSettings(context: Context) {
-    context.startActivity(
-        Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-    )
+    try {
+        context.startActivity(
+            Intent(
+                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                android.net.Uri.parse("package:${context.packageName}"),
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        )
+    } catch (_: Exception) {
+        context.startActivity(
+            Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        )
+    }
 }

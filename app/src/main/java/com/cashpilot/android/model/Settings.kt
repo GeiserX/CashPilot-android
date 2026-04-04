@@ -6,4 +6,5 @@ data class Settings(
     val apiKey: String = "",
     val heartbeatIntervalSeconds: Int = 30,
     val enabledSlugs: Set<String> = KnownApps.all.map { it.slug }.toSet(),
+    val setupCompleted: Boolean = false,
 )
