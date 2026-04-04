@@ -13,22 +13,16 @@
 
     <!-- Package visibility: required on Android 11+ to query third-party apps -->
     <queries>
-        <package android:name="com.honeygain.app" />
-        <package android:name="com.bright.earnapp" />
-        <package android:name="com.iproyal.pawns" />
-        <package android:name="network.mysterium.vpn" />
-        <package android:name="com.packetstream.android" />
+        <package android:name="com.brd.earnapp.play" />
+        <package android:name="com.iproyal.android" />
+        <package android:name="network.mysterium.provider" />
         <package android:name="com.traffmonetizer.client" />
-        <package android:name="com.repocket.android" />
-        <package android:name="com.peer2profit.app" />
-        <package android:name="com.bytelixir.app" />
-        <package android:name="com.bytebenefit.app" />
-        <package android:name="com.getgrass.android" />
-        <package android:name="com.gaga.gaganode" />
-        <package android:name="com.titan.network" />
+        <package android:name="com.bytelixir.blapp" />
+        <package android:name="io.bytebenefit.app" />
+        <package android:name="io.getgrass.www" />
+        <package android:name="com.titan_network_vip.titan_app" />
         <package android:name="io.nodle.cash" />
-        <package android:name="com.passiveincome.app" />
-        <package android:name="com.uprock.android" />
+        <package android:name="com.uprock.mining" />
         <package android:name="com.wipter.app" />
     </queries>
 

@@ -16,22 +16,16 @@ data class MonitoredApp(
 /** Built-in list of known passive income Android apps and their package names. */
 object KnownApps {
     val all = listOf(
-        MonitoredApp("honeygain", "com.honeygain.app", "Honeygain"),
-        MonitoredApp("earnapp", "com.bright.earnapp", "EarnApp"),
-        MonitoredApp("iproyal", "com.iproyal.pawns", "IPRoyal Pawns"),
-        MonitoredApp("mysterium", "network.mysterium.vpn", "Mysterium"),
-        MonitoredApp("packetstream", "com.packetstream.android", "PacketStream"),
+        MonitoredApp("earnapp", "com.brd.earnapp.play", "EarnApp"),
+        MonitoredApp("iproyal", "com.iproyal.android", "IPRoyal Pawns"),
+        MonitoredApp("mysterium", "network.mysterium.provider", "MystNodes"),
         MonitoredApp("traffmonetizer", "com.traffmonetizer.client", "Traffmonetizer"),
-        MonitoredApp("repocket", "com.repocket.android", "Repocket"),
-        MonitoredApp("peer2profit", "com.peer2profit.app", "Peer2Profit"),
-        MonitoredApp("bytelixir", "com.bytelixir.app", "Bytelixir"),
-        MonitoredApp("bytebenefit", "com.bytebenefit.app", "ByteBenefit"),
-        MonitoredApp("grass", "com.getgrass.android", "Grass"),
-        MonitoredApp("gaganode", "com.gaga.gaganode", "GagaNode"),
-        MonitoredApp("titan", "com.titan.network", "Titan Network"),
+        MonitoredApp("bytelixir", "com.bytelixir.blapp", "Bytelixir"),
+        MonitoredApp("bytebenefit", "io.bytebenefit.app", "ByteBenefit"),
+        MonitoredApp("grass", "io.getgrass.www", "Grass"),
+        MonitoredApp("titan", "com.titan_network_vip.titan_app", "Titan Network"),
         MonitoredApp("nodle", "io.nodle.cash", "Nodle Cash"),
-        MonitoredApp("passiveapp", "com.passiveincome.app", "PassiveApp"),
-        MonitoredApp("uprock", "com.uprock.android", "Uprock"),
+        MonitoredApp("uprock", "com.uprock.mining", "Uprock"),
         MonitoredApp("wipter", "com.wipter.app", "Wipter"),
     )
 
