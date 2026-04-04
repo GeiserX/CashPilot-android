@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.URL
 import kotlin.coroutines.coroutineContext
 
 enum class AppState { RUNNING, STOPPED, NOT_INSTALLED, DISABLED }
@@ -72,10 +73,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val lastHeartbeat: StateFlow<Long> = HeartbeatService.lastHeartbeat
     val lastHeartbeatFailed: StateFlow<Boolean> = HeartbeatService.lastHeartbeatFailed
 
+    private val _publicIp = MutableStateFlow<String?>(null)
+    val publicIp: StateFlow<String?> = _publicIp.asStateFlow()
+
     private var refreshJob: Job? = null
 
     init {
         checkPermissions()
+        fetchPublicIp()
     }
 
     fun refreshStatuses() {
@@ -155,6 +160,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         apiKeyJob = viewModelScope.launch {
             delay(500)
             SettingsStore.update(getApplication()) { it.copy(apiKey = key) }
+        }
+    }
+
+    private fun fetchPublicIp() {
+        viewModelScope.launch {
+            _publicIp.value = withContext(Dispatchers.IO) {
+                try {
+                    URL("https://api.ipify.org").readText().trim()
+                } catch (_: Exception) {
+                    null
+                }
+            }
         }
     }
 

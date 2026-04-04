@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Settings
@@ -79,6 +80,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
     val lastHeartbeat by viewModel.lastHeartbeat.collectAsState()
     val lastHeartbeatFailed by viewModel.lastHeartbeatFailed.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val publicIp by viewModel.publicIp.collectAsState()
 
     // Auto-refresh every 30s while visible
     LaunchedEffect(Unit) {
@@ -120,6 +122,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                         serverConfigured = settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank(),
                         lastHeartbeat = lastHeartbeat,
                         heartbeatFailed = lastHeartbeatFailed,
+                        publicIp = publicIp,
                         onNavigateToSettings = onNavigateToSettings,
                     )
                 }
@@ -144,6 +147,7 @@ private fun SummaryHeader(
     serverConfigured: Boolean,
     lastHeartbeat: Long,
     heartbeatFailed: Boolean,
+    publicIp: String?,
     onNavigateToSettings: () -> Unit,
 ) {
     Card(
@@ -244,6 +248,25 @@ private fun SummaryHeader(
                         stringResource(R.string.bandwidth_24h),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+
+            // Public IP row
+            if (publicIp != null) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.Language,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        "IP: $publicIp",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Spacer(Modifier.height(8.dp))
