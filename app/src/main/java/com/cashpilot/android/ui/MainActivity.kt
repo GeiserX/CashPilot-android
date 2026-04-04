@@ -69,12 +69,11 @@ class MainActivity : ComponentActivity() {
                     val settings by viewModel.settings.collectAsState()
                     val hasNotif by viewModel.hasNotificationAccess.collectAsState()
                     val hasUsage by viewModel.hasUsageAccess.collectAsState()
-                    val hasBattery by viewModel.hasBatteryOptOut.collectAsState()
                     var showSettings by rememberSaveable { mutableStateOf(false) }
                     var setupDismissed by rememberSaveable { mutableStateOf(false) }
 
                     val needsSetup = !setupDismissed &&
-                        (settings.serverUrl.isBlank() || settings.apiKey.isBlank() || !hasNotif || !hasUsage || !hasBattery)
+                        (settings.serverUrl.isBlank() || settings.apiKey.isBlank() || !hasNotif || !hasUsage)
 
                     // Handle system Back from Settings → return to Dashboard
                     BackHandler(enabled = showSettings && !needsSetup) {

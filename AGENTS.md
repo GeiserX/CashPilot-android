@@ -110,10 +110,10 @@ Apps removed (not on Play Store, APK-only distribution): Honeygain, PacketStream
 
 ## APK Installation via adb
 
-- `adb install -r <apk>` installs over existing app **only if signatures match**
-- Debug and release APKs have different signing keys — installing debug over release (or vice versa) fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`
-- To switch signing type: `adb uninstall com.cashpilot.android` first (loses app data)
-- CI release APK matches the keystore used for GitHub Releases and F-Droid — always prefer `app-release` artifact
+- **ALWAYS install the release-signed APK (`app-release`). NEVER use the debug APK.** Switching signatures requires a full uninstall, which wipes all app data (server URL, API key, permissions).
+- Download from CI: `gh run download <run-id> --name app-release --dir /tmp/cashpilot-apk`
+- Install: `adb install -r /tmp/cashpilot-apk/app-release.apk`
+- If signature mismatch: `adb uninstall com.cashpilot.android` first, then install (user must re-configure)
 
 ## What NOT to Build Yet
 
