@@ -1,5 +1,6 @@
 package com.cashpilot.android.ui.screen
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings as AndroidSettings
