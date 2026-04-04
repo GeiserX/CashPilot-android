@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.BatteryAlert
 import androidx.compose.material.icons.filled.QueryStats
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -52,6 +53,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
     val settings by viewModel.settings.collectAsState()
     val hasNotif by viewModel.hasNotificationAccess.collectAsState()
     val hasUsage by viewModel.hasUsageAccess.collectAsState()
+    val hasBattery by viewModel.hasBatteryOptOut.collectAsState()
     val context = LocalContext.current
 
     var localUrl by rememberSaveable { mutableStateOf("") }
@@ -164,6 +166,23 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                 }
             }
 
+            // Step 4: Battery optimization
+            SetupCard(
+                step = 4,
+                icon = Icons.Default.BatteryAlert,
+                title = stringResource(R.string.setup_battery_title),
+                description = stringResource(R.string.setup_battery_desc),
+                done = hasBattery,
+            ) {
+                TextButton(
+                    onClick = { openBatteryOptimizationSettings(context) },
+                ) {
+                    Text(stringResource(R.string.setup_grant_access))
+                    Spacer(Modifier.width(4.dp))
+                    Icon(Icons.Default.ChevronRight, null, Modifier.size(18.dp))
+                }
+            }
+
             Spacer(Modifier.height(8.dp))
 
             Button(
@@ -173,7 +192,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                     onComplete()
                 },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = serverDone && hasNotif && hasUsage,
+                enabled = serverDone && hasNotif && hasUsage && hasBattery,
             ) {
                 Text(stringResource(R.string.setup_continue))
             }
@@ -260,6 +279,13 @@ private fun openNotificationListenerSettings(context: Context) {
 private fun openUsageAccessSettings(context: Context) {
     context.startActivity(
         Intent(AndroidSettings.ACTION_USAGE_ACCESS_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
+}
+
+private fun openBatteryOptimizationSettings(context: Context) {
+    context.startActivity(
+        Intent(AndroidSettings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
     )
 }

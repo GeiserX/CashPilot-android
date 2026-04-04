@@ -31,6 +31,8 @@
     <string name="setup_notif_desc">CashPilot reads foreground notifications to detect when passive income apps are running. No notification content is collected — only presence is checked.</string>
     <string name="setup_usage_title">Usage Access</string>
     <string name="setup_usage_desc">Allows CashPilot to check when apps were last active and measure per-app network usage. This data stays on your device and is only sent to your own server.</string>
+    <string name="setup_battery_title">Battery Optimization</string>
+    <string name="setup_battery_desc">Disable battery optimization so Android doesn\'t kill CashPilot\'s background service. Without this, heartbeats may stop when the screen is off.</string>
     <string name="setup_grant_access">Open Settings</string>
     <string name="setup_continue">Continue to Dashboard</string>
     <string name="setup_skip">Skip for now</string>

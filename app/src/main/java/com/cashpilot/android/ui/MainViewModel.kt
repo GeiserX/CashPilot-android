@@ -2,6 +2,7 @@ package com.cashpilot.android.ui
 
 import android.app.AppOpsManager
 import android.app.Application
+import android.os.PowerManager
 import android.content.ComponentName
 import android.content.Context
 import android.os.Build
@@ -73,6 +74,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _hasUsageAccess = MutableStateFlow(false)
     val hasUsageAccess: StateFlow<Boolean> = _hasUsageAccess.asStateFlow()
+
+    private val _hasBatteryOptOut = MutableStateFlow(false)
+    val hasBatteryOptOut: StateFlow<Boolean> = _hasBatteryOptOut.asStateFlow()
 
     val lastHeartbeat: StateFlow<Long> = HeartbeatService.lastHeartbeat
     val lastHeartbeatFailed: StateFlow<Boolean> = HeartbeatService.lastHeartbeatFailed
@@ -225,5 +229,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         } else {
             false
         }
+
+        val pm = ctx.getSystemService(Context.POWER_SERVICE) as? PowerManager
+        _hasBatteryOptOut.value = pm?.isIgnoringBatteryOptimizations(ctx.packageName) ?: false
     }
 }
