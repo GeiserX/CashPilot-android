@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/banner.svg" alt="CashPilot Android banner" width="900"/>
+</p>
+
 # CashPilot Android Agent
 
 Lightweight Android companion for [CashPilot](https://github.com/GeiserX/CashPilot) — monitors passive income apps running on your phone and reports their status to the CashPilot fleet dashboard.
