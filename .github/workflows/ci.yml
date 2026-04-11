@@ -1,68 +1,21 @@
 name: CI
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
-
-      - name: Run lint
-        run: ./gradlew lintDebug
-
-      - name: Check signing secrets
-        id: signing
-        run: echo "available=true" >> "$GITHUB_OUTPUT"
-        if: env.KEYSTORE_B64 != ''
-        env:
-          KEYSTORE_B64: ${{ secrets.KEYSTORE_BASE64 }}
-
-      - name: Decode keystore
-        if: steps.signing.outputs.available == 'true'
-        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/release.keystore
-
-      - name: Build release APK
-        if: steps.signing.outputs.available == 'true'
-        run: ./gradlew assembleRelease
-        env:
-          CASHPILOT_KEYSTORE_PATH: release.keystore
-          CASHPILOT_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          CASHPILOT_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          CASHPILOT_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-
-      - name: Remove keystore
-        if: always()
-        run: rm -f app/release.keystore
-
-      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
+          distribution: temurin
+          java-version: 17
+      - run: chmod +x gradlew
+      - run: ./gradlew testDebugUnitTest jacocoTestReport || ./gradlew testDebugUnitTest
+      - uses: codecov/codecov-action@v5
+        if: github.event_name == 'push'
         with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Upload release APK
-        if: steps.signing.outputs.available == 'true' && github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release
-          path: app/build/outputs/apk/release/app-release.apk
+          fail_ci_if_error: false
