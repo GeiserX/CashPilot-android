@@ -15,9 +15,9 @@ jobs:
           distribution: temurin
           java-version: 17
       - run: chmod +x gradlew
-      - run: ./gradlew testDebugUnitTest jacocoTestReport || ./gradlew testDebugUnitTest
+      - run: ./gradlew jacocoTestReport
       - uses: codecov/codecov-action@v5
         if: github.event_name == 'push'
         with:
-          files: "**/jacocoTestReport.xml,**/reports/jacoco/**/*.xml"
+          files: app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           fail_ci_if_error: false
