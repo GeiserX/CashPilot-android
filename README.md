@@ -76,6 +76,16 @@ All app status data is sent **only to your own CashPilot server**. The app makes
 - Android 8.0+ (API 26)
 - CashPilot server v0.2.49+
 
+
+## Related Projects
+
+| Project | Description |
+|---------|-------------|
+| [CashPilot](https://github.com/GeiserX/CashPilot) | Self-hosted passive income platform with web UI for setup and earnings tracking |
+| [cashpilot-ha](https://github.com/GeiserX/cashpilot-ha) | Home Assistant custom integration for CashPilot passive income monitoring |
+| [cashpilot-mcp](https://github.com/GeiserX/cashpilot-mcp) | MCP Server for CashPilot passive income monitoring and fleet management |
+| [n8n-nodes-cashpilot](https://github.com/GeiserX/n8n-nodes-cashpilot) | n8n community node for CashPilot passive income monitoring |
+
 ## License
 
 GPL-3.0-or-later
