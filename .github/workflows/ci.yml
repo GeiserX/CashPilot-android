@@ -19,4 +19,5 @@ jobs:
       - uses: codecov/codecov-action@v5
         if: github.event_name == 'push'
         with:
+          files: "**/jacocoTestReport.xml,**/reports/jacoco/**/*.xml"
           fail_ci_if_error: false
