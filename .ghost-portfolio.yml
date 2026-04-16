@@ -1,0 +1,7 @@
+description: "Android companion app for CashPilot — monitors passive income apps running on your phone without root."
+personalNote: "CashPilot manages Docker containers on servers, but some passive income apps only run on Android. This agent detects which apps are installed and active using three complementary APIs — no root needed — and reports back to the fleet dashboard."
+keyFeatures:
+  - "Detects 11 passive income apps via NotificationListener, NetworkStats, and UsageStats"
+  - "Periodic heartbeats to CashPilot server for unified fleet monitoring"
+  - "No root required — uses standard Android APIs (API 26+)"
+techStack: "Kotlin, Jetpack Compose, Ktor, Material 3, WorkManager"
