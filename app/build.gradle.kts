@@ -127,6 +127,11 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/service/BootReceiver*",
         "**/service/AppDetector*",
         "**/service/HeartbeatService.class",
+        "**/service/HeartbeatService\$*.class",
+        // AppNotificationListener instance methods require Android NotificationListenerService;
+        // only the Companion (static helper methods) is unit-testable
+        "**/service/AppNotificationListener.class",
+        "**/service/AppNotificationListenerKt.class",
         "**/util/SettingsStore*",
         "**/CashPilotApp*",
     )
