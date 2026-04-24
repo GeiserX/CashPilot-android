@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class SerializationTest {
 
-    private val json = Json { ignoreUnknownKeys = true; prettyPrint = false }
+    private val json = Json { ignoreUnknownKeys = true; prettyPrint = false; encodeDefaults = true }
 
     // --- WorkerHeartbeat ---
 

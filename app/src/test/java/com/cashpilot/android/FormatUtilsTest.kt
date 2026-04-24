@@ -86,13 +86,13 @@ class FormatUtilsTest {
     fun `parseIso valid ISO instant`() {
         val millis = FormatUtils.parseIso("2024-01-15T10:30:00Z")
         assertTrue(millis > 0)
-        assertEquals(1705312200000L, millis)
+        assertEquals(1705314600000L, millis)
     }
 
     @Test
     fun `parseIso valid ISO with fractional seconds`() {
         val millis = FormatUtils.parseIso("2024-01-15T10:30:00.500Z")
-        assertEquals(1705312200500L, millis)
+        assertEquals(1705314600500L, millis)
     }
 
     @Test
