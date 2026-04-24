@@ -100,6 +100,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.14.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.14.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -115,11 +116,25 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         html.required.set(false)
     }
 
+    val excludes = listOf(
+        "**/R.class", "**/R\$*.class", "**/BuildConfig.class",
+        // Android framework classes (require instrumented tests, not unit tests)
+        "**/ui/screen/*Screen*",
+        "**/ui/theme/*",
+        "**/ui/MainActivity*",
+        "**/ui/MainViewModel.class",
+        "**/ui/MainViewModel\$*.class",
+        "**/service/BootReceiver*",
+        "**/service/AppDetector*",
+        "**/service/HeartbeatService.class",
+        "**/util/SettingsStore*",
+        "**/CashPilotApp*",
+    )
     val javaClasses = fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug") {
-        exclude("**/R.class", "**/R$*.class", "**/BuildConfig.class")
+        exclude(excludes)
     }
     val kotlinClasses = fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
-        exclude("**/R.class", "**/R$*.class", "**/BuildConfig.class")
+        exclude(excludes)
     }
 
     classDirectories.setFrom(files(javaClasses, kotlinClasses))

@@ -66,6 +66,7 @@ import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.ui.AppDisplayInfo
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.MainViewModel
+import com.cashpilot.android.util.FormatUtils
 import kotlinx.coroutines.delay
 
 private val RunningGreen = Color(0xFF22C55E)
@@ -533,12 +534,7 @@ private fun AppCard(info: AppDisplayInfo) {
     }
 }
 
-private fun formatBytes(bytes: Long): String = when {
-    bytes < 1024 -> "$bytes B"
-    bytes < 1024 * 1024 -> "${bytes / 1024} KB"
-    bytes < 1024 * 1024 * 1024 -> "${"%.1f".format(bytes / (1024.0 * 1024.0))} MB"
-    else -> "${"%.2f".format(bytes / (1024.0 * 1024.0 * 1024.0))} GB"
-}
+private fun formatBytes(bytes: Long): String = FormatUtils.formatBytes(bytes)
 
 private fun relativeTime(millis: Long): String {
     if (millis == 0L) return "never"
@@ -550,12 +546,7 @@ private fun relativeTime(millis: Long): String {
     ).toString()
 }
 
-private fun parseIso(iso: String): Long =
-    try {
-        java.time.Instant.parse(iso).toEpochMilli()
-    } catch (_: Exception) {
-        0L
-    }
+private fun parseIso(iso: String): Long = FormatUtils.parseIso(iso)
 
 private fun openAppInstall(context: Context, app: MonitoredApp) {
     // Try referral URL first, fall back to Play Store on any failure
