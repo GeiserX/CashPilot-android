@@ -32,6 +32,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
+      - uses: android-actions/setup-android@v3
       - run: ./gradlew jacocoTestReport
       - uses: codecov/codecov-action@v5
         if: github.event_name == 'push'
