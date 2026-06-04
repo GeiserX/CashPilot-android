@@ -19,6 +19,12 @@ android {
         versionName = findProperty("VERSION_NAME") as String
     }
 
+    dependenciesInfo {
+        // F-Droid: strip the Google-encrypted dependency metadata block.
+        includeInApk = false
+        includeInBundle = false
+    }
+
     signingConfigs {
         create("release") {
             val keystorePath = findProperty("CASHPILOT_KEYSTORE_PATH") as String?
