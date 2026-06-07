@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.cashpilot.android"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.cashpilot.android"
         minSdk = 26 // Android 8.0 — NotificationListenerService, NetworkStatsManager
-        targetSdk = 35
+        targetSdk = 36
 
         versionCode = (findProperty("VERSION_CODE") as String).toInt()
         versionName = findProperty("VERSION_NAME") as String
