@@ -34,7 +34,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - uses: android-actions/setup-android@v3
       - run: ./gradlew jacocoTestReport
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v7
         if: github.event_name == 'push'
         with:
           files: app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
