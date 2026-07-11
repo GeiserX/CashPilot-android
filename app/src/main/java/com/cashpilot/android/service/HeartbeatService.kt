@@ -73,7 +73,7 @@ class HeartbeatService : Service() {
         heartbeatJob = scope.launch {
             while (true) {
                 val settings = SettingsStore.settings(applicationContext).first()
-                if (settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank()) {
+                if (settings.serverUrl.isNotBlank() && settings.activeKey.isNotBlank()) {
                     sendHeartbeat(settings)
                 }
                 // Exponential backoff on consecutive failures (30s → 60s → 120s, max 5min)
@@ -124,8 +124,6 @@ class HeartbeatService : Service() {
             val url = settings.serverUrl.trimEnd('/') + "/api/workers/heartbeat"
             val response: HttpResponse = httpClient.post(url) {
                 contentType(ContentType.Application.Json)
-                // Authenticate with our own per-worker key once enrolled, else the
-                // shared key as the enrollment bootstrap.
                 bearerAuth(settings.activeKey)
                 setBody(heartbeat)
             }
@@ -137,10 +135,12 @@ class HeartbeatService : Service() {
                 // Enrollment: on first contact (and re-delivered until we confirm it
                 // by using it) the server returns this device's own fleet key. Persist
                 // and adopt it, so subsequent heartbeats authenticate with our own key.
-                val issued = runCatching { response.body<WorkerHeartbeatResponse>().workerKey }.getOrNull()
-                keyToPersist(settings.workerKey, issued)?.let { newKey ->
-                    SettingsStore.update(applicationContext) { it.copy(workerKey = newKey) }
-                    Log.i(TAG, "Enrolled: received and persisted this device's own fleet key")
+                val body = runCatching { response.body<WorkerHeartbeatResponse>() }.getOrNull()
+                if (body != null) {
+                    settingsAfterHeartbeat(settings, body)?.let { updated ->
+                        SettingsStore.update(applicationContext) { updated }
+                        Log.i(TAG, "Enrolled: received and persisted this device's own fleet key")
+                    }
                 }
                 val runningCount = apps.count { it.running }
                 updateNotification("$runningCount/${apps.size} apps running")
@@ -149,6 +149,10 @@ class HeartbeatService : Service() {
                 _lastHeartbeatFailed.value = true
                 Log.w(TAG, "Heartbeat rejected: HTTP ${response.status.value}")
                 updateNotification("Server rejected heartbeat (${response.status.value})")
+                if (response.status.value == 401 && settings.workerKey.isNotBlank()) {
+                    SettingsStore.update(applicationContext) { it.copy(workerKey = "") }
+                    Log.i(TAG, "Auth rejected (401) — clearing per-worker key to re-enroll")
+                }
             }
         } catch (e: Exception) {
             consecutiveFailures++
@@ -218,5 +222,13 @@ class HeartbeatService : Service() {
          */
         fun keyToPersist(current: String, issued: String?): String? =
             issued?.takeIf { it.isNotBlank() && it != current }
+
+        /**
+         * The [Settings] to persist after a successful heartbeat, given the current
+         * settings and the parsed response body — or `null` if nothing should change.
+         * Pure, so the response→persist wiring is unit-tested without Robolectric.
+         */
+        fun settingsAfterHeartbeat(settings: Settings, body: WorkerHeartbeatResponse): Settings? =
+            keyToPersist(settings.workerKey, body.workerKey)?.let { newKey -> settings.copy(workerKey = newKey) }
     }
 }
