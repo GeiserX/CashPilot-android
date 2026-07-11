@@ -14,3 +14,12 @@ Append-only. Newest at the bottom. Every "done" needs evidence (test/build/commi
 - Protocol contract (from web UI v1.0.0): heartbeat with own key once enrolled, else shared bootstrap key;
   server returns `worker_key` once on enroll; reissue until confirmed; reject shared key for confirmed device.
 - Next: implement android client (btz/a5d) then desktop server (jet/xkf), verify each.
+
+### 2026-07-11 — both sides implemented + PRs open
+- Android (client): PR #37 — Settings.workerKey/activeKey, SettingsStore persist, WorkerHeartbeatResponse,
+  HeartbeatService capture via pure keyToPersist; v0.2.0; PerWorkerKeyTest. Beads btz/a5d/nvn/20v closed.
+  CI compile break (Settings destructuring order) fixed by moving workerKey last (commit bacf9f1).
+- Desktop (server): PR #91 — store api_key_hash+key_confirmed + guarded migration; classifyFleetAuth
+  drives handleWorkerHeartbeat (enroll/reissue/confirm/reject); tests. Beads jet/xkf/10u/rxx closed.
+  Verified locally: go build/vet clean, go test -race ./... green.
+- Next: confirm both CIs green, address CodeRabbit, then architect review + cancel.
