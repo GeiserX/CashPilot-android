@@ -19,6 +19,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 object SettingsStore {
     private val SERVER_URL = stringPreferencesKey("server_url")
     private val API_KEY = stringPreferencesKey("api_key")
+    private val WORKER_KEY = stringPreferencesKey("worker_key")
     private val HEARTBEAT_INTERVAL = intPreferencesKey("heartbeat_interval")
     private val ENABLED_SLUGS = stringSetPreferencesKey("enabled_slugs")
     private val SETUP_COMPLETED = booleanPreferencesKey("setup_completed")
@@ -28,6 +29,7 @@ object SettingsStore {
             Settings(
                 serverUrl = prefs[SERVER_URL] ?: "",
                 apiKey = prefs[API_KEY] ?: "",
+                workerKey = prefs[WORKER_KEY] ?: "",
                 heartbeatIntervalSeconds = prefs[HEARTBEAT_INTERVAL] ?: 30,
                 enabledSlugs = prefs[ENABLED_SLUGS] ?: KnownApps.all.map { it.slug }.toSet(),
                 // Migration: mark as completed only if both URL and key were configured before this field existed
@@ -41,6 +43,7 @@ object SettingsStore {
             val current = Settings(
                 serverUrl = prefs[SERVER_URL] ?: "",
                 apiKey = prefs[API_KEY] ?: "",
+                workerKey = prefs[WORKER_KEY] ?: "",
                 heartbeatIntervalSeconds = prefs[HEARTBEAT_INTERVAL] ?: 30,
                 enabledSlugs = prefs[ENABLED_SLUGS] ?: KnownApps.all.map { it.slug }.toSet(),
                 setupCompleted = prefs[SETUP_COMPLETED]
@@ -49,6 +52,7 @@ object SettingsStore {
             val updated = transform(current)
             prefs[SERVER_URL] = updated.serverUrl
             prefs[API_KEY] = updated.apiKey
+            prefs[WORKER_KEY] = updated.workerKey
             prefs[HEARTBEAT_INTERVAL] = updated.heartbeatIntervalSeconds
             prefs[ENABLED_SLUGS] = updated.enabledSlugs
             prefs[SETUP_COMPLETED] = updated.setupCompleted

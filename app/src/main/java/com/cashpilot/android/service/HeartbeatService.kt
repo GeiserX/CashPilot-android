@@ -15,8 +15,10 @@ import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.model.SystemInfo
 import com.cashpilot.android.model.WorkerHeartbeat
+import com.cashpilot.android.model.WorkerHeartbeatResponse
 import com.cashpilot.android.util.SettingsStore
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -122,7 +124,9 @@ class HeartbeatService : Service() {
             val url = settings.serverUrl.trimEnd('/') + "/api/workers/heartbeat"
             val response: HttpResponse = httpClient.post(url) {
                 contentType(ContentType.Application.Json)
-                bearerAuth(settings.apiKey)
+                // Authenticate with our own per-worker key once enrolled, else the
+                // shared key as the enrollment bootstrap.
+                bearerAuth(settings.activeKey)
                 setBody(heartbeat)
             }
 
@@ -130,6 +134,14 @@ class HeartbeatService : Service() {
                 consecutiveFailures = 0
                 _lastHeartbeat.value = System.currentTimeMillis()
                 _lastHeartbeatFailed.value = false
+                // Enrollment: on first contact (and re-delivered until we confirm it
+                // by using it) the server returns this device's own fleet key. Persist
+                // and adopt it, so subsequent heartbeats authenticate with our own key.
+                val issued = runCatching { response.body<WorkerHeartbeatResponse>().workerKey }.getOrNull()
+                keyToPersist(settings.workerKey, issued)?.let { newKey ->
+                    SettingsStore.update(applicationContext) { it.copy(workerKey = newKey) }
+                    Log.i(TAG, "Enrolled: received and persisted this device's own fleet key")
+                }
                 val runningCount = apps.count { it.running }
                 updateNotification("$runningCount/${apps.size} apps running")
             } else {
@@ -198,5 +210,13 @@ class HeartbeatService : Service() {
         /** Whether the last heartbeat attempt failed. */
         private val _lastHeartbeatFailed = MutableStateFlow(false)
         val lastHeartbeatFailed: StateFlow<Boolean> = _lastHeartbeatFailed.asStateFlow()
+
+        /**
+         * The per-worker key to newly persist, given the currently stored key and the
+         * one the server returned on this heartbeat — or `null` if nothing should
+         * change (no key issued, blank, or unchanged). Pure, so it is unit-tested.
+         */
+        fun keyToPersist(current: String, issued: String?): String? =
+            issued?.takeIf { it.isNotBlank() && it != current }
     }
 }
