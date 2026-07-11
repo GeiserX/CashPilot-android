@@ -47,3 +47,19 @@ data class AppStatus(
     @SerialName("net_rx_24h") val netRx24h: Long = 0,
     @SerialName("last_active") val lastActive: String? = null,
 )
+
+/**
+ * Response from POST /api/workers/heartbeat.
+ *
+ * On this device's first (enrollment) heartbeat — and re-delivered on each
+ * subsequent heartbeat until the device confirms it — the server returns a
+ * per-worker key in [workerKey]. The client persists it and authenticates with
+ * it thereafter (the shared key becomes enrollment-only). [workerKey] is absent
+ * once the device is enrolled and confirmed.
+ */
+@Serializable
+data class WorkerHeartbeatResponse(
+    val status: String = "",
+    @SerialName("worker_id") val workerId: Long? = null,
+    @SerialName("worker_key") val workerKey: String? = null,
+)
