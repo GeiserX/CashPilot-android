@@ -23,7 +23,7 @@ Android monitoring agent for CashPilot that tracks passive income apps (EarnApp,
 ./gradlew test
 ```
 
-**No local Java on macOS dev machine** — all compilation is via GitHub Actions CI. Lint baseline at `app/lint-baseline.xml` — new lint errors are fatal.
+**No working JVM on either Mac** — the dev machine has no Java, and the mini's Temurin 17 crashes at startup (`SIGBUS ... CodeHeap::allocate`, even on `java -version` and in `-Xint`). Use `scripts/remote-gradle.sh test|assembleDebug|lintDebug`, which runs Gradle in `eclipse-temurin:17-jdk` on the build host (~26s warm). That is a **faster pre-check, not a replacement for CI** — CI additionally builds the signed release variant and runs lint against the baseline, so never report a green local run as "CI passed". Lint baseline at `app/lint-baseline.xml` — new lint errors are fatal.
 
 ### Repository & Infrastructure
 
