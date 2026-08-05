@@ -10,7 +10,12 @@
     <string name="upload">Upload</string>
     <string name="download">Download</string>
     <string name="bandwidth_24h">24h</string>
-    <string name="not_connected">Not connected — configure server</string>
+    <!-- Standalone is a SUPPORTED mode, not a failure. "Not connected" in error
+         red made a deliberate choice look like a broken app. -->
+    <string name="not_paired">Not paired — running standalone</string>
+    <string name="setup_server_optional">Optional — skip this if you don\'t have a server</string>
+    <string name="setup_server_what_it_adds">Without a server CashPilot still detects which apps are running on this device and warns you when one stops. Pairing adds fleet-wide totals and earnings history across all your machines. You can pair later from Settings.</string>
+    <string name="setup_continue_standalone">Continue without a server</string>
     <string name="no_heartbeat_yet">No heartbeat yet</string>
     <string name="last_heartbeat">Last heartbeat %s</string>
 

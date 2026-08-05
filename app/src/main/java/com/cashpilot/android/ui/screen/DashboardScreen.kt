@@ -287,13 +287,13 @@ private fun SummaryHeader(
                             Icons.Default.CloudOff,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.error,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
-                            stringResource(R.string.not_connected),
+                            stringResource(R.string.not_paired),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.error,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 } else {

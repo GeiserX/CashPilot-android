@@ -111,7 +111,9 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                 step = 1,
                 icon = Icons.Default.Cloud,
                 title = stringResource(R.string.setup_server_title),
-                description = stringResource(R.string.setup_server_desc),
+                description = stringResource(R.string.setup_server_desc) + " " +
+                    stringResource(R.string.setup_server_what_it_adds),
+                optional = true,
                 done = serverDone,
             ) {
                 OutlinedTextField(
@@ -190,12 +192,22 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
 
             Spacer(Modifier.height(8.dp))
 
+            // The PERMISSIONS are genuinely required -- without notification and
+            // usage access the detector is blind and the app can do nothing at
+            // all. A SERVER is not: the phone works out which apps are running
+            // entirely on its own, and that is most of the value. Requiring one
+            // here made the app useless to anyone who installs it from a store
+            // without ever having heard of the server (CashPilot-android-ni6).
             Button(
                 onClick = finishSetup,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = serverDone && hasNotif && hasUsage,
+                enabled = hasNotif && hasUsage,
             ) {
-                Text(stringResource(R.string.setup_continue))
+                Text(
+                    stringResource(
+                        if (serverDone) R.string.setup_continue else R.string.setup_continue_standalone,
+                    ),
+                )
             }
 
             TextButton(
@@ -217,6 +229,8 @@ private fun SetupCard(
     title: String,
     description: String,
     done: Boolean,
+    /** Shown with an "optional" note and never blocks finishing setup. */
+    optional: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     Card(
@@ -249,7 +263,8 @@ private fun SetupCard(
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
-                        stringResource(R.string.setup_step, step, title),
+                        stringResource(R.string.setup_step, step, title) +
+                            if (optional) " · " + stringResource(R.string.setup_server_optional) else "",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                     )
