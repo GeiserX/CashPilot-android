@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.cashpilot.android.R
 import com.cashpilot.android.BuildConfig
+import com.cashpilot.android.model.Earnings
 import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.model.SystemInfo
@@ -143,6 +144,7 @@ class HeartbeatService : Service() {
                         SettingsStore.update(applicationContext) { updated }
                         Log.i(TAG, "Enrolled: received and persisted this device's own fleet key")
                     }
+                    recordEarnings(body, System.currentTimeMillis())
                 }
                 val runningCount = apps.count { it.running }
                 updateNotification("$runningCount/${apps.size} apps running")
@@ -218,6 +220,30 @@ class HeartbeatService : Service() {
         val lastHeartbeatFailed: StateFlow<Boolean> = _lastHeartbeatFailed.asStateFlow()
 
         /**
+         * Earnings from the most recent heartbeat that carried them, or null.
+         *
+         * Null is UNKNOWN, not zero: an older server, a server that could not
+         * produce the figures, or no heartbeat yet. The last known value is kept
+         * when a later heartbeat omits it, because a phone is offline often and
+         * blanking the figure on every blip would be worse than showing a stale
+         * one -- but see [earningsAsOf], which is what lets the UI say it is stale
+         * rather than pretending it is current.
+         */
+        private val _earnings = MutableStateFlow<Earnings?>(null)
+        val earnings: StateFlow<Earnings?> = _earnings.asStateFlow()
+
+        /** When [earnings] was received (0 = never). */
+        private val _earningsAsOf = MutableStateFlow(0L)
+        val earningsAsOf: StateFlow<Long> = _earningsAsOf.asStateFlow()
+
+        /**
+         * The earnings to keep after a heartbeat: the newly received ones, or the
+         * previous value when this response carried none. Pure, so it is
+         * unit-tested without a service.
+         */
+        fun earningsToKeep(current: Earnings?, received: Earnings?): Earnings? = received ?: current
+
+        /**
          * The per-worker key to newly persist, given the currently stored key and the
          * one the server returned on this heartbeat — or `null` if nothing should
          * change (no key issued, blank, or unchanged). Pure, so it is unit-tested.
@@ -232,5 +258,17 @@ class HeartbeatService : Service() {
          */
         fun settingsAfterHeartbeat(settings: Settings, body: WorkerHeartbeatResponse): Settings? =
             keyToPersist(settings.workerKey, body.workerKey)?.let { newKey -> settings.copy(workerKey = newKey) }
+
+        /**
+         * Record the earnings a heartbeat carried. Separate from
+         * [settingsAfterHeartbeat] because earnings are ephemeral display state,
+         * not settings -- persisting them to DataStore would mean writing on every
+         * heartbeat for a value that is meaningless once stale.
+         */
+        fun recordEarnings(body: WorkerHeartbeatResponse, now: Long) {
+            val kept = earningsToKeep(_earnings.value, body.earnings)
+            _earnings.value = kept
+            if (body.earnings != null) _earningsAsOf.value = now
+        }
     }
 }

@@ -80,4 +80,36 @@ data class WorkerHeartbeatResponse(
     val status: String = "",
     @SerialName("worker_id") val workerId: Long? = null,
     @SerialName("worker_key") val workerKey: String? = null,
+    /**
+     * What the platforms on this device have earned, when the server chose to
+     * send it. Null means UNKNOWN — an older server, or one that could not
+     * produce the figures — and must never be rendered as zero.
+     */
+    val earnings: Earnings? = null,
+)
+
+/**
+ * Earnings for the platforms this device is running.
+ *
+ * Deliberately NOT "what this device earned". Providers report one balance per
+ * account, so when the same app runs on two machines nothing can split it — see
+ * [PlatformEarnings.sharedWithOtherWorkers]. Claiming a per-device figure would
+ * be inventing one.
+ */
+@Serializable
+data class Earnings(
+    @SerialName("window_days") val windowDays: Int = 30,
+    val currency: String = "USD",
+    val platforms: List<PlatformEarnings> = emptyList(),
+    /** Sum of the platforms that HAVE a reading. Null when none do. */
+    @SerialName("total_usd") val totalUsd: Double? = null,
+    @SerialName("platforms_without_readings") val platformsWithoutReadings: List<String> = emptyList(),
+)
+
+@Serializable
+data class PlatformEarnings(
+    val slug: String = "",
+    /** Null means nothing has ever been read for this platform. Not zero. */
+    val usd: Double? = null,
+    @SerialName("shared_with_other_workers") val sharedWithOtherWorkers: Boolean = false,
 )
