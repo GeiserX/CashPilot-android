@@ -1,9 +1,9 @@
 package com.cashpilot.android
 
 import java.io.File
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 /**
  * CashPilot-android-ni6: the app demanded a server before it would do anything.
