@@ -93,6 +93,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
     val publicIp by viewModel.publicIp.collectAsState()
     val earnings by viewModel.earnings.collectAsState()
     val earningsAsOf by viewModel.earningsAsOf.collectAsState()
+    val isBlind by viewModel.isBlind.collectAsState()
     // Recomputed on each refresh tick rather than read at composition time, so
     // the "may be out of date" badge appears while the screen is open instead of
     // only after the user navigates away and back.
@@ -144,9 +145,12 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                     )
                 }
 
-                // -- Permission banner (full width) --
+                // -- Permissions --
+                // While blind the banner is the wrong shape: it is dismissible,
+                // and dismissing it leaves a screen full of cards that cannot
+                // say anything true. The blocking card takes over instead.
                 item(span = { GridItemSpan(2) }) {
-                    PermissionBanner(viewModel)
+                    if (isBlind) PermissionBlocker() else PermissionBanner(viewModel)
                 }
 
                 // -- Earnings (full width) --
@@ -160,8 +164,14 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                 }
 
                 // -- App grid --
-                items(apps, key = { it.app.slug }) { info ->
-                    AppCard(info, earnings?.platforms?.firstOrNull { it.slug == info.app.slug })
+                // Every card would read "Can't tell", which is eleven copies of
+                // one message. The blocking card above says it once, with the fix.
+                // Earnings stay visible either way -- they come from the server
+                // and are unaffected by what this device can see.
+                if (!isBlind) {
+                    items(apps, key = { it.app.slug }) { info ->
+                        AppCard(info, earnings?.platforms?.firstOrNull { it.slug == info.app.slug })
+                    }
                 }
             }
         }
@@ -218,6 +228,25 @@ private fun SummaryHeader(
                         stringResource(R.string.summary_stopped, summary.stopped),
                         style = MaterialTheme.typography.labelMedium,
                     )
+                }
+                // Unknown -- only when there ARE any, because a permanent
+                // "0 unknown" is noise. Shown BEFORE not-installed: an app we
+                // cannot see is a live problem, one that is not installed is not.
+                if (summary.unknown > 0) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Circle,
+                            contentDescription = null,
+                            tint = UnknownAmber,
+                            modifier = Modifier.size(10.dp),
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.summary_unknown, summary.unknown),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
                 // Not installed
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -347,6 +376,75 @@ private fun SummaryHeader(
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+/**
+ * Shown INSTEAD of the app grid when no detection signal is available.
+ *
+ * Not a styling choice. With neither notification nor usage access every app
+ * resolves to [AppState.UNKNOWN], so the grid would be eleven identical "Can't
+ * tell" cards — the same sentence, repeated, with the actual fix nowhere on
+ * screen. This says it once and offers the two buttons that resolve it.
+ *
+ * Deliberately NOT dismissible, unlike [PermissionBanner]. Dismissing it would
+ * leave a screen that looks informative and knows nothing.
+ */
+@Composable
+private fun PermissionBlocker() {
+    val context = LocalContext.current
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.VisibilityOff,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.onErrorContainer,
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    stringResource(R.string.permissions_blocking_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                stringResource(R.string.permissions_blocking_body),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+            )
+            Spacer(Modifier.height(8.dp))
+            TextButton(
+                onClick = {
+                    context.startActivity(
+                        Intent(AndroidSettings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    )
+                },
+            ) {
+                Icon(Icons.Default.Notifications, null, Modifier.size(16.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(stringResource(R.string.grant_notification_access))
+            }
+            TextButton(
+                onClick = {
+                    context.startActivity(
+                        Intent(AndroidSettings.ACTION_USAGE_ACCESS_SETTINGS)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    )
+                },
+            ) {
+                Icon(Icons.Default.Language, null, Modifier.size(16.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(stringResource(R.string.grant_usage_access))
             }
         }
     }

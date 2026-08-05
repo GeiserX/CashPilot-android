@@ -16,6 +16,7 @@ import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.service.AppDetector
+import com.cashpilot.android.service.Detection
 import com.cashpilot.android.service.AppNotificationListener
 import com.cashpilot.android.service.HeartbeatService
 import com.cashpilot.android.util.SettingsStore
@@ -24,6 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -57,6 +59,21 @@ data class FleetSummary(
     val disabled: Int = 0,
     val totalTx: Long = 0,
     val totalRx: Long = 0,
+    /**
+     * Apps whose state could not be determined.
+     *
+     * Without this the counts silently swallow them: every app reads UNKNOWN
+     * when the permissions are denied, so running and stopped are both 0 and the
+     * header states "0 running" -- which reads as "nothing is earning". Same
+     * false claim the per-app cards were just fixed for, one summary line up.
+     *
+     * Declared LAST on purpose, matching the convention SystemInfo already
+     * documents: DataClassContractTest destructures this class positionally, so
+     * member order is part of its contract and inserting anywhere else silently
+     * changes what component3() means. Adding it third broke that test, which is
+     * the convention doing its job.
+     */
+    val unknown: Int = 0,
 )
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -87,6 +104,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _hasBatteryOptOut = MutableStateFlow(false)
     val hasBatteryOptOut: StateFlow<Boolean> = _hasBatteryOptOut.asStateFlow()
+
+    /**
+     * True when NO detection signal is available on this device.
+     *
+     * Not a nicety: while blind, every app reads UNKNOWN, so the app grid can
+     * say nothing true and the permission prompt is the only honest content the
+     * screen has. Earnings are unaffected -- they come from the server.
+     */
+    val isBlind: StateFlow<Boolean> = combine(hasNotificationAccess, hasUsageAccess) { notif, usage ->
+        Detection.isBlind(canSeeNotifications = notif, canSeeUsage = usage)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     val lastHeartbeat: StateFlow<Long> = HeartbeatService.lastHeartbeat
     val lastHeartbeatFailed: StateFlow<Boolean> = HeartbeatService.lastHeartbeatFailed
@@ -165,14 +193,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         // If this job was cancelled while IO work ran, don't write stale results
         coroutineContext.ensureActive()
         _apps.value = result
-        _summary.value = FleetSummary(
-            running = result.count { it.state == AppState.RUNNING },
-            stopped = result.count { it.state == AppState.STOPPED },
-            notInstalled = result.count { it.state == AppState.NOT_INSTALLED },
-            disabled = result.count { it.state == AppState.DISABLED },
-            totalTx = result.mapNotNull { it.status?.netTx24h }.sum(),
-            totalRx = result.mapNotNull { it.status?.netRx24h }.sum(),
-        )
+        _summary.value = AppPresentation.summarise(result)
         checkPermissions()
         // Only fetch public IP when fully configured, and don't retry on failure
         val serverReady = settings.value.serverUrl.isNotBlank() && settings.value.apiKey.isNotBlank()
