@@ -89,4 +89,5 @@
     <string name="state_unknown">Can\'t tell</string>
     <string name="permissions_blocking_title">CashPilot can\'t see your apps</string>
     <string name="permissions_blocking_body">Without notification and usage access this app cannot tell which earning apps are running. It will not guess — every app shows as unknown until you grant them.</string>
+    <string name="summary_unknown">%1$d unknown</string>
 </resources>

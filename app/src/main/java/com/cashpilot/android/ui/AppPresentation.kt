@@ -97,4 +97,27 @@ object AppPresentation {
      */
     fun sortForDashboard(apps: List<AppDisplayInfo>): List<AppDisplayInfo> =
         apps.sortedWith(compareBy({ attentionRank(it.state) }, { it.app.displayName.lowercase() }))
+
+    /**
+     * The header counts, derived from the same list the grid shows.
+     *
+     * Pure and here, rather than inline in [MainViewModel], for the reason that
+     * keeps recurring: the ViewModel needs an Application, so a test cannot
+     * drive it and instead RE-IMPLEMENTS the counting. A copy cannot fail when
+     * production changes -- a control that removed the UNKNOWN tally from the
+     * ViewModel left such a test perfectly green.
+     *
+     * Every state must land in exactly one bucket. When they do not, apps go
+     * missing from the header entirely: that is how a device where nothing could
+     * be seen reported "0 running, 0 stopped" and read as "nothing is earning".
+     */
+    fun summarise(apps: List<AppDisplayInfo>): FleetSummary = FleetSummary(
+        running = apps.count { it.state == AppState.RUNNING },
+        stopped = apps.count { it.state == AppState.STOPPED },
+        notInstalled = apps.count { it.state == AppState.NOT_INSTALLED },
+        disabled = apps.count { it.state == AppState.DISABLED },
+        totalTx = apps.mapNotNull { it.status?.netTx24h }.sum(),
+        totalRx = apps.mapNotNull { it.status?.netRx24h }.sum(),
+        unknown = apps.count { it.state == AppState.UNKNOWN },
+    )
 }
