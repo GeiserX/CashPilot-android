@@ -11,6 +11,7 @@ import android.provider.Settings as SystemSettings
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.cashpilot.android.model.AppStatus
+import com.cashpilot.android.model.Earnings
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.model.Settings
@@ -81,6 +82,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val lastHeartbeat: StateFlow<Long> = HeartbeatService.lastHeartbeat
     val lastHeartbeatFailed: StateFlow<Boolean> = HeartbeatService.lastHeartbeatFailed
 
+    /**
+     * What the server says these platforms earned.
+     *
+     * The service has carried this since the earnings work landed, and nothing
+     * read it -- the phone asked, the server answered, the reply was parsed,
+     * stored and kept across offline blips, and then no screen showed it. That
+     * was the user's original complaint about this app.
+     *
+     * Null is UNKNOWN, never zero. [earningsAsOf] is exposed alongside so the
+     * dashboard can say a figure is stale instead of presenting it as current;
+     * a phone is offline often, so the last known value is kept deliberately.
+     */
+    val earnings: StateFlow<Earnings?> = HeartbeatService.earnings
+    val earningsAsOf: StateFlow<Long> = HeartbeatService.earningsAsOf
+
     private val _publicIp = MutableStateFlow<String?>(null)
     val publicIp: StateFlow<String?> = _publicIp.asStateFlow()
     private var publicIpFailed = false
@@ -122,17 +138,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val isEnabled = app.slug in enabled
                 val status = detected[app.slug]
 
-                val state = when {
-                    !installed -> AppState.NOT_INSTALLED
-                    !isEnabled -> AppState.DISABLED
-                    status?.running == true -> AppState.RUNNING
-                    else -> AppState.STOPPED
-                }
+                val state = AppPresentation.resolveState(
+                    installed = installed,
+                    enabled = isEnabled,
+                    running = status?.running,
+                )
 
                 AppDisplayInfo(app = app, state = state, status = status)
             }
 
-            displayList.sortedBy { it.state.ordinal }
+            // Problems first. This used to sort by AppState.ordinal, which is
+            // the enum's declaration order -- RUNNING first -- so the apps that
+            // were fine took the top of the screen and anything STOPPED was
+            // pushed below them.
+            AppPresentation.sortForDashboard(displayList)
         }
         // If this job was cancelled while IO work ran, don't write stale results
         coroutineContext.ensureActive()

@@ -4,14 +4,16 @@ import com.cashpilot.android.model.AppStatus
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.ui.AppDisplayInfo
+import com.cashpilot.android.ui.AppPresentation
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.FleetSummary
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 /**
- * Tests the AppState resolution logic extracted from MainViewModel.doRefresh.
- * This covers every branch in the state determination: NOT_INSTALLED, DISABLED, RUNNING, STOPPED.
+ * Every branch of AppState resolution: NOT_INSTALLED, DISABLED, RUNNING, STOPPED.
+ *
+ * Drives [AppPresentation.resolveState], the same function MainViewModel calls.
  */
 class AppStateResolutionTest {
 
@@ -19,16 +21,20 @@ class AppStateResolutionTest {
      * Mirrors the state resolution logic from MainViewModel.doRefresh.
      * This is the exact same when-expression used in production.
      */
+    /**
+     * Delegates to production instead of restating it.
+     *
+     * This used to be a COPY of the when-expression in MainViewModel, and said
+     * so: "this is the exact same when-expression used in production". A copy
+     * cannot fail when production changes, so every case below was verifying
+     * the copy. The logic moved to AppPresentation; this now calls it, which
+     * makes the existing cases real coverage without rewriting them.
+     */
     private fun resolveState(
         installed: Boolean,
         enabled: Boolean,
         running: Boolean?,
-    ): AppState = when {
-        !installed -> AppState.NOT_INSTALLED
-        !enabled -> AppState.DISABLED
-        running == true -> AppState.RUNNING
-        else -> AppState.STOPPED
-    }
+    ): AppState = AppPresentation.resolveState(installed, enabled, running)
 
     @Test
     fun `not installed overrides everything`() {
