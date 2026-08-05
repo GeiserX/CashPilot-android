@@ -63,4 +63,25 @@
     <string name="about_github_android">CashPilot Android</string>
     <string name="about_github_server">CashPilot Server</string>
     <string name="about_donate">Sponsor / Donate</string>
+
+    <!-- Earnings. The server has been sending these since the earnings work
+         landed; nothing displayed them until now. -->
+    <string name="earnings_title">Earnings</string>
+    <string name="earnings_window">Last %1$d days</string>
+    <!-- Shown INSTEAD of a figure. Never "$0.00" - nothing has been read, which
+         is not the same as having earned nothing. -->
+    <string name="earnings_none_yet">Nothing read yet</string>
+    <string name="earnings_none_yet_detail">CashPilot has not received an earnings figure for these apps yet. This is not the same as having earned nothing.</string>
+    <string name="earnings_stale">Last updated %1$s</string>
+    <string name="earnings_stale_badge">May be out of date</string>
+    <!-- A provider reports one balance per account, so when the same app runs on
+         more than one machine nothing can split it per device. -->
+    <string name="earnings_shared">Shared across your devices</string>
+    <string name="earnings_shared_detail">This provider reports one balance for your whole account, so this figure is not what this phone alone earned.</string>
+    <string name="earnings_no_reading">No reading for this app yet</string>
+    <string name="earnings_needs_server">Pair a CashPilot server to see earnings</string>
+    <plurals name="earnings_platforms_without_readings">
+        <item quantity="one">%1$d app has no reading yet</item>
+        <item quantity="other">%1$d apps have no reading yet</item>
+    </plurals>
 </resources>

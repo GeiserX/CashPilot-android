@@ -65,7 +65,10 @@ import com.cashpilot.android.R
 import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.ui.AppDisplayInfo
 import com.cashpilot.android.ui.AppState
+import com.cashpilot.android.ui.EarningsPresentation
+import com.cashpilot.android.model.PlatformEarnings
 import com.cashpilot.android.ui.MainViewModel
+import com.cashpilot.android.ui.component.EarningsCard
 import com.cashpilot.android.util.FormatUtils
 import kotlinx.coroutines.delay
 
@@ -84,11 +87,18 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
     val lastHeartbeatFailed by viewModel.lastHeartbeatFailed.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val publicIp by viewModel.publicIp.collectAsState()
+    val earnings by viewModel.earnings.collectAsState()
+    val earningsAsOf by viewModel.earningsAsOf.collectAsState()
+    // Recomputed on each refresh tick rather than read at composition time, so
+    // the "may be out of date" badge appears while the screen is open instead of
+    // only after the user navigates away and back.
+    var nowMillis by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
 
     // Auto-refresh every 30s while visible
     LaunchedEffect(Unit) {
         while (true) {
             delay(30_000)
+            nowMillis = System.currentTimeMillis()
             viewModel.refreshStatuses()
         }
     }
@@ -135,9 +145,19 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                     PermissionBanner(viewModel)
                 }
 
+                // -- Earnings (full width) --
+                item(span = { GridItemSpan(2) }) {
+                    EarningsCard(
+                        earnings = earnings,
+                        asOfMillis = earningsAsOf,
+                        nowMillis = nowMillis,
+                        serverConfigured = settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank(),
+                    )
+                }
+
                 // -- App grid --
                 items(apps, key = { it.app.slug }) { info ->
-                    AppCard(info)
+                    AppCard(info, earnings?.platforms?.firstOrNull { it.slug == info.app.slug })
                 }
             }
         }
@@ -409,7 +429,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
 }
 
 @Composable
-private fun AppCard(info: AppDisplayInfo) {
+private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
     val context = LocalContext.current
     val borderColor = when (info.state) {
         AppState.RUNNING -> RunningGreen
@@ -464,6 +484,30 @@ private fun AppCard(info: AppDisplayInfo) {
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
+            }
+
+            // Per-app earnings. Only for apps that are actually on this
+            // device: a figure beside an app the user has not installed would
+            // be noise, and beside a DISABLED one it would be stale by design.
+            if (EarningsPresentation.showsPerAppEarnings(info.state)) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    // An em-dash for null, never "$0.00". Nothing has been read,
+                    // which is not the same as having earned nothing.
+                    FormatUtils.formatPlatformEarnings(earnings?.usd),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                if (earnings?.sharedWithOtherWorkers == true) {
+                    Text(
+                        stringResource(R.string.earnings_shared),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
 
             Spacer(Modifier.height(4.dp))

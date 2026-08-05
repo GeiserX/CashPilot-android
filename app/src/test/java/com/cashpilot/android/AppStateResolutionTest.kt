@@ -4,14 +4,16 @@ import com.cashpilot.android.model.AppStatus
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.ui.AppDisplayInfo
+import com.cashpilot.android.ui.AppPresentation
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.FleetSummary
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 /**
- * Tests the AppState resolution logic extracted from MainViewModel.doRefresh.
- * This covers every branch in the state determination: NOT_INSTALLED, DISABLED, RUNNING, STOPPED.
+ * Every branch of AppState resolution: NOT_INSTALLED, DISABLED, RUNNING, STOPPED.
+ *
+ * Drives [AppPresentation.resolveState], the same function MainViewModel calls.
  */
 class AppStateResolutionTest {
 
@@ -19,16 +21,20 @@ class AppStateResolutionTest {
      * Mirrors the state resolution logic from MainViewModel.doRefresh.
      * This is the exact same when-expression used in production.
      */
+    /**
+     * Delegates to production instead of restating it.
+     *
+     * This used to be a COPY of the when-expression in MainViewModel, and said
+     * so: "this is the exact same when-expression used in production". A copy
+     * cannot fail when production changes, so every case below was verifying
+     * the copy. The logic moved to AppPresentation; this now calls it, which
+     * makes the existing cases real coverage without rewriting them.
+     */
     private fun resolveState(
         installed: Boolean,
         enabled: Boolean,
         running: Boolean?,
-    ): AppState = when {
-        !installed -> AppState.NOT_INSTALLED
-        !enabled -> AppState.DISABLED
-        running == true -> AppState.RUNNING
-        else -> AppState.STOPPED
-    }
+    ): AppState = AppPresentation.resolveState(installed, enabled, running)
 
     @Test
     fun `not installed overrides everything`() {
@@ -62,8 +68,18 @@ class AppStateResolutionTest {
 
     // --- Full display list building ---
 
+    /**
+     * Builds the list the way MainViewModel does, and sorts it the way
+     * MainViewModel does.
+     *
+     * This test used to re-implement `sortedBy { it.state.ordinal }` on its own
+     * list and assert RUNNING first. It therefore kept passing after production
+     * changed to sort problems first — it was sorting a local list, not calling
+     * the app. It documented behaviour the dashboard no longer had.
+     * (CodeRabbit, PR #47.)
+     */
     @Test
-    fun `build display list and sort by state ordinal`() {
+    fun `build display list and sort the way the dashboard does`() {
         val apps = listOf(
             Triple(MonitoredApp("a", "com.a", "App A"), true, AppStatus("a", true)),
             Triple(MonitoredApp("b", "com.b", "App B"), true, AppStatus("b", false)),
@@ -72,16 +88,21 @@ class AppStateResolutionTest {
         )
 
         val enabledSlugs = setOf("a", "b", "d") // c is not enabled
-        val displayList = apps.map { (app, installed, status) ->
-            val isEnabled = app.slug in enabledSlugs
-            val state = resolveState(installed, isEnabled, status?.running)
-            AppDisplayInfo(app = app, state = state, status = status)
-        }.sortedBy { it.state.ordinal }
+        val displayList = AppPresentation.sortForDashboard(
+            apps.map { (app, installed, status) ->
+                val isEnabled = app.slug in enabledSlugs
+                val state = resolveState(installed, isEnabled, status?.running)
+                AppDisplayInfo(app = app, state = state, status = status)
+            },
+        )
 
-        // Verify order: RUNNING, RUNNING, STOPPED, NOT_INSTALLED
-        assertEquals(AppState.RUNNING, displayList[0].state)
+        // Problems first: the STOPPED app leads, then the two RUNNING ones in
+        // name order, then the one that is not installed at all.
+        assertEquals(AppState.STOPPED, displayList[0].state)
+        assertEquals("b", displayList[0].app.slug)
         assertEquals(AppState.RUNNING, displayList[1].state)
-        assertEquals(AppState.STOPPED, displayList[2].state)
+        assertEquals(AppState.RUNNING, displayList[2].state)
+        assertEquals(listOf("a", "d"), displayList.subList(1, 3).map { it.app.slug })
         assertEquals(AppState.NOT_INSTALLED, displayList[3].state)
     }
 
