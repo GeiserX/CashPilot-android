@@ -11,6 +11,7 @@ import android.provider.Settings.Secure
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.cashpilot.android.R
+import com.cashpilot.android.BuildConfig
 import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.model.SystemInfo
@@ -118,6 +119,7 @@ class HeartbeatService : Service() {
                     arch = Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown",
                     osVersion = "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})",
                     deviceType = "android",
+                    version = BuildConfig.VERSION_NAME,
                 ),
             )
 

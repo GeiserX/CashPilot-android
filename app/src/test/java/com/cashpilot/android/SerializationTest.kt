@@ -131,6 +131,33 @@ class SerializationTest {
         assertFalse(encoded.contains("\"deviceType\""))
     }
 
+    // --- version reporting (the app was invisible to the server's skew check) ---
+
+    @Test
+    fun `SystemInfo carries a version field the server can read`() {
+        // The server reads system_info.version to decide whether a worker is on
+        // a different release series. Android never sent it, so every device
+        // read as "version unknown" and two phones sat on a pre-enrollment
+        // build for weeks unnoticed.
+        val encoded = json.encodeToString(SystemInfo(version = "0.2.1"))
+        assertTrue(encoded.contains("\"version\":\"0.2.1\""), encoded)
+    }
+
+    @Test
+    fun `SystemInfo version round-trips`() {
+        val original = SystemInfo(os = "Android", version = "1.2.3")
+        assertEquals(original, json.decodeFromString<SystemInfo>(json.encodeToString(original)))
+    }
+
+    @Test
+    fun `an absent version decodes as empty, never as a match`() {
+        // Absent must read as UNKNOWN. The server only calls something a
+        // mismatch when BOTH sides are known releases, so an empty string here
+        // is the safe value -- inventing one would fabricate agreement.
+        val decoded = json.decodeFromString<SystemInfo>("""{"os":"Android"}""")
+        assertEquals("", decoded.version)
+    }
+
     @Test
     fun `SystemInfo defaults round-trip`() {
         val original = SystemInfo()

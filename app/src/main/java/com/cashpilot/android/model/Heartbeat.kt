@@ -36,6 +36,24 @@ data class SystemInfo(
     @SerialName("os_version") val osVersion: String = "",
     @SerialName("device_type") val deviceType: String = "android",
     val apps: List<AppStatus> = emptyList(),
+    /**
+     * This app's own version, e.g. "0.2.1".
+     *
+     * The server reads `system_info.version` to decide whether a worker is on a
+     * different release series from the UI. Android never sent it, so every
+     * device read as "version unknown" and there was no way to see which phones
+     * were on an outdated build -- which is how two devices sat on a
+     * pre-enrollment release for weeks without anyone noticing.
+     *
+     * Defaults to empty on purpose: an ABSENT version must read as unknown, not
+     * as a match. The server's own rule is that both sides must be known
+     * releases before it will call anything a mismatch.
+     *
+     * Declared LAST on purpose: DataClassContractTest destructures SystemInfo
+     * positionally, so member order is part of this class's contract and
+     * inserting anywhere else silently changes what component5() means.
+     */
+    val version: String = "",
 )
 
 @Serializable
