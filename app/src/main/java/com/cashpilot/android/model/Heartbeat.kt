@@ -35,6 +35,7 @@ data class SystemInfo(
     val arch: String = "",
     @SerialName("os_version") val osVersion: String = "",
     @SerialName("device_type") val deviceType: String = "android",
+    val apps: List<AppStatus> = emptyList(),
     /**
      * This app's own version, e.g. "0.2.1".
      *
@@ -47,9 +48,12 @@ data class SystemInfo(
      * Defaults to empty on purpose: an ABSENT version must read as unknown, not
      * as a match. The server's own rule is that both sides must be known
      * releases before it will call anything a mismatch.
+     *
+     * Declared LAST on purpose: DataClassContractTest destructures SystemInfo
+     * positionally, so member order is part of this class's contract and
+     * inserting anywhere else silently changes what component5() means.
      */
     val version: String = "",
-    val apps: List<AppStatus> = emptyList(),
 )
 
 @Serializable

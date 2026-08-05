@@ -91,13 +91,18 @@ class DataClassContractTest {
             osVersion = "Android 15",
             deviceType = "android",
             apps = listOf(AppStatus(slug = "test", running = true)),
+            version = "9.9.9",
         )
-        val (os, arch, osVersion, deviceType, apps) = info
+        // version is component6, declared after apps so that adding it did not
+        // shift what component5 means. This test is what makes that ordering a
+        // deliberate contract rather than an accident.
+        val (os, arch, osVersion, deviceType, apps, version) = info
         assertEquals("Android", os)
         assertEquals("arm64-v8a", arch)
         assertEquals("Android 15", osVersion)
         assertEquals("android", deviceType)
         assertEquals(1, apps.size)
+        assertEquals("9.9.9", version)
     }
 
     @Test
