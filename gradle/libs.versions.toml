@@ -4,7 +4,16 @@ kotlin = "2.4.10"
 coreKtx = "1.19.0"
 lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
-composeBom = "2024.12.01"
+# Verified against the BOM's own pom on Google Maven before bumping:
+#   material3               -> 1.4.0   (was 1.3.1)
+#   ui                      -> 1.11.4
+#   material-icons-extended -> 1.7.8   (frozen but STILL SHIPPED by this BOM)
+#
+# The icons library is no longer updated and material3 1.4.0 stopped depending on
+# material-icons-core transitively -- but this project declares
+# material-icons-extended explicitly, and the BOM still pins it, so the 16 icons
+# in use keep resolving. No icon migration is forced by this bump.
+composeBom = "2026.06.01"
 ktor = "3.5.1"
 serialization = "1.11.0"
 datastore = "1.2.1"
