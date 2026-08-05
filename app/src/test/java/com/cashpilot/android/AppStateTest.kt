@@ -4,6 +4,7 @@ import com.cashpilot.android.model.AppStatus
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.ui.AppDisplayInfo
+import com.cashpilot.android.ui.AppPresentation
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.FleetSummary
 import org.junit.jupiter.api.Assertions.*
@@ -12,11 +13,16 @@ import org.junit.jupiter.api.Test
 class AppStateTest {
 
     @Test
-    fun `app state ordinal ordering`() {
-        // Sorting by ordinal puts RUNNING first, NOT_INSTALLED last
-        assertTrue(AppState.RUNNING.ordinal < AppState.STOPPED.ordinal)
-        assertTrue(AppState.STOPPED.ordinal < AppState.NOT_INSTALLED.ordinal)
-        assertTrue(AppState.NOT_INSTALLED.ordinal < AppState.DISABLED.ordinal)
+    fun `ordinal is no longer the ordering authority`() {
+        // This used to assert "sorting by ordinal puts RUNNING first", which was
+        // both the old behaviour AND the bug: it buried stopped apps under the
+        // healthy ones. Order now comes from AppPresentation.attentionRank, so
+        // that declaration order can be changed without silently rearranging the
+        // screen. Asserting the ordinals again here would re-couple them.
+        assertTrue(
+            AppPresentation.attentionRank(AppState.STOPPED) <
+                AppPresentation.attentionRank(AppState.RUNNING),
+        )
     }
 
     @Test
@@ -100,17 +106,20 @@ class AppStateTest {
     }
 
     @Test
-    fun `sorting display list by state ordinal`() {
+    fun `sorting the display list the way the dashboard does`() {
         val list = listOf(
             AppDisplayInfo(app = MonitoredApp("d", "com.d", "D"), state = AppState.DISABLED),
             AppDisplayInfo(app = MonitoredApp("r", "com.r", "R"), state = AppState.RUNNING),
             AppDisplayInfo(app = MonitoredApp("n", "com.n", "N"), state = AppState.NOT_INSTALLED),
             AppDisplayInfo(app = MonitoredApp("s", "com.s", "S"), state = AppState.STOPPED),
         )
-        val sorted = list.sortedBy { it.state.ordinal }
-        assertEquals(AppState.RUNNING, sorted[0].state)
-        assertEquals(AppState.STOPPED, sorted[1].state)
-        assertEquals(AppState.NOT_INSTALLED, sorted[2].state)
-        assertEquals(AppState.DISABLED, sorted[3].state)
+        // Calls production instead of re-implementing `sortedBy { ordinal }`,
+        // which is what let this test keep asserting RUNNING-first long after
+        // the dashboard stopped doing that.
+        val sorted = AppPresentation.sortForDashboard(list)
+        assertEquals(AppState.STOPPED, sorted[0].state)
+        assertEquals(AppState.RUNNING, sorted[1].state)
+        assertEquals(AppState.DISABLED, sorted[2].state)
+        assertEquals(AppState.NOT_INSTALLED, sorted[3].state)
     }
 }

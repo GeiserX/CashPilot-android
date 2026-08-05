@@ -2,6 +2,7 @@ package com.cashpilot.android
 
 import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.AppStatus
+import com.cashpilot.android.service.Detection
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.model.SystemInfo
@@ -25,7 +26,7 @@ class HeartbeatPayloadBuildTest {
             AppContainer(
                 slug = app.slug,
                 name = "cashpilot-${app.slug}",
-                status = if (app.running) "running" else "stopped",
+                status = Detection.wireStatus(app.running),
                 labels = mapOf(
                     "cashpilot.managed" to "true",
                     "cashpilot.service" to app.slug,
@@ -85,7 +86,7 @@ class HeartbeatPayloadBuildTest {
             assertEquals("stopped", container.status)
         }
         heartbeat.apps.forEach { app ->
-            assertFalse(app.running)
+            assertEquals(false, app.running)
             assertFalse(app.notificationActive)
             assertEquals(0L, app.netTx24h)
         }
@@ -232,7 +233,7 @@ class HeartbeatPayloadBuildTest {
             AppStatus(slug = "titan", running = true),
             AppStatus(slug = "nodle", running = false),
         )
-        val runningCount = apps.count { it.running }
+        val runningCount = apps.count { it.running == true }
         val notificationText = "$runningCount/${apps.size} apps running"
         assertEquals("3/5 apps running", notificationText)
     }

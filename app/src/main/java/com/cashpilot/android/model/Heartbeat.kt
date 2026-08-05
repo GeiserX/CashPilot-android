@@ -59,7 +59,16 @@ data class SystemInfo(
 @Serializable
 data class AppStatus(
     val slug: String,
-    val running: Boolean,
+    /**
+     * Whether the app is running, or **null when it could not be determined**.
+     *
+     * Null is UNKNOWN and must never be rendered or forwarded as "stopped".
+     * Without notification and usage access every detection signal degrades to
+     * false, and this used to be a non-nullable Boolean -- so a device with the
+     * permissions denied reported every earning app as STOPPED, which is a claim
+     * nobody measured. See [com.cashpilot.android.service.Detection].
+     */
+    val running: Boolean?,
     @SerialName("notification_active") val notificationActive: Boolean = false,
     @SerialName("net_tx_24h") val netTx24h: Long = 0,
     @SerialName("net_rx_24h") val netRx24h: Long = 0,

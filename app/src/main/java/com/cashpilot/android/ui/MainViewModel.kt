@@ -33,7 +33,16 @@ import kotlinx.coroutines.withContext
 import java.net.URL
 import kotlin.coroutines.coroutineContext
 
-enum class AppState { RUNNING, STOPPED, NOT_INSTALLED, DISABLED }
+/**
+ * What the dashboard can say about an app.
+ *
+ * [UNKNOWN] is deliberately NOT a flavour of [STOPPED]. They have different
+ * causes and different fixes: STOPPED means the app should be reporting and is
+ * not, so restart it; UNKNOWN means this device cannot see, so grant the
+ * permission. Collapsing them is what made a permission problem look like
+ * eleven dead apps.
+ */
+enum class AppState { STOPPED, UNKNOWN, RUNNING, NOT_INSTALLED, DISABLED }
 
 data class AppDisplayInfo(
     val app: MonitoredApp,

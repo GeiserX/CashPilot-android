@@ -163,7 +163,7 @@ class HeartbeatLogicTest {
         val recentlyActive = false
         val hasRecentNetworkActivity = false
         val running = notificationActive || recentlyActive || hasRecentNetworkActivity
-        assertTrue(running)
+        assertEquals(true, running)
     }
 
     @Test
@@ -172,7 +172,7 @@ class HeartbeatLogicTest {
         val recentlyActive = true
         val hasRecentNetworkActivity = false
         val running = notificationActive || recentlyActive || hasRecentNetworkActivity
-        assertTrue(running)
+        assertEquals(true, running)
     }
 
     @Test
@@ -181,7 +181,7 @@ class HeartbeatLogicTest {
         val recentlyActive = false
         val hasRecentNetworkActivity = true
         val running = notificationActive || recentlyActive || hasRecentNetworkActivity
-        assertTrue(running)
+        assertEquals(true, running)
     }
 
     @Test
@@ -190,7 +190,7 @@ class HeartbeatLogicTest {
         val recentlyActive = false
         val hasRecentNetworkActivity = false
         val running = notificationActive || recentlyActive || hasRecentNetworkActivity
-        assertFalse(running)
+        assertEquals(false, running)
     }
 
     @Test
@@ -199,7 +199,7 @@ class HeartbeatLogicTest {
         val recentlyActive = true
         val hasRecentNetworkActivity = true
         val running = notificationActive || recentlyActive || hasRecentNetworkActivity
-        assertTrue(running)
+        assertEquals(true, running)
     }
 
     @Test

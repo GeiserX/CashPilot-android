@@ -28,7 +28,7 @@ class SerializationEdgeCaseTest {
         val jsonStr = """{"slug":"test","running":true}"""
         val status = json.decodeFromString<AppStatus>(jsonStr)
         assertEquals("test", status.slug)
-        assertTrue(status.running)
+        assertEquals(true, status.running)
         assertFalse(status.notificationActive)
         assertEquals(0L, status.netTx24h)
         assertEquals(0L, status.netRx24h)
@@ -67,7 +67,7 @@ class SerializationEdgeCaseTest {
         val jsonStr = """{"slug":"test","running":false,"unknown_int":42,"unknown_str":"hello"}"""
         val status = json.decodeFromString<AppStatus>(jsonStr)
         assertEquals("test", status.slug)
-        assertFalse(status.running)
+        assertEquals(false, status.running)
     }
 
     @Test
@@ -258,8 +258,8 @@ class SerializationEdgeCaseTest {
         val encoded = json.encodeToString(original)
         val decoded = json.decodeFromString<WorkerHeartbeat>(encoded)
         assertEquals(2, decoded.systemInfo.apps.size)
-        assertTrue(decoded.systemInfo.apps[0].running)
-        assertFalse(decoded.systemInfo.apps[1].running)
+        assertEquals(true, decoded.systemInfo.apps[0].running)
+        assertEquals(false, decoded.systemInfo.apps[1].running)
         assertEquals("2026-01-01T00:00:00Z", decoded.systemInfo.apps[1].lastActive)
     }
 
