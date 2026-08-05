@@ -68,8 +68,18 @@ class AppStateResolutionTest {
 
     // --- Full display list building ---
 
+    /**
+     * Builds the list the way MainViewModel does, and sorts it the way
+     * MainViewModel does.
+     *
+     * This test used to re-implement `sortedBy { it.state.ordinal }` on its own
+     * list and assert RUNNING first. It therefore kept passing after production
+     * changed to sort problems first — it was sorting a local list, not calling
+     * the app. It documented behaviour the dashboard no longer had.
+     * (CodeRabbit, PR #47.)
+     */
     @Test
-    fun `build display list and sort by state ordinal`() {
+    fun `build display list and sort the way the dashboard does`() {
         val apps = listOf(
             Triple(MonitoredApp("a", "com.a", "App A"), true, AppStatus("a", true)),
             Triple(MonitoredApp("b", "com.b", "App B"), true, AppStatus("b", false)),
@@ -78,16 +88,21 @@ class AppStateResolutionTest {
         )
 
         val enabledSlugs = setOf("a", "b", "d") // c is not enabled
-        val displayList = apps.map { (app, installed, status) ->
-            val isEnabled = app.slug in enabledSlugs
-            val state = resolveState(installed, isEnabled, status?.running)
-            AppDisplayInfo(app = app, state = state, status = status)
-        }.sortedBy { it.state.ordinal }
+        val displayList = AppPresentation.sortForDashboard(
+            apps.map { (app, installed, status) ->
+                val isEnabled = app.slug in enabledSlugs
+                val state = resolveState(installed, isEnabled, status?.running)
+                AppDisplayInfo(app = app, state = state, status = status)
+            },
+        )
 
-        // Verify order: RUNNING, RUNNING, STOPPED, NOT_INSTALLED
-        assertEquals(AppState.RUNNING, displayList[0].state)
+        // Problems first: the STOPPED app leads, then the two RUNNING ones in
+        // name order, then the one that is not installed at all.
+        assertEquals(AppState.STOPPED, displayList[0].state)
+        assertEquals("b", displayList[0].app.slug)
         assertEquals(AppState.RUNNING, displayList[1].state)
-        assertEquals(AppState.STOPPED, displayList[2].state)
+        assertEquals(AppState.RUNNING, displayList[2].state)
+        assertEquals(listOf("a", "d"), displayList.subList(1, 3).map { it.app.slug })
         assertEquals(AppState.NOT_INSTALLED, displayList[3].state)
     }
 
