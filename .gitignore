@@ -15,3 +15,16 @@ local.properties
 *.jks
 *.keystore
 AGENTS.md
+
+# Agent / tooling working dirs (not part of the project)
+#
+# This repository is PUBLIC. These directories hold local agent state -- task
+# trackers, session notes, tool config -- that is useful on one machine and has
+# no business being published. `.beads/` in particular was protected only by
+# .git/info/exclude, which is local to a single clone and travels with nothing,
+# so a fresh checkout had no protection at all.
+.agents/
+.beads/
+.claude/
+.codex/
+.omc/
