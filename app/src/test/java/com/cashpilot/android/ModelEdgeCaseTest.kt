@@ -2,6 +2,7 @@ package com.cashpilot.android
 
 import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.AppStatus
+import com.cashpilot.android.service.Detection
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
 import com.cashpilot.android.model.SystemInfo
@@ -46,7 +47,7 @@ class ModelEdgeCaseTest {
             lastActive = "2024-01-15T10:00:00Z",
         )
         val modified = original.copy(running = false)
-        assertFalse(modified.running)
+        assertEquals(false, modified.running)
         assertTrue(modified.notificationActive) // not changed
         assertEquals(500, modified.netTx24h)
         assertEquals("2024-01-15T10:00:00Z", modified.lastActive)
@@ -324,15 +325,19 @@ class ModelEdgeCaseTest {
     // --- AppState enum ---
 
     @Test
-    fun `AppState has exactly 4 values`() {
-        assertEquals(4, AppState.entries.size)
+    fun `AppState has exactly 5 values`() {
+        // UNKNOWN was added because "cannot see it" is not "it is stopped" --
+        // with the permissions denied every signal degrades to false, and the
+        // app was reporting every earning app as dead.
+        assertEquals(5, AppState.entries.size)
     }
 
     @Test
-    fun `AppState values are RUNNING, STOPPED, NOT_INSTALLED, DISABLED`() {
+    fun `AppState values include UNKNOWN alongside the original four`() {
         val names = AppState.entries.map { it.name }
         assertTrue("RUNNING" in names)
         assertTrue("STOPPED" in names)
+        assertTrue("UNKNOWN" in names)
         assertTrue("NOT_INSTALLED" in names)
         assertTrue("DISABLED" in names)
     }
@@ -439,7 +444,7 @@ class ModelEdgeCaseTest {
         val container = AppContainer(
             slug = app.slug,
             name = "cashpilot-${app.slug}",
-            status = if (app.running) "running" else "stopped",
+            status = Detection.wireStatus(app.running),
             labels = mapOf(
                 "cashpilot.managed" to "true",
                 "cashpilot.service" to app.slug,
@@ -458,7 +463,7 @@ class ModelEdgeCaseTest {
         val container = AppContainer(
             slug = app.slug,
             name = "cashpilot-${app.slug}",
-            status = if (app.running) "running" else "stopped",
+            status = Detection.wireStatus(app.running),
         )
         assertEquals("stopped", container.status)
     }
@@ -474,7 +479,7 @@ class ModelEdgeCaseTest {
             AppContainer(
                 slug = app.slug,
                 name = "cashpilot-${app.slug}",
-                status = if (app.running) "running" else "stopped",
+                status = Detection.wireStatus(app.running),
             )
         }
         assertEquals(3, containers.size)

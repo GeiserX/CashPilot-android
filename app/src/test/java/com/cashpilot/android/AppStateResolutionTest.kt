@@ -62,8 +62,12 @@ class AppStateResolutionTest {
     }
 
     @Test
-    fun `installed and enabled with null running`() {
-        assertEquals(AppState.STOPPED, resolveState(installed = true, enabled = true, running = null))
+    fun `installed and enabled with null running is UNKNOWN, not stopped`() {
+        // null means the detectors could not tell -- which happens when the
+        // permissions are denied and every signal degrades to false. Calling
+        // that STOPPED told users their earning apps had died when the app
+        // simply could not see them.
+        assertEquals(AppState.UNKNOWN, resolveState(installed = true, enabled = true, running = null))
     }
 
     // --- Full display list building ---
@@ -153,13 +157,17 @@ class AppStateResolutionTest {
             AppDisplayInfo(
                 app = MonitoredApp("app$index", "com.app$index", "App $index"),
                 state = state,
-                status = if (state == AppState.RUNNING || state == AppState.STOPPED) {
-                    AppStatus(slug = "app$index", running = state == AppState.RUNNING)
-                } else null,
+                status = when (state) {
+                    AppState.RUNNING -> AppStatus(slug = "app$index", running = true)
+                    AppState.STOPPED -> AppStatus(slug = "app$index", running = false)
+                    // The detectors could not tell -- null, not false.
+                    AppState.UNKNOWN -> AppStatus(slug = "app$index", running = null)
+                    else -> null
+                },
             )
         }
 
-        assertEquals(4, list.size)
+        assertEquals(AppState.entries.size, list.size)
         assertEquals(1, list.count { it.state == AppState.RUNNING })
         assertEquals(1, list.count { it.state == AppState.STOPPED })
         assertEquals(1, list.count { it.state == AppState.NOT_INSTALLED })

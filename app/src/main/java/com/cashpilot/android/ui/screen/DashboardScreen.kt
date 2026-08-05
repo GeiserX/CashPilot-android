@@ -73,6 +73,10 @@ import com.cashpilot.android.util.FormatUtils
 import kotlinx.coroutines.delay
 
 private val RunningGreen = Color(0xFF22C55E)
+// Amber, deliberately NOT the stopped red: "we cannot see this" is a different
+// claim from "this is dead", and colouring them the same is what made a
+// permission problem look like a fleet of dead apps.
+private val UnknownAmber = Color(0xFFF59E0B)
 private val StoppedRed = Color(0xFFEF4444)
 private val DisabledGray = Color(0xFF9CA3AF)
 private val NotInstalledGray = Color(0xFF6B7280)
@@ -434,6 +438,7 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
     val borderColor = when (info.state) {
         AppState.RUNNING -> RunningGreen
         AppState.STOPPED -> StoppedRed
+        AppState.UNKNOWN -> UnknownAmber
         AppState.DISABLED -> DisabledGray
         AppState.NOT_INSTALLED -> Color.Transparent
     }
@@ -471,6 +476,7 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
                     tint = when (info.state) {
                         AppState.RUNNING -> RunningGreen
                         AppState.STOPPED -> StoppedRed
+                        AppState.UNKNOWN -> UnknownAmber
                         AppState.DISABLED -> DisabledGray
                         AppState.NOT_INSTALLED -> NotInstalledGray
                     },
@@ -517,6 +523,7 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
                 when (info.state) {
                     AppState.RUNNING -> stringResource(R.string.state_running)
                     AppState.STOPPED -> info.status?.lastActive?.let { stringResource(R.string.state_last_active, relativeTime(parseIso(it))) } ?: stringResource(R.string.state_stopped)
+                    AppState.UNKNOWN -> stringResource(R.string.state_unknown)
                     AppState.DISABLED -> stringResource(R.string.state_disabled)
                     AppState.NOT_INSTALLED -> stringResource(R.string.state_not_installed)
                 },

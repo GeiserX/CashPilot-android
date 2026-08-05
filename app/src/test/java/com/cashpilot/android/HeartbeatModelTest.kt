@@ -2,6 +2,7 @@ package com.cashpilot.android
 
 import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.AppStatus
+import com.cashpilot.android.service.Detection
 import com.cashpilot.android.model.SystemInfo
 import com.cashpilot.android.model.WorkerHeartbeat
 import org.junit.jupiter.api.Assertions.*
@@ -74,7 +75,7 @@ class HeartbeatModelTest {
             netTx24h = 1024000,
             netRx24h = 5120000,
         )
-        assertTrue(status.running)
+        assertEquals(true, status.running)
         assertTrue(status.notificationActive)
         assertEquals(1024000, status.netTx24h)
     }
@@ -85,7 +86,7 @@ class HeartbeatModelTest {
             slug = "traffmonetizer",
             running = false,
         )
-        assertFalse(status.running)
+        assertEquals(false, status.running)
         assertFalse(status.notificationActive)
         assertEquals(0, status.netTx24h)
         assertEquals(0, status.netRx24h)
@@ -102,7 +103,7 @@ class HeartbeatModelTest {
             AppContainer(
                 slug = it.slug,
                 name = "cashpilot-${it.slug}",
-                status = if (it.running) "running" else "stopped",
+                status = Detection.wireStatus(it.running),
             )
         }
         val hb = WorkerHeartbeat(

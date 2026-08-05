@@ -32,7 +32,7 @@ class DataClassContractTest {
         )
         val (slug, running, notifActive, tx, rx, lastActive) = status
         assertEquals("earnapp", slug)
-        assertTrue(running)
+        assertEquals(true, running)
         assertTrue(notifActive)
         assertEquals(500L, tx)
         assertEquals(1000L, rx)
@@ -44,7 +44,7 @@ class DataClassContractTest {
         val status = AppStatus(slug = "test", running = false)
         val (slug, running, notifActive, tx, rx, lastActive) = status
         assertEquals("test", slug)
-        assertFalse(running)
+        assertEquals(false, running)
         assertFalse(notifActive)
         assertEquals(0L, tx)
         assertEquals(0L, rx)

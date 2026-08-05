@@ -103,7 +103,11 @@ class HeartbeatService : Service() {
                 AppContainer(
                     slug = app.slug,
                     name = "cashpilot-${app.slug}",
-                    status = if (app.running) "running" else "stopped",
+                    // Three-valued on the wire too. `unknown` is NOT "stopped":
+                    // the server maps a falsy running to "stopped", so sending
+                    // false while blind would hand the fleet page the same false
+                    // claim this fix removes from the phone.
+                    status = Detection.wireStatus(app.running),
                     labels = mapOf(
                         "cashpilot.managed" to "true",
                         "cashpilot.service" to app.slug,
@@ -146,8 +150,19 @@ class HeartbeatService : Service() {
                     }
                     recordEarnings(body, System.currentTimeMillis())
                 }
-                val runningCount = apps.count { it.running }
-                updateNotification("$runningCount/${apps.size} apps running")
+                // Counts only what is KNOWN to be running. An app we cannot
+                // see is not counted as running, and equally not reported as a
+                // failure -- the notification says how many are unknown instead
+                // of quietly folding them into the stopped remainder.
+                val runningCount = apps.count { it.running == true }
+                val unknownCount = apps.count { it.running == null }
+                updateNotification(
+                    if (unknownCount > 0) {
+                        "$runningCount/${apps.size} apps running, $unknownCount unknown"
+                    } else {
+                        "$runningCount/${apps.size} apps running"
+                    },
+                )
             } else {
                 consecutiveFailures++
                 _lastHeartbeatFailed.value = true

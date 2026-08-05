@@ -47,14 +47,33 @@ class AppPresentationTest {
     }
 
     @Test
-    fun `an undetectable app counts as stopped, not as fine`() {
-        // running == null means the detectors could not tell. It is installed
-        // and enabled, so something should be reporting it; silence is the
-        // failure this product exists to surface.
+    fun `an undetectable app is UNKNOWN, not stopped`() {
+        // I originally wrote this asserting STOPPED, reasoning that silence
+        // about a possibly-dead app was the worse failure. That was wrong once
+        // the cause was traced: null arises when the PERMISSIONS are denied, so
+        // every app on such a device read as STOPPED and the screen stated they
+        // had all died. Different cause, different fix -- grant the permission,
+        // do not restart the app.
         assertEquals(
-            AppState.STOPPED,
+            AppState.UNKNOWN,
             AppPresentation.resolveState(installed = true, enabled = true, running = null),
         )
+    }
+
+    @Test
+    fun `a definite false is still STOPPED`() {
+        // The distinction only works if a real negative still reads as a problem.
+        assertEquals(
+            AppState.STOPPED,
+            AppPresentation.resolveState(installed = true, enabled = true, running = false),
+        )
+    }
+
+    @Test
+    fun `unknown ranks below stopped but above running`() {
+        val rank = AppPresentation::attentionRank
+        assertTrue(rank(AppState.STOPPED) < rank(AppState.UNKNOWN))
+        assertTrue(rank(AppState.UNKNOWN) < rank(AppState.RUNNING))
     }
 
     @Test
@@ -80,10 +99,18 @@ class AppPresentationTest {
     }
 
     @Test
-    fun `the ordinal order would have been wrong`() {
-        // Proves the defect was real rather than asserting the new order in a
-        // vacuum: the old key ranked RUNNING above STOPPED.
-        assertTrue(AppState.RUNNING.ordinal < AppState.STOPPED.ordinal)
+    fun `ordering does not depend on the enum declaration order`() {
+        // The original defect was sorting by AppState.ordinal. The enum has
+        // since been reordered (STOPPED first) for readability, which is exactly
+        // why the rank table must stay independent of it -- otherwise a future
+        // reorder silently rearranges the screen again. Asserting the ordinals
+        // here would re-create that coupling, so this asserts the rank table
+        // covers every state instead.
+        assertTrue(AppPresentation.rankIsTotal())
+        assertEquals(
+            AppState.entries.size,
+            AppState.entries.map(AppPresentation::attentionRank).distinct().size,
+        )
     }
 
     @Test

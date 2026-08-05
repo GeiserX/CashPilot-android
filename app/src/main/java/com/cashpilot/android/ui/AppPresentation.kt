@@ -25,10 +25,14 @@ object AppPresentation {
      * is a problem, "disabled" is a choice.
      *
      * `running == null` means the detectors could not tell, and it resolves to
-     * [AppState.STOPPED] deliberately: the app is installed and enabled, so
-     * something SHOULD be reporting it, and staying silent about an app that
-     * may have died is the failure this whole product exists to prevent. The
-     * card says how it knows; see [AppState].
+     * [AppState.UNKNOWN] -- NOT to STOPPED.
+     *
+     * An earlier version mapped it to STOPPED and argued that silence about a
+     * possibly-dead app was the worse failure. That reasoning was wrong once the
+     * cause was traced: null arises when the permissions are denied, so every
+     * app on such a device reported STOPPED and the screen stated as fact that
+     * they had all died. The two need different answers because they need
+     * different ACTIONS -- restart the app versus grant the permission.
      */
     fun resolveState(
         installed: Boolean,
@@ -38,7 +42,8 @@ object AppPresentation {
         !installed -> AppState.NOT_INSTALLED
         !enabled -> AppState.DISABLED
         running == true -> AppState.RUNNING
-        else -> AppState.STOPPED
+        running == false -> AppState.STOPPED
+        else -> AppState.UNKNOWN
     }
 
     /**
@@ -55,10 +60,11 @@ object AppPresentation {
      *
      * | | | |
      * |---|---|---|
-     * | 0 | [AppState.STOPPED]       | should be earning and is not — act now |
-     * | 1 | [AppState.RUNNING]       | working; confirmation is worth seeing  |
-     * | 2 | [AppState.DISABLED]      | switched off deliberately              |
-     * | 3 | [AppState.NOT_INSTALLED] | not on this device at all              |
+     * | 0 | [AppState.STOPPED]       | should be earning and is not — act now  |
+     * | 1 | [AppState.UNKNOWN]       | cannot see it — grant the permission     |
+     * | 2 | [AppState.RUNNING]       | working; confirmation is worth seeing    |
+     * | 3 | [AppState.DISABLED]      | switched off deliberately                |
+     * | 4 | [AppState.NOT_INSTALLED] | not on this device at all                |
      *
      * Deliberately NOT derived from the enum, so that reordering or inserting a
      * state cannot silently rearrange the screen. A new state must be given a
@@ -66,9 +72,12 @@ object AppPresentation {
      */
     fun attentionRank(state: AppState): Int = when (state) {
         AppState.STOPPED -> 0
-        AppState.RUNNING -> 1
-        AppState.DISABLED -> 2
-        AppState.NOT_INSTALLED -> 3
+        // Second, not first. An unknown app MIGHT be fine, while a stopped one
+        // is definitely not -- so a real problem still outranks a blind spot.
+        AppState.UNKNOWN -> 1
+        AppState.RUNNING -> 2
+        AppState.DISABLED -> 3
+        AppState.NOT_INSTALLED -> 4
     }
 
     /**

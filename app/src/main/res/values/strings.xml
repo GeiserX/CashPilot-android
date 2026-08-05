@@ -84,4 +84,9 @@
         <item quantity="one">%1$d app has no reading yet</item>
         <item quantity="other">%1$d apps have no reading yet</item>
     </plurals>
+
+    <!-- UNKNOWN is not STOPPED. Different cause, different fix. -->
+    <string name="state_unknown">Can\'t tell</string>
+    <string name="permissions_blocking_title">CashPilot can\'t see your apps</string>
+    <string name="permissions_blocking_body">Without notification and usage access this app cannot tell which earning apps are running. It will not guess — every app shows as unknown until you grant them.</string>
 </resources>

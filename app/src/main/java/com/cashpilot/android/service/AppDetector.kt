@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
 import com.cashpilot.android.model.AppStatus
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
+import com.cashpilot.android.util.Permissions
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -59,9 +60,19 @@ class AppDetector(private val context: Context) {
         } ?: false
         val hasRecentNetworkActivity = (tx2h + rx2h) > 1024 // >1KB in last 2h
 
+        // Ask what we can actually SEE before reading absence as absence. The
+        // system services are handed out even when the permission is denied --
+        // enforcement happens at query time -- so a non-null manager proves
+        // nothing and the empty results it returns look exactly like "stopped".
         return AppStatus(
             slug = app.slug,
-            running = notificationActive || recentlyActive || hasRecentNetworkActivity,
+            running = Detection.resolveRunning(
+                canSeeNotifications = Permissions.hasNotificationAccess(context),
+                canSeeUsage = Permissions.hasUsageAccess(context),
+                notificationActive = notificationActive,
+                recentlyActive = recentlyActive,
+                hasRecentNetworkActivity = hasRecentNetworkActivity,
+            ),
             notificationActive = notificationActive,
             netTx24h = tx24h,
             netRx24h = rx24h,

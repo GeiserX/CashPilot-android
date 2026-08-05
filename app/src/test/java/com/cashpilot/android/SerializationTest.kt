@@ -267,7 +267,7 @@ class SerializationTest {
             AppContainer(
                 slug = it.slug,
                 name = "cashpilot-${it.slug}",
-                status = if (it.running) "running" else "stopped",
+                status = if (it.running == true) "running" else "stopped",
                 labels = mapOf("cashpilot.managed" to "true", "cashpilot.service" to it.slug),
             )
         }
@@ -290,8 +290,8 @@ class SerializationTest {
         assertEquals(2, decoded.apps.size)
         assertEquals("running", decoded.containers[0].status)
         assertEquals("stopped", decoded.containers[1].status)
-        assertTrue(decoded.apps[0].running)
-        assertFalse(decoded.apps[1].running)
+        assertEquals(true, decoded.apps[0].running)
+        assertEquals(false, decoded.apps[1].running)
         assertEquals("Android", decoded.systemInfo.os)
     }
 }
