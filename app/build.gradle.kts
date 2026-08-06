@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.roborazzi)
     id("jacoco")
 }
 
@@ -78,6 +79,15 @@ android {
         buildConfig = true
         compose = true
     }
+
+    testOptions {
+        unitTests {
+            // Robolectric needs the merged resources and the manifest to inflate
+            // anything; without this every screenshot test fails at startup with
+            // a resource-not-found rather than a diff.
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -107,10 +117,40 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.14.4")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.14.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Screenshot tests. Robolectric and the Compose test rule are JUnit4-only,
+    // and this module runs on the JUnit5 platform -- so the vintage engine is
+    // what lets both live in one source set. Without it the JUnit4 tests are
+    // silently NOT RUN, which looks exactly like passing.
+    testImplementation(libs.junit4)
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.14.4")
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.junit.rule)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    // The golden images are INPUTS to the tests that compare against them.
+    //
+    // Without this Gradle has no idea they exist, so editing, deleting or adding
+    // a golden leaves `testDebugUnitTest` UP-TO-DATE and the run passes in
+    // seconds without executing anything. Caught by a negative control: adding a
+    // stray PNG and deleting a real one BOTH "passed", in twelve seconds, and
+    // only `--rerun-tasks` revealed the assertions were fine and the task had
+    // simply been skipped.
+    //
+    // CI starts from a fresh checkout so it always ran; this is what makes the
+    // gate trustworthy locally too, which is where the icon migration will
+    // actually be done.
+    inputs.dir(layout.projectDirectory.dir("src/test/screenshots"))
+        .withPropertyName("roborazziGoldens")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {

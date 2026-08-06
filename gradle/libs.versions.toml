@@ -18,6 +18,16 @@ ktor = "3.5.1"
 serialization = "1.11.0"
 datastore = "1.2.1"
 workManager = "2.11.2"
+# Screenshot testing. Roborazzi renders Compose on the JVM through Robolectric's
+# native (Skia) graphics -- no emulator, no device, so it runs in CI and in the
+# Docker build container alike.
+#
+# Chosen over Google's own `com.android.compose.screenshot`, which is still
+# 0.0.1-alphaNN (alpha16, 2026-07-27) after two years. An alpha plugin is the
+# wrong dependency for a gate that is meant to make a migration SAFE.
+roborazzi = "1.70.0"
+robolectric = "4.16.1"
+junit4 = "4.13.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,7 +52,17 @@ ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serializatio
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 
+# Screenshot testing (unit-test source set; no device needed).
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-junit-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
