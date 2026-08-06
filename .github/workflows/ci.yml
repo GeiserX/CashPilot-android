@@ -27,6 +27,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      # The release keystore password sat in a tracked CLAUDE.md, in this
+      # PUBLIC repo, from 2026-05-25 to 2026-08-06. GitGuardian ran on every PR
+      # throughout and passed: it looks for high-entropy tokens, and what was
+      # committed was a short memorable phrase in a sentence. This checks for
+      # the shape a HUMAN writes instead, which is the half a scanner misses.
+      # Needs no JDK, so it runs before the expensive setup.
+      - name: No credentials in tracked files
+        run: ./scripts/check-no-committed-credentials.sh
+
       - uses: actions/setup-java@v5.6.0
         with:
           distribution: temurin
