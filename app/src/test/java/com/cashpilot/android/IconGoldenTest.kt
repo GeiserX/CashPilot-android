@@ -3,28 +3,12 @@ package com.cashpilot.android
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.BatteryAlert
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.CloudOff
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.QueryStats
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Test
@@ -86,6 +70,10 @@ import java.io.File
 @Config(sdk = [34], qualifiers = "w411dp-h891dp-xhdpi")
 class IconGoldenTest {
 
+    /** Drawables that are not part of the migrated icon set and need no golden. */
+    private val NOT_AN_ICON = setOf("ic_github", "ic_notification", "ic_launcher_background")
+
+
     /**
      * Every icon this app draws, by the name it is referenced with.
      *
@@ -96,33 +84,33 @@ class IconGoldenTest {
      * in this list, because an icon nobody photographed is an icon the migration
      * can silently break.
      */
-    private val icons: List<Pair<String, ImageVector>> = listOf(
-        "arrow_back" to Icons.AutoMirrored.Filled.ArrowBack,
-        "arrow_downward" to Icons.Default.ArrowDownward,
-        "arrow_upward" to Icons.Default.ArrowUpward,
-        "battery_alert" to Icons.Default.BatteryAlert,
-        "check_circle" to Icons.Default.CheckCircle,
-        "chevron_right" to Icons.Default.ChevronRight,
-        "circle" to Icons.Default.Circle,
-        "close" to Icons.Default.Close,
-        "cloud" to Icons.Default.Cloud,
-        "cloud_off" to Icons.Default.CloudOff,
-        "language" to Icons.Default.Language,
-        "notifications" to Icons.Default.Notifications,
-        "query_stats" to Icons.Default.QueryStats,
-        "settings" to Icons.Default.Settings,
-        "visibility_off" to Icons.Default.VisibilityOff,
-        "warning" to Icons.Default.Warning,
+    private val icons: List<Pair<String, Int>> = listOf(
+        "arrow_back" to R.drawable.ic_arrow_back,
+        "arrow_downward" to R.drawable.ic_arrow_downward,
+        "arrow_upward" to R.drawable.ic_arrow_upward,
+        "battery_alert" to R.drawable.ic_battery_alert,
+        "check_circle" to R.drawable.ic_check_circle,
+        "chevron_right" to R.drawable.ic_chevron_right,
+        "circle" to R.drawable.ic_circle,
+        "close" to R.drawable.ic_close,
+        "cloud" to R.drawable.ic_cloud,
+        "cloud_off" to R.drawable.ic_cloud_off,
+        "language" to R.drawable.ic_language,
+        "notifications" to R.drawable.ic_notifications,
+        "query_stats" to R.drawable.ic_query_stats,
+        "settings" to R.drawable.ic_settings,
+        "visibility_off" to R.drawable.ic_visibility_off,
+        "warning" to R.drawable.ic_warning,
     )
 
     @Composable
-    private fun Subject(icon: ImageVector) {
+    private fun Subject(@DrawableRes resId: Int) {
         // A fixed box, an opaque background and an explicit tint: three things
         // that would otherwise be inherited from a theme and would re-render
         // every golden the first time the theme changed.
         Box(Modifier.size(96.dp).background(Color.White)) {
             Icon(
-                imageVector = icon,
+                painter = painterResource(resId),
                 contentDescription = null,
                 tint = Color.Black,
                 modifier = Modifier.size(48.dp),
@@ -134,26 +122,27 @@ class IconGoldenTest {
     fun everyIconHasAGolden() {
         // One file per icon, so a diff names the icon that changed instead of
         // saying "the sheet is different".
-        icons.forEach { (name, vector) ->
-            captureRoboImage("src/test/screenshots/icon_$name.png") { Subject(vector) }
+        icons.forEach { (name, resId) ->
+            captureRoboImage("src/test/screenshots/icon_$name.png") { Subject(resId) }
         }
     }
 
     @Test
-    fun iconsInSourceAreAllCovered() {
-        // The list above is hand-maintained, and a hand-maintained list drifts —
+    fun everyIconDrawnByTheAppHasAGolden() {
+        // The list above is hand-maintained, and a hand-maintained list drifts --
         // that is the whole reason this bead exists. So it is checked against the
         // source on every run.
-        val referenced = Regex("""Icons\.(?:AutoMirrored\.)?(?:Filled|Outlined|Default)\.([A-Za-z]+)""")
+        //
+        // It now scans for R.drawable.ic_* rather than Icons.*, because the app
+        // no longer draws a single ImageVector: the frozen library is gone.
+        val referenced = Regex("""R\.drawable\.(ic_[a-z0-9_]+)""")
             .findAll(sourceText())
             .map { it.groupValues[1] }
-            .toSet()
-        val covered = icons.map { (name, _) ->
-            name.split("_").joinToString("") { part -> part.replaceFirstChar(Char::uppercase) }
-        }.toSet()
+            .toSet() - NOT_AN_ICON
+        val covered = icons.map { (name, _) -> "ic_$name" }.toSet()
 
         val uncovered = referenced - covered
-        assert(uncovered.isEmpty()) { "icons drawn by the app with no golden image: $uncovered" }
+        assert(uncovered.isEmpty()) { "drawables the app draws with no golden image: $uncovered" }
     }
 
     @Test
@@ -161,16 +150,31 @@ class IconGoldenTest {
         // The mirror of the test above. Without it the list only ever grows, and
         // a golden for an icon nobody draws is a file that fails a migration for
         // no reason anyone can act on.
-        val referenced = Regex("""Icons\.(?:AutoMirrored\.)?(?:Filled|Outlined|Default)\.([A-Za-z]+)""")
+        val referenced = Regex("""R\.drawable\.(ic_[a-z0-9_]+)""")
             .findAll(sourceText())
             .map { it.groupValues[1] }
             .toSet()
-        val covered = icons.map { (name, _) ->
-            name.split("_").joinToString("") { part -> part.replaceFirstChar(Char::uppercase) }
-        }.toSet()
+        val covered = icons.map { (name, _) -> "ic_$name" }.toSet()
 
         val stale = covered - referenced
         assert(stale.isEmpty()) { "goldens for icons the app no longer draws: $stale" }
+    }
+
+    @Test
+    fun theFrozenIconLibraryIsGone() {
+        // The point of the whole migration.
+        //
+        // Belt and braces, and worth saying which is which: with the dependency
+        // removed, a stray `Icons.` reference does not compile at all
+        // ("Unresolved reference 'Icons'" -- verified by putting one back). This
+        // test catches the case that DOES compile: someone re-adds the
+        // dependency and the usage together, which would restore the frozen
+        // library without failing anything else.
+        val offenders = Regex("""Icons\.(?:AutoMirrored\.)?(?:Filled|Outlined|Default)\.""")
+            .findAll(sourceText())
+            .map { it.value }
+            .toSet()
+        assert(offenders.isEmpty()) { "the app still draws Material Icons: $offenders" }
     }
 
     @Test

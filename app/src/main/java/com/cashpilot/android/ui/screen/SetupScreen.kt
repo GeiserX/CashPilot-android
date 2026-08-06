@@ -15,13 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.BatteryAlert
-import androidx.compose.material.icons.filled.QueryStats
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,6 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -109,7 +104,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
             // Step 1: Server connection
             SetupCard(
                 step = 1,
-                icon = Icons.Default.Cloud,
+                icon = painterResource(R.drawable.ic_cloud),
                 title = stringResource(R.string.setup_server_title),
                 description = stringResource(R.string.setup_server_desc) + " " +
                     stringResource(R.string.setup_server_what_it_adds),
@@ -142,7 +137,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
             // Step 2: Notification access
             SetupCard(
                 step = 2,
-                icon = Icons.Default.Notifications,
+                icon = painterResource(R.drawable.ic_notifications),
                 title = stringResource(R.string.setup_notif_title),
                 description = stringResource(R.string.setup_notif_desc),
                 done = hasNotif,
@@ -152,14 +147,14 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                 ) {
                     Text(stringResource(R.string.setup_grant_access))
                     Spacer(Modifier.width(4.dp))
-                    Icon(Icons.Default.ChevronRight, null, Modifier.size(18.dp))
+                    Icon(painterResource(R.drawable.ic_chevron_right), null, Modifier.size(18.dp))
                 }
             }
 
             // Step 3: Usage access
             SetupCard(
                 step = 3,
-                icon = Icons.Default.QueryStats,
+                icon = painterResource(R.drawable.ic_query_stats),
                 title = stringResource(R.string.setup_usage_title),
                 description = stringResource(R.string.setup_usage_desc),
                 done = hasUsage,
@@ -169,14 +164,14 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                 ) {
                     Text(stringResource(R.string.setup_grant_access))
                     Spacer(Modifier.width(4.dp))
-                    Icon(Icons.Default.ChevronRight, null, Modifier.size(18.dp))
+                    Icon(painterResource(R.drawable.ic_chevron_right), null, Modifier.size(18.dp))
                 }
             }
 
             // Step 4: Battery optimization
             SetupCard(
                 step = 4,
-                icon = Icons.Default.BatteryAlert,
+                icon = painterResource(R.drawable.ic_battery_alert),
                 title = stringResource(R.string.setup_battery_title),
                 description = stringResource(R.string.setup_battery_desc),
                 done = hasBattery,
@@ -186,7 +181,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                 ) {
                     Text(stringResource(R.string.setup_grant_access))
                     Spacer(Modifier.width(4.dp))
-                    Icon(Icons.Default.ChevronRight, null, Modifier.size(18.dp))
+                    Icon(painterResource(R.drawable.ic_chevron_right), null, Modifier.size(18.dp))
                 }
             }
 
@@ -225,7 +220,7 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
 @Composable
 private fun SetupCard(
     step: Int,
-    icon: ImageVector,
+    icon: Painter,
     title: String,
     description: String,
     done: Boolean,
@@ -247,7 +242,7 @@ private fun SetupCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (done) {
                     Icon(
-                        Icons.Default.CheckCircle,
+                        painterResource(R.drawable.ic_check_circle),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(24.dp),
