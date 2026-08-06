@@ -173,6 +173,29 @@ class IconGoldenTest {
         assert(stale.isEmpty()) { "goldens for icons the app no longer draws: $stale" }
     }
 
+    @Test
+    fun theGoldenDirectoryHoldsExactlyTheExpectedFiles() {
+        // The third direction of drift, and the only one the two tests above
+        // cannot see: they compare the LIST against the SOURCE and never look at
+        // the directory. An icon removed from both leaves its PNG committed
+        // forever, and a golden that goes missing is not reported as missing --
+        // it is simply not compared. (CodeRabbit, PR #51.)
+        val dir = File("src/test/screenshots")
+        check(dir.isDirectory) { "expected the goldens at ${dir.absolutePath}" }
+
+        val onDisk = dir.listFiles { f -> f.isFile && f.extension == "png" }
+            .orEmpty()
+            .map { it.name }
+            .toSet()
+        val expected = icons.map { (name, _) -> "icon_$name.png" }.toSet()
+
+        val orphaned = onDisk - expected
+        val missing = expected - onDisk
+        assert(orphaned.isEmpty() && missing.isEmpty()) {
+            "golden files with no icon: $orphaned; icons with no golden file: $missing"
+        }
+    }
+
     /**
      * Every Kotlin source file under `app/src/main`, concatenated.
      *
