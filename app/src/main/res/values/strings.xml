@@ -78,7 +78,6 @@
          more than one machine nothing can split it per device. -->
     <string name="earnings_shared">Shared across your devices</string>
     <string name="earnings_shared_detail">This provider reports one balance for your whole account, so this figure is not what this phone alone earned.</string>
-    <string name="earnings_no_reading">No reading for this app yet</string>
     <string name="earnings_needs_server">Pair a CashPilot server to see earnings</string>
     <plurals name="earnings_platforms_without_readings">
         <item quantity="one">%1$d app has no reading yet</item>
