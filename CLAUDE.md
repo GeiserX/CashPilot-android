@@ -25,6 +25,31 @@ Android monitoring agent for CashPilot that tracks passive income apps (EarnApp,
 
 **No working JVM on either Mac** — the dev machine has no Java, and the mini's Temurin 17 crashes at startup (`SIGBUS ... CodeHeap::allocate`, even on `java -version` and in `-Xint`). Use `scripts/remote-gradle.sh test|assembleDebug|lintDebug`, which runs Gradle in `eclipse-temurin:17-jdk` on the build host (~26s warm). That is a **faster pre-check, not a replacement for CI** — CI additionally builds the signed release variant and runs lint against the baseline, so never report a green local run as "CI passed". Lint baseline at `app/lint-baseline.xml` — new lint errors are fatal.
 
+### Icon goldens
+
+`app/src/test/screenshots/` holds one golden PNG per icon the app draws.
+Roborazzi renders Compose on the JVM through Robolectric, so there is no
+emulator and no device involved and it runs anywhere Gradle does.
+
+```bash
+./scripts/remote-gradle.sh verifyRoborazziDebug   # fail on any visual change (what CI runs)
+./scripts/remote-gradle.sh recordRoborazziDebug   # re-record, only when a change is INTENDED
+```
+
+`remote-gradle.sh` syncs the goldens and any failure diffs back from the build
+host; without that the record task looks like it did nothing.
+
+They exist for one job: `material-icons-extended` is frozen at 1.7.8 and the
+migration to per-icon vector drawables is sixteen substitutions whose only
+acceptable outcome is "nothing changed visually". A diff during that migration
+means the glyph is not the same one.
+
+**Icons only, not whole screens — on purpose.** Screen goldens are dominated by
+text, and text rendering depends on the fonts on the machine that rendered it,
+so they fail for reasons unrelated to the change and then get muted. Icons are
+pure vector geometry. Screen-level goldens belong with the UI-renewal work,
+where the fonts can be pinned deliberately.
+
 ### Repository & Infrastructure
 
 - **Package:** `com.cashpilot.android`

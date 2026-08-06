@@ -48,3 +48,19 @@ ssh "$HOST" "docker run --rm \
   -v $REMOTE_ROOT/gradle:/root/.gradle \
   -w /src -e ANDROID_HOME=/sdk -e ANDROID_SDK_ROOT=/sdk \
   eclipse-temurin:17-jdk bash -lc './gradlew --no-daemon $TASK'"
+
+# Bring back the SOURCE-TREE artefacts the build writes, which are the only
+# outputs that belong under version control: the Roborazzi goldens
+# (`recordRoborazziDebug` writes them) and the diff images a failed
+# `verifyRoborazziDebug` leaves behind. Without this the record task appears to
+# do nothing -- the images exist, on a machine you are not looking at.
+#
+# Everything under build/ is deliberately NOT synced back: it is large,
+# regenerable, and not the point.
+for dir in app/src/test/screenshots app/build/outputs/roborazzi; do
+  if ssh "$HOST" "test -d '$REMOTE_ROOT/src/$dir'"; then
+    echo "==> fetching $dir"
+    mkdir -p "$HERE/$dir"
+    rsync -a "$HOST:$REMOTE_ROOT/src/$dir/" "$HERE/$dir/"
+  fi
+done

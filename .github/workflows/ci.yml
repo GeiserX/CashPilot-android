@@ -34,6 +34,24 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
       - uses: android-actions/setup-android@v4
       - run: ./gradlew jacocoTestReport
+
+      # The icon goldens (CashPilot-android-vxb). Roborazzi renders Compose on
+      # the JVM through Robolectric, so this needs no emulator and no device.
+      #
+      # verify, never record: a CI job that RE-RECORDS makes every change agree
+      # with itself, which is the one outcome a visual gate must never produce.
+      - name: Verify icon goldens
+        run: ./gradlew verifyRoborazziDebug
+
+      # The diffs are the whole point when this fails -- a red check saying
+      # "an image changed" with no image is not actionable.
+      - name: Upload golden diffs
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: roborazzi-diffs
+          path: app/build/outputs/roborazzi/
+          if-no-files-found: ignore
       - uses: codecov/codecov-action@v7
         if: github.event_name == 'push'
         with:
