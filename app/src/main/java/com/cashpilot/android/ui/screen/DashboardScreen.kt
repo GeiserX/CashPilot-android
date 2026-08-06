@@ -601,6 +601,16 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
+                    // The label alone says the figure is shared; it does not say
+                    // what that means for the number directly above it. Without
+                    // this line a user reasonably reads it as what THIS phone
+                    // earned, which is the misreading the label exists to prevent.
+                    // Follows the earnings_none_yet / _detail pair in EarningsCard.
+                    Text(
+                        stringResource(R.string.earnings_shared_detail),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             }
 

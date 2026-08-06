@@ -73,6 +73,12 @@ android {
 
     lint {
         baseline = file("lint-baseline.xml")
+        // Lint already DETECTS an orphaned drawable or string, but as a warning,
+        // and the project's rule is that only new lint ERRORS are fatal. So
+        // detection worked and nothing acted on it: a deliberately orphaned
+        // drawable survived both testDebugUnitTest and lintDebug, and two dead
+        // strings had already accumulated (CashPilot-android-xuc).
+        error += "UnusedResources"
     }
 
     buildFeatures {
