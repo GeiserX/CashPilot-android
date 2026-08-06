@@ -170,8 +170,17 @@ class IconGoldenTest {
         // test catches the case that DOES compile: someone re-adds the
         // dependency and the usage together, which would restore the frozen
         // library without failing anything else.
-        val offenders = Regex("""Icons\.(?:AutoMirrored\.)?(?:Filled|Outlined|Default)\.""")
-            .findAll(sourceText())
+        // ANY `Icons.` reference, not an enumerated list of themes. The first
+        // version matched only Filled/Outlined/Default and would have missed
+        // Icons.Rounded, Icons.Sharp, Icons.TwoTone and their AutoMirrored
+        // variants -- all valid Compose themes that pull the same artifact back
+        // in. (CodeRabbit, PR #52.)
+        //
+        // Comments are stripped first. Scanning raw text would make a mention of
+        // `Icons.` in a KDoc trip the guard -- a test failing on its own prose,
+        // which this repo has been bitten by more than once.
+        val offenders = Regex("""\bIcons\.[A-Za-z]""")
+            .findAll(sourceText(stripComments = true))
             .map { it.value }
             .toSet()
         assert(offenders.isEmpty()) { "the app still draws Material Icons: $offenders" }
@@ -207,12 +216,16 @@ class IconGoldenTest {
      * catch a NEW `Icons.` reference, which by definition is not in this test's
      * own classpath knowledge.
      */
-    private fun sourceText(): String {
+    private fun sourceText(stripComments: Boolean = false): String {
         val root = File("src/main/java")
         check(root.isDirectory) { "expected app sources at ${root.absolutePath}" }
         val files = root.walkTopDown().filter { it.isFile && it.extension == "kt" }.toList()
         // A silent empty read would make both drift tests vacuously pass.
         check(files.size >= 10) { "only found ${files.size} Kotlin sources; the path is wrong" }
-        return files.joinToString("\n") { it.readText() }
+        val raw = files.joinToString("\n") { it.readText() }
+        if (!stripComments) return raw
+        return raw
+            .replace(Regex("""/\*.*?\*/""", RegexOption.DOT_MATCHES_ALL), "")
+            .replace(Regex("""//.*"""), "")
     }
 }
