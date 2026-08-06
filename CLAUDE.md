@@ -56,8 +56,8 @@ where the fonts can be pinned deliberately.
 - **Version source of truth:** `gradle.properties` (`VERSION_NAME`, `VERSION_CODE`). CI overrides via `-P` flags.
 - **Release workflow:** Push a `v*` tag -> GitHub Actions builds signed APK+AAB, creates GitHub Release
 - **CI workflow:** On push to main -> debug APK + lint + signed release APK. On PR -> debug + lint only (no keystore access)
-- **Signing keystore:** JKS at `~/repos/personal/keystores/cashpilot-release.jks` (alias: `cashpilot`, password: `cashpilot-release-2026`). Base64-encoded in GitHub secret `KEYSTORE_BASE64`.
-- **F-Droid:** MR !35850 at gitlab.com/fdroid/fdroiddata. Metadata at `metadata/com.cashpilot.android.yml`. Uses `UpdateCheckData` to read version from `gradle.properties`.
+- **Signing keystore:** JKS at `~/repos/personal/keystores/cashpilot-release.jks` (alias: `cashpilot`). **The password is NOT recorded here — this repository is public.** It lives with the other credentials in `~/repos/personal/.claude/reference/`. The keystore is base64-encoded in the GitHub secret `KEYSTORE_BASE64`.
+- **F-Droid: NOT listed.** MR !35850 at gitlab.com/fdroid/fdroiddata was **closed without merging** (2026-07-04). `metadata/com.cashpilot.android.yml` is **not** on their master (404, verified against a known-good file returning 200), and `f-droid.org/packages/com.cashpilot.android/` is 404. The recipe used `UpdateCheckData` to read the version from `gradle.properties`. Read the closed MR's discussion before resubmitting — see `PUBLISHING.md`.
 
 ## Architecture
 
