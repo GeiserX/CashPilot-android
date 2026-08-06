@@ -23,17 +23,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.CloudOff
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -114,7 +104,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings))
+                        Icon(painterResource(R.drawable.ic_settings), contentDescription = stringResource(R.string.settings))
                     }
                 },
             )
@@ -203,7 +193,7 @@ private fun SummaryHeader(
                 // Running
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        Icons.Default.Circle,
+                        painterResource(R.drawable.ic_circle),
                         contentDescription = null,
                         tint = RunningGreen,
                         modifier = Modifier.size(10.dp),
@@ -218,7 +208,7 @@ private fun SummaryHeader(
                 // Stopped
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        Icons.Default.Circle,
+                        painterResource(R.drawable.ic_circle),
                         contentDescription = null,
                         tint = StoppedRed,
                         modifier = Modifier.size(10.dp),
@@ -235,7 +225,7 @@ private fun SummaryHeader(
                 if (summary.unknown > 0) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            Icons.Default.Circle,
+                            painterResource(R.drawable.ic_circle),
                             contentDescription = null,
                             tint = UnknownAmber,
                             modifier = Modifier.size(10.dp),
@@ -251,7 +241,7 @@ private fun SummaryHeader(
                 // Not installed
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        Icons.Default.Circle,
+                        painterResource(R.drawable.ic_circle),
                         contentDescription = null,
                         tint = NotInstalledGray,
                         modifier = Modifier.size(10.dp),
@@ -274,7 +264,7 @@ private fun SummaryHeader(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            Icons.Default.ArrowUpward,
+                            painterResource(R.drawable.ic_arrow_upward),
                             contentDescription = stringResource(R.string.upload),
                             modifier = Modifier.size(14.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -288,7 +278,7 @@ private fun SummaryHeader(
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            Icons.Default.ArrowDownward,
+                            painterResource(R.drawable.ic_arrow_downward),
                             contentDescription = stringResource(R.string.download),
                             modifier = Modifier.size(14.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -313,7 +303,7 @@ private fun SummaryHeader(
             if (publicIp != null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        Icons.Default.Language,
+                        painterResource(R.drawable.ic_language),
                         contentDescription = null,
                         modifier = Modifier.size(14.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -337,7 +327,7 @@ private fun SummaryHeader(
                 if (!serverConfigured) {
                     TextButton(onClick = onNavigateToSettings) {
                         Icon(
-                            Icons.Default.CloudOff,
+                            painterResource(R.drawable.ic_cloud_off),
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -360,7 +350,7 @@ private fun SummaryHeader(
                             label = "heartbeat-dot",
                         )
                         Icon(
-                            Icons.Default.Circle,
+                            painterResource(R.drawable.ic_circle),
                             contentDescription = null,
                             tint = dotColor,
                             modifier = Modifier.size(8.dp),
@@ -402,7 +392,7 @@ private fun PermissionBlocker() {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    Icons.Default.VisibilityOff,
+                    painterResource(R.drawable.ic_visibility_off),
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onErrorContainer,
@@ -430,7 +420,7 @@ private fun PermissionBlocker() {
                     )
                 },
             ) {
-                Icon(Icons.Default.Notifications, null, Modifier.size(16.dp))
+                Icon(painterResource(R.drawable.ic_notifications), null, Modifier.size(16.dp))
                 Spacer(Modifier.width(6.dp))
                 Text(stringResource(R.string.grant_notification_access))
             }
@@ -442,7 +432,7 @@ private fun PermissionBlocker() {
                     )
                 },
             ) {
-                Icon(Icons.Default.Language, null, Modifier.size(16.dp))
+                Icon(painterResource(R.drawable.ic_language), null, Modifier.size(16.dp))
                 Spacer(Modifier.width(6.dp))
                 Text(stringResource(R.string.grant_usage_access))
             }
@@ -475,7 +465,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                Icons.Default.Warning,
+                painterResource(R.drawable.ic_warning),
                 contentDescription = null,
                 modifier = Modifier.size(18.dp),
                 tint = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -498,7 +488,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
                         },
                         contentPadding = PaddingValues(0.dp),
                     ) {
-                        Icon(Icons.Default.Notifications, null, Modifier.size(14.dp))
+                        Icon(painterResource(R.drawable.ic_notifications), null, Modifier.size(14.dp))
                         Spacer(Modifier.width(4.dp))
                         Text(stringResource(R.string.grant_notification_access), style = MaterialTheme.typography.bodySmall)
                     }
@@ -513,7 +503,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
                         },
                         contentPadding = PaddingValues(0.dp),
                     ) {
-                        Icon(Icons.Default.VisibilityOff, null, Modifier.size(14.dp))
+                        Icon(painterResource(R.drawable.ic_visibility_off), null, Modifier.size(14.dp))
                         Spacer(Modifier.width(4.dp))
                         Text(stringResource(R.string.grant_usage_access), style = MaterialTheme.typography.bodySmall)
                     }
@@ -521,7 +511,7 @@ private fun PermissionBanner(viewModel: MainViewModel) {
             }
             IconButton(onClick = { dismissed = true }) {
                 Icon(
-                    Icons.Default.Close,
+                    painterResource(R.drawable.ic_close),
                     contentDescription = stringResource(R.string.dismiss),
                     modifier = Modifier.size(18.dp),
                 )
@@ -569,7 +559,7 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
             // Status dot + app name
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    Icons.Default.Circle,
+                    painterResource(R.drawable.ic_circle),
                     contentDescription = null,
                     tint = when (info.state) {
                         AppState.RUNNING -> RunningGreen
@@ -634,7 +624,7 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
                 Spacer(Modifier.height(2.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        Icons.Default.Notifications,
+                        painterResource(R.drawable.ic_notifications),
                         contentDescription = stringResource(R.string.notification_active),
                         modifier = Modifier.size(12.dp),
                         tint = RunningGreen.copy(alpha = 0.7f),
@@ -655,7 +645,7 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
                 Spacer(Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        Icons.Default.ArrowUpward,
+                        painterResource(R.drawable.ic_arrow_upward),
                         contentDescription = null,
                         modifier = Modifier.size(10.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
@@ -667,7 +657,7 @@ private fun AppCard(info: AppDisplayInfo, earnings: PlatformEarnings? = null) {
                     )
                     Spacer(Modifier.width(6.dp))
                     Icon(
-                        Icons.Default.ArrowDownward,
+                        painterResource(R.drawable.ic_arrow_downward),
                         contentDescription = null,
                         modifier = Modifier.size(10.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),

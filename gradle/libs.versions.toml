@@ -5,14 +5,16 @@ coreKtx = "1.19.0"
 lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
 # Verified against the BOM's own pom on Google Maven before bumping:
-#   material3               -> 1.4.0   (was 1.3.1)
-#   ui                      -> 1.11.4
-#   material-icons-extended -> 1.7.8   (frozen but STILL SHIPPED by this BOM)
+#   material3 -> 1.4.0 (was 1.3.1), ui -> 1.11.4
 #
-# The icons library is no longer updated and material3 1.4.0 stopped depending on
-# material-icons-core transitively -- but this project declares
-# material-icons-extended explicitly, and the BOM still pins it, so the 16 icons
-# in use keep resolving. No icon migration is forced by this bump.
+# material-icons-extended is GONE from this project (CashPilot-android-vxb).
+# Google froze it at 1.7.8 and material3 1.4.0 stopped depending on
+# material-icons-core transitively, so it was resolving only because the BOM
+# still happened to pin it -- a dependency that would have broken one day with a
+# missing version rather than a deprecation warning. The 16 icons the app draws
+# are now vector drawables in res/drawable/, converted from the same upstream
+# Material Icons SVGs, and app/src/test/screenshots/ proves they render
+# identically. Do not reintroduce it: IconGoldenTest fails on any `Icons.` use.
 composeBom = "2026.06.01"
 ktor = "3.5.1"
 serialization = "1.11.0"
@@ -41,7 +43,6 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
 
