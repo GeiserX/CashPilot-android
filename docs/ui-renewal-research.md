@@ -144,6 +144,25 @@ actually changes, which is exactly when a monitoring widget should change.
 So the widget is cheaper than the generic advice suggests, but it is a **second
 UI in a second framework**, not a reskin of the first.
 
+### This contradicts a standing rule, deliberately
+
+`CLAUDE.md` lists **"Widget — defer until core monitoring is solid"** under
+*What NOT to Build Yet*. This note recommends the widget as the largest win, so
+one of the two has to give and it should be a decision rather than a drift.
+
+The case that the condition is now met: detection runs on three complementary
+APIs, the null-vs-zero rule is enforced end to end, the state machine is
+covered by tests, and the icon goldens exist. "Solid" was never defined, but
+the app is no longer the moving target that rule was written against.
+
+The case for keeping the rule: a widget is a second UI in a second framework
+on a library that is not yet 1.0, and everything in steps 1-3 below is cheaper
+and useful regardless.
+
+**I have not changed the rule.** If the widget is agreed, `CLAUDE.md` should be
+updated in the same change, so the repository does not carry an instruction
+its own roadmap contradicts.
+
 ### Wear OS
 
 One paragraph, as asked. A tile would show the same two facts on a wrist. It
