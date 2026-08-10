@@ -16,7 +16,7 @@ activityCompose = "1.13.0"
 # Material Icons SVGs, and app/src/test/screenshots/ proves they render
 # identically. Do not reintroduce it: IconGoldenTest fails on any `Icons.` use.
 composeBom = "2026.06.01"
-ktor = "3.5.1"
+ktor = "3.5.2"
 serialization = "1.11.0"
 datastore = "1.2.1"
 workManager = "2.11.2"
