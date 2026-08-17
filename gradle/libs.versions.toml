@@ -15,7 +15,7 @@ activityCompose = "1.13.0"
 # are now vector drawables in res/drawable/, converted from the same upstream
 # Material Icons SVGs, and app/src/test/screenshots/ proves they render
 # identically. Do not reintroduce it: IconGoldenTest fails on any `Icons.` use.
-composeBom = "2026.06.01"
+composeBom = "2026.08.00"
 ktor = "3.5.2"
 serialization = "1.11.0"
 datastore = "1.2.1"
@@ -27,7 +27,7 @@ workManager = "2.11.2"
 # Chosen over Google's own `com.android.compose.screenshot`, which is still
 # 0.0.1-alphaNN (alpha16, 2026-07-27) after two years. An alpha plugin is the
 # wrong dependency for a gate that is meant to make a migration SAFE.
-roborazzi = "1.70.0"
+roborazzi = "1.72.0"
 robolectric = "4.16.1"
 junit4 = "4.13.2"
 
