@@ -1,5 +1,5 @@
 [versions]
-agp = "9.4.0"
+agp = "9.4.1"
 kotlin = "2.4.20"
 coreKtx = "1.19.0"
 lifecycleRuntimeKtx = "2.11.0"
@@ -16,7 +16,7 @@ activityCompose = "1.13.0"
 # Material Icons SVGs, and app/src/test/screenshots/ proves they render
 # identically. Do not reintroduce it: IconGoldenTest fails on any `Icons.` use.
 composeBom = "2026.09.00"
-ktor = "3.5.2"
+ktor = "3.6.0"
 serialization = "1.11.0"
 datastore = "1.2.1"
 workManager = "2.11.2"
