@@ -14,7 +14,7 @@ CashPilot Android is the Android companion app for [CashPilot](https://github.co
 ## Features
 
 - Detects 11 passive income apps: EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, Uprock, Wipter
-- Instant detection from each app's foreground-service notification (NotificationListenerService)
+- Instant detection from each app's ongoing notification (NotificationListenerService)
 - Confirms activity from per-app network traffic and recent foreground use (NetworkStatsManager, UsageStatsManager)
 - Periodic heartbeats to your server (`POST /api/workers/heartbeat`), so phones appear next to Docker workers in the fleet view
 - Sends data only to your own CashPilot server, plus one request to `api.ipify.org` to show your public IP
