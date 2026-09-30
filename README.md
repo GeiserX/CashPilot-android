@@ -30,8 +30,15 @@ Needs Android 8.0 (API 26) or later and a reachable CashPilot 1.x server.
 
 ## Documentation
 
-- [How it works](docs/how-it-works.md): the three detection APIs, the heartbeat flow, privacy
-- [Development](docs/development.md): building with Gradle, the stack
+Everything below is on the site, https://geiserx.github.io/CashPilot-android/.
+
+- [Getting started](https://geiserx.github.io/CashPilot-android/getting-started/): install the APK, the first-run steps, and what a working start looks like
+- [Usage](https://geiserx.github.io/CashPilot-android/usage/): the dashboard, what each app state means, earnings, the notification
+- [Configuration](https://geiserx.github.io/CashPilot-android/configuration/): every setting, the fleet key and enrollment, heartbeat timing, the app list
+- [How it works](https://geiserx.github.io/CashPilot-android/how-it-works/): the three detection APIs, the running rule, what a heartbeat carries, privacy
+- [Troubleshooting](https://geiserx.github.io/CashPilot-android/troubleshooting/): symptom, cause, fix, and what to put in a bug report
+- [Development](https://geiserx.github.io/CashPilot-android/development/): building, tests, releases, the stack
+- [Related projects](https://geiserx.github.io/CashPilot-android/related/): the CashPilot server, desktop app and integrations
 
 ## Related projects
 
