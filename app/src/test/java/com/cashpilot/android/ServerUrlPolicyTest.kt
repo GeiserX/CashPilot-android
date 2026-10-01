@@ -57,6 +57,10 @@ class ServerUrlPolicyTest {
             "http://192.168.1.256",
             "http://192.168.1.1.example.com",
             "http://10.0.0.1@cashpilot.example.com",
+            // Non-canonical hosts that OkHttp would turn into 8.8.8.8 or a public name.
+            "http://8%2e8%2e8%2e8",
+            "http://cashpilot%2eexample%2ecom",
+            "http://\uFF18\uFF0E\uFF18\uFF0E\uFF18\uFF0E\uFF18",
             "ftp://192.168.1.10",
             "cashpilot.example.com",
             "",
