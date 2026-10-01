@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **The fleet key no longer goes to a public server over plain `http://`.** The app sent its bearer token to any `http://` URL and only showed a warning, so a server on a public address got the key in clear text. Now `http://` works only for a private address, judged from the address as written: loopback, the LAN ranges, link-local, Tailscale's `100.64.0.0/10` and `.ts.net` names, and names with no dot or ending in `.local`, `.lan`, `.home.arpa` or `.internal`. Any other `http://` URL is refused before a request leaves the phone, including one saved by an older version. The URL field, the dashboard and the notification say why. `https://` works as before.
+
 ### Fixed
 
 - **The app now reports its own version to the server.** Every heartbeat's `system_info` carried `os`, `arch`, `os_version` and `device_type`, but never a `version`. The CashPilot server reads exactly that key to tell whether a worker is on a different release series from the UI, so every Android device showed as "version unknown" on the fleet page and there was no way to see which phones were running an outdated build.

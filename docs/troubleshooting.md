@@ -38,11 +38,17 @@ Symptom, cause, fix. The texts in bold are what the app shows.
 
 **Fix:** open the server URL in the phone's browser. If the browser cannot load it, neither can the app. A server that is only on your home network needs the phone on that network or on a VPN to it.
 
+## Not sending heartbeats: this server URL needs https://
+
+**Cause:** the URL starts with `http://` and points at a public address, so the keys would cross the internet unencrypted. The app refuses to send them and makes no request.
+
+**Fix:** use the server's `https://` address, or reach it at a private address: its LAN IP, a `.local` name, or its Tailscale address or `.ts.net` name. [Which addresses count as private](configuration.md#the-server-url-use-https).
+
 ## The URL field is red: Insecure
 
 **Cause:** the URL starts with `http://`, so the keys and the app data would travel unencrypted.
 
-**Fix:** use the server's `https://` address. On a home network `http://` works, and the warning stays.
+**Fix:** use the server's `https://` address. On a private address `http://` works, and the warning stays.
 
 ## Earnings say Nothing read yet
 
