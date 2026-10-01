@@ -44,7 +44,7 @@ object ServerUrlPolicy {
 
     private fun isPrivateIpv4(o: List<Int>): Boolean = o.all { it <= 255 } && when (o[0]) {
         10, 127 -> true
-        172 -> o[1] in 16..32
+        172 -> o[1] in 16..31
         192 -> o[1] == 168
         169 -> o[1] == 254
         100 -> o[1] in 64..127
