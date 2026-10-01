@@ -18,6 +18,10 @@ object ServerUrlPolicy {
     private val IPV6_LOOPBACK = Regex("""[0:]*::?0{0,3}1""")
     private val HEXTET = Regex("""[0-9a-f]{1,4}""")
 
+    // Only a host already in canonical form is judged. OkHttp decodes %2e and
+    // normalises Unicode dots and digits, so 8%2e8%2e8%2e8 would reach 8.8.8.8.
+    private val CANONICAL = Regex("""[a-z0-9.:-]+""")
+
     // A dotless number is an IPv4 address to the system resolver (134744072 is 8.8.8.8).
     private val NUMERIC = Regex("""0x[0-9a-f]*|\d+""")
 
@@ -34,7 +38,7 @@ object ServerUrlPolicy {
     fun isPrivateHost(rawHost: String): Boolean {
         val host = rawHost.removeSurrounding("[", "]").trimEnd('.').lowercase()
         return when {
-            host.isEmpty() -> false
+            !CANONICAL.matches(host) -> false
             IPV4.matches(host) -> isPrivateIpv4(host.split('.').map { it.toInt() })
             ':' in host -> isPrivateIpv6(host)
             '.' in host -> PRIVATE_SUFFIXES.any { host.endsWith(it) }
