@@ -18,6 +18,7 @@ import com.cashpilot.android.model.Settings
 import com.cashpilot.android.model.SystemInfo
 import com.cashpilot.android.model.WorkerHeartbeat
 import com.cashpilot.android.model.WorkerHeartbeatResponse
+import com.cashpilot.android.util.ServerUrlPolicy
 import com.cashpilot.android.util.SettingsStore
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -93,6 +94,15 @@ class HeartbeatService : Service() {
     }
 
     private suspend fun sendHeartbeat(settings: Settings) {
+        val url = settings.serverUrl.trimEnd('/') + "/api/workers/heartbeat"
+        // http to a public host would hand the fleet key to every network on the way.
+        // No backoff: the next tick picks up a corrected URL straight away.
+        if (!ServerUrlPolicy.allowsToken(url)) {
+            _lastHeartbeatFailed.value = true
+            Log.w(TAG, "Heartbeat not sent: server URL is not https and not a private address")
+            updateNotification(getString(R.string.cleartext_refused_short))
+            return
+        }
         try {
             val apps = detector.detectAll(settings.enabledSlugs)
 
@@ -128,7 +138,6 @@ class HeartbeatService : Service() {
                 ),
             )
 
-            val url = settings.serverUrl.trimEnd('/') + "/api/workers/heartbeat"
             val response: HttpResponse = httpClient.post(url) {
                 contentType(ContentType.Application.Json)
                 bearerAuth(settings.activeKey)

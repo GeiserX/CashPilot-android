@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- CashPilot connects to a user-configured server that may use HTTP on local networks -->
+    <!-- CashPilot connects to a user-configured server that may use HTTP on local networks.
+         ServerUrlPolicy refuses http to any public host before a request is made. -->
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />

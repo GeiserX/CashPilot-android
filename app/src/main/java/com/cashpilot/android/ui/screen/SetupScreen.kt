@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cashpilot.android.R
 import com.cashpilot.android.ui.MainViewModel
+import com.cashpilot.android.util.ServerUrlPolicy
 
 @Composable
 fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
@@ -57,6 +58,8 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
     // Sync each field independently so a partial DataStore write doesn't clobber the other
     var urlSynced by rememberSaveable { mutableStateOf(false) }
     var keySynced by rememberSaveable { mutableStateOf(false) }
+    val cleartext = localUrl.trim().startsWith("http://", ignoreCase = true)
+    val urlRefused = localUrl.isNotBlank() && !ServerUrlPolicy.allowsToken(localUrl)
     LaunchedEffect(settings.serverUrl) {
         if (!urlSynced && settings.serverUrl.isNotEmpty()) {
             localUrl = settings.serverUrl
@@ -118,10 +121,12 @@ fun SetupScreen(viewModel: MainViewModel, onComplete: () -> Unit) {
                     placeholder = { Text("https://cashpilot.example.com") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    isError = localUrl.trim().startsWith("http://", ignoreCase = true),
-                    supportingText = if (localUrl.trim().startsWith("http://", ignoreCase = true)) {
-                        { Text(stringResource(R.string.cleartext_warning)) }
-                    } else null,
+                    isError = cleartext || urlRefused,
+                    supportingText = when {
+                        urlRefused -> { { Text(stringResource(R.string.cleartext_refused)) } }
+                        cleartext -> { { Text(stringResource(R.string.cleartext_warning)) } }
+                        else -> null
+                    },
                 )
                 Spacer(Modifier.height(8.dp))
                 OutlinedTextField(

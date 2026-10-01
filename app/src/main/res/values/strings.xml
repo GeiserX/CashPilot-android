@@ -56,6 +56,8 @@
     <string name="battery_disable_optimization">Disable Battery Optimization</string>
 
     <!-- Warnings -->
+    <string name="cleartext_refused">CashPilot will not send your API key unencrypted over the internet. Use https://, or http:// only for a local, private or Tailscale address.</string>
+    <string name="cleartext_refused_short">Not sending heartbeats: this server URL needs https://</string>
     <string name="cleartext_warning">Insecure: API key and app data will be sent unencrypted. Use https:// if possible.</string>
 
     <!-- About section -->

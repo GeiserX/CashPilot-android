@@ -60,6 +60,7 @@ import com.cashpilot.android.model.PlatformEarnings
 import com.cashpilot.android.ui.MainViewModel
 import com.cashpilot.android.ui.component.EarningsCard
 import com.cashpilot.android.util.FormatUtils
+import com.cashpilot.android.util.ServerUrlPolicy
 import kotlinx.coroutines.delay
 
 private val RunningGreen = Color(0xFF22C55E)
@@ -130,6 +131,7 @@ fun DashboardScreen(viewModel: MainViewModel, onNavigateToSettings: () -> Unit) 
                         serverConfigured = settings.serverUrl.isNotBlank() && settings.apiKey.isNotBlank(),
                         lastHeartbeat = lastHeartbeat,
                         heartbeatFailed = lastHeartbeatFailed,
+                        urlRefused = !ServerUrlPolicy.allowsToken(settings.serverUrl),
                         publicIp = publicIp,
                         onNavigateToSettings = onNavigateToSettings,
                     )
@@ -174,6 +176,7 @@ private fun SummaryHeader(
     serverConfigured: Boolean,
     lastHeartbeat: Long,
     heartbeatFailed: Boolean,
+    urlRefused: Boolean,
     publicIp: String?,
     onNavigateToSettings: () -> Unit,
 ) {
@@ -343,7 +346,7 @@ private fun SummaryHeader(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         val dotColor by animateColorAsState(
                             targetValue = when {
-                                heartbeatFailed -> StoppedRed
+                                heartbeatFailed || urlRefused -> StoppedRed
                                 lastHeartbeat > 0 -> RunningGreen
                                 else -> DisabledGray
                             },
@@ -358,11 +361,12 @@ private fun SummaryHeader(
                         Spacer(Modifier.width(6.dp))
                         Text(
                             when {
+                                urlRefused -> stringResource(R.string.cleartext_refused_short)
                                 lastHeartbeat == 0L -> stringResource(R.string.no_heartbeat_yet)
                                 else -> stringResource(R.string.last_heartbeat, relativeTime(lastHeartbeat))
                             },
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = if (urlRefused) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
