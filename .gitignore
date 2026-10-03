@@ -14,7 +14,6 @@ local.properties
 *.aab
 *.jks
 *.keystore
-AGENTS.md
 
 # Agent / tooling working dirs (not part of the project)
 #
@@ -33,7 +32,8 @@ AGENTS.md
 .beads/*.db
 .beads/.beads-credential-key
 .beads/.local_version
-.claude/
+.claude/*
+!.claude/settings.json
 .codex/
 .omc/
 site/
