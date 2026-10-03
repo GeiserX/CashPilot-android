@@ -26,6 +26,7 @@ AGENTS.md
 .agents/
 .beads/issues.jsonl
 .beads/interactions.jsonl
+.beads/events.jsonl
 .beads/backup/
 .beads/dolt/
 .beads/embeddeddolt/

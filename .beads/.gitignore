@@ -1,6 +1,7 @@
 # Bead text lives in the Dolt tracker only, never in git
 issues.jsonl
 interactions.jsonl
+events.jsonl
 
 # Dolt database (managed by Dolt, not git)
 dolt/
