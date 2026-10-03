@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "CashPilot_android",
+  "project_id": "2138e28e-4d6e-4065-842b-8e46a27eba15"
+}
