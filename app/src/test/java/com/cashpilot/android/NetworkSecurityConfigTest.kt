@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 /**
  * The app's http rule and the network stack's http rule are the same list.
@@ -23,7 +24,9 @@ import org.robolectric.RuntimeEnvironment
  * android.security.net.config classes in Robolectric's framework jar), so this
  * checks how the platform reads the file, not a copy of its rules.
  */
+// Same SDK as IconGoldenTest: Robolectric 4.17 cannot run this module's targetSdk.
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class NetworkSecurityConfigTest {
 
     private val allowed = listOf(
