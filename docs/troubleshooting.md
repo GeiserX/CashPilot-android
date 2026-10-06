@@ -40,7 +40,7 @@ Symptom, cause, fix. The texts in bold are what the app shows.
 
 ## Not sending heartbeats: this server URL needs https://
 
-**Cause:** the URL starts with `http://` and its host is not loopback or a private name. That includes an IP address, even a LAN or Tailscale one: Android can allow plain http per name, not per address range. The app refuses to send the keys and makes no request.
+**Cause:** the URL starts with `http://` and its host is not loopback or a private name. That includes any IP address other than `127.0.0.1` and `::1`, even a LAN or Tailscale one: Android can allow plain http per name, not per address range. The app refuses to send the keys and makes no request.
 
 **Fix:** use the server's `https://` address, or reach it by a private name: a `.lan`, `.local`, `.home.arpa` or `.internal` name, or its Tailscale `.ts.net` name. [Which hosts work over http](configuration.md#the-server-url-use-https).
 
