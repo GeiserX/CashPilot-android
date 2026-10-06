@@ -27,7 +27,7 @@ workManager = "2.12.0"
 # Chosen over Google's own `com.android.compose.screenshot`, which is still
 # 0.0.1-alphaNN (alpha16, 2026-07-27) after two years. An alpha plugin is the
 # wrong dependency for a gate that is meant to make a migration SAFE.
-roborazzi = "1.75.0"
+roborazzi = "1.76.0"
 robolectric = "4.17"
 junit4 = "4.13.2"
 
