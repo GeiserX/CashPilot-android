@@ -37,3 +37,6 @@ local.properties
 .codex/
 .omc/
 site/
+
+# Where scripts/remote-gradle.sh builds: a private host, never published.
+scripts/remote-gradle.env
