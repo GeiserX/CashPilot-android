@@ -40,15 +40,15 @@ Symptom, cause, fix. The texts in bold are what the app shows.
 
 ## Not sending heartbeats: this server URL needs https://
 
-**Cause:** the URL starts with `http://` and points at a public address, so the keys would cross the internet unencrypted. The app refuses to send them and makes no request.
+**Cause:** the URL starts with `http://` and its host is not loopback or a private name. That includes an IP address, even a LAN or Tailscale one: Android can allow plain http per name, not per address range. The app refuses to send the keys and makes no request.
 
-**Fix:** use the server's `https://` address, or reach it at a private address: its LAN IP, a `.local` name, or its Tailscale address or `.ts.net` name. [Which addresses count as private](configuration.md#the-server-url-use-https).
+**Fix:** use the server's `https://` address, or reach it by a private name: a `.lan`, `.local`, `.home.arpa` or `.internal` name, or its Tailscale `.ts.net` name. [Which hosts work over http](configuration.md#the-server-url-use-https).
 
 ## The URL field is red: Insecure
 
 **Cause:** the URL starts with `http://`, so the keys and the app data would travel unencrypted.
 
-**Fix:** use the server's `https://` address. On a private address `http://` works, and the warning stays.
+**Fix:** use the server's `https://` address. On loopback or a private name `http://` works, and the warning stays.
 
 ## Earnings say Nothing read yet
 
