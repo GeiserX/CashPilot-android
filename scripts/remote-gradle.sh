@@ -4,7 +4,7 @@
 # WHY THIS EXISTS
 # ---------------
 # There is no working JVM on either Mac here. The dev machine has no Java at
-# all, and Temurin 17 on the Mac mini crashes at startup:
+# all, and Temurin 17 on the other Mac crashes at startup:
 #
 #   SIGBUS (0xa) ... CodeHeap::allocate
 #
@@ -24,13 +24,35 @@
 #   scripts/remote-gradle.sh test
 #   scripts/remote-gradle.sh assembleDebug
 #   scripts/remote-gradle.sh 'test lint'
+#
+# CONFIGURATION (required, there are no defaults)
+# -----------------------------------------------
+# Where the build runs is yours to choose and is never written in this public
+# repository. Set both variables in the environment, or put them in
+# scripts/remote-gradle.env, which is git-ignored and read if present:
+#
+#   CASHPILOT_BUILD_HOST=user@build-host   # ssh target with Docker and rsync
+#   CASHPILOT_BUILD_ROOT=/path/on/host     # holds sdk/, src/ and gradle/
+#
+# The environment wins over the file.
 set -euo pipefail
 
-HOST="${CASHPILOT_BUILD_HOST:-root@watchtower.mango-alpha.ts.net}"
-REMOTE_ROOT="${CASHPILOT_BUILD_ROOT:-/mnt/user/appdata/androidbuild}"
-TASK="${*:-test}"
-
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+ENV_HOST="${CASHPILOT_BUILD_HOST:-}"
+ENV_ROOT="${CASHPILOT_BUILD_ROOT:-}"
+if [ -f "$HERE/scripts/remote-gradle.env" ]; then
+  # shellcheck source=/dev/null
+  . "$HERE/scripts/remote-gradle.env"
+fi
+HOST="${ENV_HOST:-${CASHPILOT_BUILD_HOST:-}}"
+REMOTE_ROOT="${ENV_ROOT:-${CASHPILOT_BUILD_ROOT:-}}"
+if [ -z "$HOST" ] || [ -z "$REMOTE_ROOT" ]; then
+  echo "remote-gradle.sh: set CASHPILOT_BUILD_HOST and CASHPILOT_BUILD_ROOT," >&2
+  echo "in the environment or in scripts/remote-gradle.env (see this script's header)." >&2
+  exit 2
+fi
+TASK="${*:-test}"
 
 # --delete keeps the remote tree honest: a file deleted locally must not linger
 # there and keep compiling. .beads is excluded because these repositories are
