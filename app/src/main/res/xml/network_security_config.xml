@@ -8,7 +8,7 @@
          fleet key over http to any host that can be on the public internet,
          before a request is made. NetworkSecurityConfigTest reads this file
          through Android's own parser and fails if the base is ever off. -->
-    <base-config cleartextTrafficPermitted="true">
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
