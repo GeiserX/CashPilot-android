@@ -22,11 +22,11 @@ The app accepts an `http://` URL only for a server it can tell is private, becau
 - loopback: `localhost`, `127.0.0.1`, `::1`;
 - private and link-local addresses: `10.x.x.x`, `172.16.x.x` to `172.31.x.x`, `192.168.x.x`, `169.254.x.x`, and IPv6 `fc00::/7` and `fe80::/10`;
 - Tailscale addresses (`100.64.x.x` to `100.127.x.x`) and MagicDNS names ending in `.ts.net`, because the tunnel encrypts;
-- names that cannot be public: ending in `.local`, `.lan`, `.home.arpa` or `.internal`, or a bare name with no dot.
+- names that cannot be public: ending in `.local`, `.lan`, `.home.arpa` or `.internal`, or a bare name with no dot. A bare name (`http://cashpilot:8080`) is resolved through the network's search domain, so on a network whose search domain points at public hosts it could reach one; use the address or a suffixed name there.
 
 A public host over `http://` is refused (`http://cashpilot.example.com`, `http://8.8.8.8`). Android itself lets an app allow plain http per host name or domain suffix, never per address range, so the app keeps cleartext on at the platform level and does the refusing itself, before any request is made.
 
-On the hosts above, the fleet key, the per-worker key and the app data travel unencrypted, and the URL field turns red with **Insecure: API key and app data will be sent unencrypted. Use https:// if possible.** Any other `http://` URL is refused: the field shows **CashPilot sends your API key over http:// only to a server on your own network: localhost, a LAN, link-local or Tailscale address, or a name ending in .local, .lan, .home.arpa, .internal or .ts.net. Use https:// for anything else.**, the dashboard and the notification read **Not sending heartbeats: this server URL needs https://**, and no request leaves the phone. An `http://` URL saved by an older version is refused the same way.
+On the hosts above, the fleet key, the per-worker key and the app data travel unencrypted, and the URL field turns red with **Insecure: API key and app data will be sent unencrypted. Use https:// if possible.** Any other `http://` URL is refused: the field shows **CashPilot sends your API key over http:// only to a server on your own network: localhost, a LAN, link-local or Tailscale address, a name ending in .local, .lan, .home.arpa, .internal or .ts.net, or a bare name with no dot. Use https:// for anything else.**, the dashboard and the notification read **Not sending heartbeats: this server URL needs https://**, and no request leaves the phone. An `http://` URL saved by an older version is refused the same way.
 
 ## The fleet key and enrollment
 
