@@ -24,7 +24,7 @@ CashPilot Android is the Android companion app for [CashPilot](https://github.co
 
 1. Download `app-release.apk` from the [latest release](https://github.com/GeiserX/CashPilot-android/releases/latest) and install it.
 2. Grant the three permissions it asks for: Notification Access, Usage Access, and the battery-optimisation exemption.
-3. In Settings, enter your CashPilot server URL and the fleet key (`CASHPILOT_API_KEY` on the server). Use `https://`; the app accepts `http://` only for `localhost`, `127.0.0.1`, `::1` or a private name (`.local`, `.lan`, `.home.arpa`, `.internal`, Tailscale `.ts.net`), not for any other IP address.
+3. In Settings, enter your CashPilot server URL and the fleet key (`CASHPILOT_API_KEY` on the server). Use `https://`; the app accepts `http://` only for a server on your own network: `localhost`, a LAN, link-local or Tailscale address (`192.168.x.x`, `10.x.x.x`, `172.16-31.x.x`, `169.254.x.x`, `100.64-127.x.x`), or a private name (`.local`, `.lan`, `.home.arpa`, `.internal`, Tailscale `.ts.net`).
 
 Needs Android 8.0 (API 26) or later and a reachable CashPilot 1.x server.
 

@@ -11,14 +11,14 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 /**
- * The app's http rule and the network stack's http rule are the same list.
+ * The network stack must let through every http host the app's policy allows,
+ * and the policy must be the part that refuses public hosts.
  *
- * ServerUrlPolicy decides in the UI and before every heartbeat whether http is
- * allowed; res/xml/network_security_config.xml is what Android actually
- * enforces when OkHttp opens the connection. If the policy allowed a host the
- * config refuses, the app would promise a connection that then fails with a
- * cleartext error; if the config allowed a host the policy refuses, the config
- * would be wider than it needs to be.
+ * res/xml/network_security_config.xml keeps cleartext on at the base: Android
+ * can allow plain http per name or domain suffix, never per address range, and
+ * the common home setup is a server at http://192.168.x.x. So the config alone
+ * would also let the fleet key go to a public host over http. ServerUrlPolicy
+ * is the gate that refuses that, in the UI and before every heartbeat.
  *
  * The config is read through Android's own parser and matcher (the hidden
  * android.security.net.config classes in Robolectric's framework jar), so this
@@ -29,29 +29,30 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34])
 class NetworkSecurityConfigTest {
 
-    private val allowed = listOf(
+    private val privateHosts = listOf(
         "localhost",
         "127.0.0.1",
         "::1",
+        "192.168.1.10",
+        "10.0.0.1",
+        "172.16.0.1",
+        "100.64.0.1",
+        "fd12:3456::1",
         "cashpilot.local",
         "cashpilot.lan",
         "nas.home.lan",
         "cashpilot.home.arpa",
         "cashpilot.internal",
         "cashpilot.example-tailnet.ts.net",
+        "cashpilot",
     )
 
-    private val refused = listOf(
+    private val publicHosts = listOf(
         "cashpilot.example.com",
         "8.8.8.8",
-        "192.168.1.10",
-        "10.0.0.1",
-        "172.16.0.1",
-        "100.64.0.1",
-        "127.0.0.2",
-        "fd12:3456::1",
-        "cashpilot",
-        "notlocal",
+        "192.169.0.1",
+        "100.128.0.1",
+        "2001:db8::1",
         "local.example.com",
         "cashpilot.lan.example.com",
     )
@@ -70,15 +71,18 @@ class NetworkSecurityConfigTest {
     }
 
     @Test
-    fun `the config allows http only to loopback and private names`() {
-        allowed.forEach { assertEquals("config, $it", true, configPermitsCleartext(it)) }
-        refused.forEach { assertEquals("config, $it", false, configPermitsCleartext(it)) }
+    fun `the config lets through every http host the policy allows`() {
+        privateHosts.forEach {
+            assertEquals("policy, $it", true, ServerUrlPolicy.allowsCleartext(it))
+            assertEquals("config, $it", true, configPermitsCleartext(it))
+        }
     }
 
     @Test
-    fun `the policy allows http to exactly the hosts the config allows`() {
-        (allowed + refused).forEach {
-            assertEquals("policy vs config, $it", configPermitsCleartext(it), ServerUrlPolicy.allowsCleartext(it))
+    fun `the policy, not the config, is what refuses a public host`() {
+        publicHosts.forEach {
+            assertEquals("config alone would allow $it", true, configPermitsCleartext(it))
+            assertEquals("policy refuses $it", false, ServerUrlPolicy.allowsCleartext(it))
         }
     }
 }
