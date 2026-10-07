@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- Cleartext is off for every host by default, so nothing in the app can
-         reach the internet over plain http. -->
-    <base-config cleartextTrafficPermitted="false">
+    <!-- Cleartext stays on at the base. The common home setup is a CashPilot
+         server at http://192.168.x.x with no certificate, and this file can
+         only allow plain http per host name or domain suffix, never per
+         address range, so turning the base off would refuse every LAN and
+         Tailscale address. The gate is ServerUrlPolicy: it refuses to send the
+         fleet key over http to any host that can be on the public internet,
+         before a request is made. NetworkSecurityConfigTest reads this file
+         through Android's own parser and fails if the base is ever off. -->
+    <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <!-- A CashPilot server at home often has no certificate, so http is allowed
-         to names that cannot be public. This file can only list exact hosts and
-         domain suffixes, not IP ranges, so a LAN IP over http is not here and
-         needs a name or https. ServerUrlPolicy mirrors this list so the app
-         explains a refusal before a request is made; NetworkSecurityConfigTest
-         fails if the two disagree. -->
+    <!-- The names the policy allows, written here so the two files say the
+         same thing. With the base on they add nothing to what Android allows. -->
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="false">localhost</domain>
         <domain includeSubdomains="false">127.0.0.1</domain>
