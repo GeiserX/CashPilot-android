@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-/** The fleet key goes out over https, or over http only to a private destination. */
+/** The fleet key goes out over https, or over http only to loopback or a private name. */
 class ServerUrlPolicyTest {
 
     @ParameterizedTest(name = "allowed: {0}")
@@ -16,20 +16,10 @@ class ServerUrlPolicyTest {
             "https://8.8.8.8:8443/",
             "http://localhost:8080",
             "http://127.0.0.1",
-            "http://10.1.2.3:8000",
-            "http://172.16.0.1",
-            "http://172.31.255.255",
-            "http://192.168.1.10:8000/",
-            "HTTP://192.168.1.10",
-            "http://169.254.10.20",
+            "HTTP://localhost",
             "http://[::1]:8080",
-            "http://[fd12:3456::1]",
-            "http://[fc00::1]",
-            "http://[fe80::1]",
-            "http://100.64.0.1",
-            "http://100.127.255.255",
-            "http://cashpilot:8000",
             "http://cashpilot.local",
+            "http://CashPilot.Local:8000/",
             "http://cashpilot.lan",
             "http://cashpilot.home.arpa",
             "http://cashpilot.internal",
@@ -45,6 +35,19 @@ class ServerUrlPolicyTest {
         strings = [
             "http://8.8.8.8",
             "http://cashpilot.example.com",
+            // Private, but the network security config can list names and
+            // suffixes only, not IP ranges, so http to an address is refused.
+            "http://10.1.2.3:8000",
+            "http://172.16.0.1",
+            "http://192.168.1.10:8000/",
+            "http://169.254.10.20",
+            "http://100.64.0.1",
+            "http://127.0.0.2",
+            "http://[fd12:3456::1]",
+            "http://[fe80::1]",
+            "http://cashpilot:8000",
+            "http://local",
+            "http://evil.lan.example.com",
             "http://100.63.255.255",
             "http://100.128.0.1",
             "http://172.15.255.255",
