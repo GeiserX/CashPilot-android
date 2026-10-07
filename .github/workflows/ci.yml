@@ -9,14 +9,11 @@ on:
       - '*.gradle*'
       - 'gradle.properties'
       - '.github/workflows/ci.yml'
+  # Every PR runs this workflow, so "test" can be a required check. The
+  # filter step below decides whether the Gradle steps run; on a PR that
+  # touches none of these paths they are skipped and the check passes fast.
   pull_request:
     branches: [main]
-    paths:
-      - 'app/**'
-      - 'gradle/**'
-      - '*.gradle*'
-      - 'gradle.properties'
-      - '.github/workflows/ci.yml'
 
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
@@ -25,7 +22,26 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
+      # Same list as the push trigger above. On a PR the filter reads the
+      # changed files from the API. Outside a PR (push, manual run) every
+      # step runs.
+      - name: Filter paths
+        id: filter
+        if: github.event_name == 'pull_request'
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            code:
+              - 'app/**'
+              - 'gradle/**'
+              - '*.gradle*'
+              - 'gradle.properties'
+              - '.github/workflows/ci.yml'
+
       - uses: actions/checkout@v7
 
       # The release keystore password sat in a tracked CLAUDE.md, in this
@@ -38,12 +54,17 @@ jobs:
         run: ./scripts/check-no-committed-credentials.sh
 
       - uses: actions/setup-java@v6.0.1
+        if: github.event_name != 'pull_request' || steps.filter.outputs.code == 'true'
         with:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v6
+        if: github.event_name != 'pull_request' || steps.filter.outputs.code == 'true'
       - uses: android-actions/setup-android@v4
-      - run: ./gradlew jacocoTestReport
+        if: github.event_name != 'pull_request' || steps.filter.outputs.code == 'true'
+      - name: Unit tests and coverage
+        if: github.event_name != 'pull_request' || steps.filter.outputs.code == 'true'
+        run: ./gradlew jacocoTestReport
 
       # The icon goldens (CashPilot-android-vxb). Roborazzi renders Compose on
       # the JVM through Robolectric, so this needs no emulator and no device.
@@ -51,6 +72,7 @@ jobs:
       # verify, never record: a CI job that RE-RECORDS makes every change agree
       # with itself, which is the one outcome a visual gate must never produce.
       - name: Verify icon goldens
+        if: github.event_name != 'pull_request' || steps.filter.outputs.code == 'true'
         run: ./gradlew verifyRoborazziDebug
 
       # The diffs are the whole point when this fails -- a red check saying
