@@ -43,6 +43,8 @@ jobs:
               - '.github/workflows/ci.yml'
 
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false   # nothing here pushes
 
       # The release keystore password sat in a tracked CLAUDE.md, in this
       # PUBLIC repo, from 2026-05-25 to 2026-08-06. GitGuardian ran on every PR
