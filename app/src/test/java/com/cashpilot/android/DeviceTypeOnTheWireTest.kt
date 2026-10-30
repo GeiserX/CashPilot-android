@@ -1,6 +1,6 @@
 package com.cashpilot.android
 
-import kotlinx.serialization.json.Json
+import com.cashpilot.android.model.HeartbeatJson
 import com.cashpilot.android.model.SystemInfo
 import com.cashpilot.android.model.WorkerHeartbeat
 import kotlinx.serialization.json.jsonObject
@@ -17,16 +17,13 @@ import org.junit.jupiter.api.Test
  */
 class DeviceTypeOnTheWireTest {
 
-    // What HeartbeatService configured before this fix.
-    private val wire_json = Json { ignoreUnknownKeys = true }
-
     @Test
     fun `a heartbeat sends device_type android`() {
         val beat = WorkerHeartbeat(
             name = "OPPO CPH1951",
             systemInfo = SystemInfo(os = "Android", arch = "arm64-v8a", version = "0.3.0"),
         )
-        val wire = wire_json.parseToJsonElement(wire_json.encodeToString(WorkerHeartbeat.serializer(), beat))
+        val wire = HeartbeatJson.parseToJsonElement(HeartbeatJson.encodeToString(WorkerHeartbeat.serializer(), beat))
         val info = wire.jsonObject["system_info"]!!.jsonObject
         assertEquals("android", info["device_type"]?.jsonPrimitive?.content)
     }

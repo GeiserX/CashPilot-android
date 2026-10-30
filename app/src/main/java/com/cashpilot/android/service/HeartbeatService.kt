@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.cashpilot.android.R
 import com.cashpilot.android.BuildConfig
+import com.cashpilot.android.model.HeartbeatJson
 import com.cashpilot.android.model.Earnings
 import com.cashpilot.android.model.AppContainer
 import com.cashpilot.android.model.Settings
@@ -44,7 +45,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 
 class HeartbeatService : Service() {
 
@@ -54,7 +54,7 @@ class HeartbeatService : Service() {
 
     private val httpClient = HttpClient(OkHttp) {
         install(ContentNegotiation) {
-            json(Json { ignoreUnknownKeys = true })
+            json(HeartbeatJson)
         }
         install(HttpTimeout) {
             requestTimeoutMillis = 15_000
