@@ -1,7 +1,21 @@
 package com.cashpilot.android.model
 
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+/**
+ * The JSON the heartbeat client sends and reads with. One copy, so a test that
+ * encodes with it sees exactly what the server receives.
+ *
+ * It drops default values, so a field the server needs every time must carry
+ * [EncodeDefault]: `device_type` defaulted to "android" and was never sent,
+ * and the server took the phones for Docker hosts and their apps for stopped
+ * containers.
+ */
+val HeartbeatJson = Json { ignoreUnknownKeys = true }
 
 /**
  * Heartbeat payload sent to CashPilot server.
@@ -34,6 +48,8 @@ data class SystemInfo(
     val os: String = "",
     val arch: String = "",
     @SerialName("os_version") val osVersion: String = "",
+    @OptIn(ExperimentalSerializationApi::class)
+    @EncodeDefault
     @SerialName("device_type") val deviceType: String = "android",
     val apps: List<AppStatus> = emptyList(),
     /**
