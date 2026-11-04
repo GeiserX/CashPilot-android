@@ -24,7 +24,7 @@ object KnownApps {
             referralUrl = "https://pawns.app?r=19266874"),
         MonitoredApp("mysterium", "network.mysterium.provider", "MystNodes"),
         MonitoredApp("traffmonetizer", "com.traffmonetizer.client", "Traffmonetizer",
-            referralUrl = "https://traffmonetizer.com/?aff=2111758"),
+            referralUrl = "https://traffmonetizer.io/?aff=2111758"),
         MonitoredApp("bytelixir", "com.bytelixir.blapp", "Bytelixir",
             referralUrl = "https://bytelixir.com/?ref=OYEIRE0VSZBZ"),
         MonitoredApp("bytebenefit", "io.bytebenefit.app", "ByteBenefit"),
