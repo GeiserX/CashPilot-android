@@ -1,0 +1,35 @@
+AntiFeatures:
+  NonFreeAdd:
+    en-US: Promotes non-free passive-income apps. The install button of an app that
+      is not installed opens its sign-up page, several through referral links.
+Categories:
+  - Finance Manager
+License: GPL-3.0-or-later
+AuthorName: GeiserX
+AuthorWebSite: https://github.com/GeiserX
+WebSite: https://github.com/GeiserX/CashPilot
+SourceCode: https://github.com/GeiserX/CashPilot-android
+IssueTracker: https://github.com/GeiserX/CashPilot-android/issues
+Changelog: https://github.com/GeiserX/CashPilot-android/blob/HEAD/CHANGELOG.md
+
+AutoName: CashPilot
+
+RepoType: git
+Repo: https://github.com/GeiserX/CashPilot-android.git
+Binaries: https://github.com/GeiserX/CashPilot-android/releases/download/v%v/app-release.apk
+
+Builds:
+  - versionName: 0.4.0
+    versionCode: 400
+    commit: FULL_SHA_OF_TAG_v0.4.0
+    subdir: app
+    gradle:
+      - yes
+
+AllowedAPKSigningKeys: 6ecaaf97d35ea59e18a70cb88d8928bd9d3e6dd27f78ee0d859439b06bf058da
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags ^v(\d+\.\d+\.\d+)$
+UpdateCheckData: gradle.properties|VERSION_CODE=(\d+)|gradle.properties|VERSION_NAME=(.+)
+CurrentVersion: 0.4.0
+CurrentVersionCode: 400
