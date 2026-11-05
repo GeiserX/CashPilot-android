@@ -21,8 +21,13 @@ name="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
 # them as octal and publish a different versionCode than F-Droid builds.
 code=$(( 10#${BASH_REMATCH[1]} * 10000 + 10#${BASH_REMATCH[2]} * 100 + 10#${BASH_REMATCH[3]} ))
 
-file_name="$(sed -n 's/^VERSION_NAME=//p' "$props" | tr -d '\r')"
-file_code="$(sed -n 's/^VERSION_CODE=//p' "$props" | tr -d '\r')"
+# Read a key the way Gradle does: blanks around the key and the = or : separator
+# are ignored, the value keeps its trailing blanks, and the last declaration wins.
+prop() {
+  sed -n -E "s/^[[:space:]]*$1[[:space:]]*[=:][[:space:]]*//p" "$props" | tr -d '\r' | tail -n 1
+}
+file_name="$(prop VERSION_NAME)"
+file_code="$(prop VERSION_CODE)"
 
 status=0
 if [ "$file_name" != "$name" ]; then
