@@ -14,6 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # F-Droid rebuilds from gradle.properties without our -P flags, so a tag that
+      # disagrees with the file ships an APK F-Droid can never reproduce (v0.3.0
+      # was built as 300 while the file said 200). Stop before building.
+      - name: Check gradle.properties matches the tag
+        run: ./scripts/check-release-version.sh "${GITHUB_REF#refs/tags/}"
+
       - name: Compute version from tag
         id: version
         run: |

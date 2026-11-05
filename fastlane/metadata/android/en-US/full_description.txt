@@ -1,13 +1,16 @@
-CashPilot Android is a monitoring agent for CashPilot, the self-hosted passive income orchestrator. It tracks earnings from bandwidth sharing, DePIN, storage, and GPU compute services running on your phone — without root access.
+CashPilot shows which of your passive-income and DePIN apps are installed, running and active on this phone. It needs no root.
 
-Features:
-- Monitors passive income apps (EarnApp, Grass, MystNodes, etc.) via NotificationListenerService
-- Reports app status to your self-hosted CashPilot server
-- Lightweight foreground service with minimal battery impact
-- Usage statistics and network bandwidth tracking
-- Material Design 3 UI with Jetpack Compose
-- No accounts required — connects to your own CashPilot instance
+It watches EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, Uprock and Wipter. For each one it shows whether the app is installed, whether it is running, and when it was last active.
 
-Privacy: All data is sent only to your own server. A single request to api.ipify.org fetches your public IP for display — this only happens after setup is complete.
+How it knows:
+- Notification access: most of these apps keep a notification up while they run, so CashPilot reads it to tell that the app is alive.
+- Usage access: when each app was last in use.
+- Network usage: how much data each app sent and received recently, so a running app that has gone quiet stands out.
 
-Requires a self-hosted CashPilot server to function. CashPilot is free and open-source software licensed under GPL-3.0.
+All of this is read on the phone. Without a server, the app list is the whole app.
+
+With a self-hosted CashPilot server (https://github.com/GeiserX/CashPilot), the phone also joins your fleet. A small foreground service sends the apps' status to your server on a schedule, and the dashboard shows your earnings from the server. The phone sends app status, never notification content.
+
+Privacy: no account, no analytics, no ads. Data goes only to the server you set. Once a server is set, the app makes one request to api.ipify.org to show your public IP.
+
+CashPilot is free software under the GPL-3.0-or-later license.

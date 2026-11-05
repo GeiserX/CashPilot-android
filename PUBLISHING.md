@@ -33,61 +33,89 @@ decision**, not a missing feature. Decide it deliberately before submitting.
 |---|---|
 | Release signing | **Done.** `app/build.gradle.kts` reads `CASHPILOT_KEYSTORE_PATH`, `_PASSWORD`, `CASHPILOT_KEY_ALIAS`, `_KEY_PASSWORD` from Gradle properties or the environment, and only applies the config when all four are present. The keystore is never in the repository. |
 | Release artifacts | **Done.** `release.yml` builds **both** `app-release.aab` (what Play wants) and `app-release.apk` (what F-Droid and direct installs want). |
+| Version in one place | **Done.** `gradle.properties` holds `VERSION_NAME` and `VERSION_CODE` (major*10000 + minor*100 + patch). `release.yml` runs `scripts/check-release-version.sh` first and refuses a tag that disagrees with the file. F-Droid builds from that file without our `-P` flags, so the two must agree. |
 | Special-use foreground service | **Done, and this one usually bites.** `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` is declared with a justification string. Google requires it and rejects builds that declare `FOREGROUND_SERVICE_SPECIAL_USE` without one. |
-| Store text | **Done.** `fastlane/metadata/android/en-US/` has `title.txt`, `short_description.txt`, `full_description.txt` and `changelogs/`. |
+| Store text and graphics | **Done.** `fastlane/metadata/android/en-US/` has `title.txt`, `short_description.txt`, `full_description.txt`, `changelogs/<versionCode>.txt`, `images/icon.png` (512x512, from `docs/images/icon.svg`) and `images/featureGraphic.png` (1024x500, from `docs/images/banner.svg`). |
+| F-Droid recipe | **Done.** `fdroid/com.cashpilot.android.yml` is the file to place in fdroiddata as `metadata/com.cashpilot.android.yml`. Fill in the tag's full commit sha first. |
 | Licence | **Done.** GPL-3.0, no proprietary dependencies — which is what makes F-Droid possible at all. |
 
 ## Missing, and required by both stores
 
-**Screenshots and a feature graphic.** `fastlane/metadata/` contains no
-`images/` directory and no PNGs at all.
-
-Neither store will list without them, so this is the first real piece of work:
+**Phone screenshots.** The icon and the feature graphic are in place. The
+screenshots are not:
 
 ```
-fastlane/metadata/android/en-US/images/
-    icon.png                  512x512
-    featureGraphic.png        1024x500        (Play only)
-    phoneScreenshots/1.png    at least 2, 16:9 or 9:16
+fastlane/metadata/android/en-US/images/phoneScreenshots/1.png    at least 2, 9:16
 ```
 
-Take them from a device or emulator showing a populated dashboard. A screenshot
-of an empty, unpaired app is an honest picture of a bad first run and will cost
-installs.
+Take them on a real phone that has several of the monitored apps installed and
+running. An emulator has none of them, and a screenshot of an empty grid is an
+honest picture of a bad first run and will cost installs.
 
 ---
 
-## F-Droid: an attempt was already made, and it did not land
+## F-Droid: resubmit, the first attempt closed for inactivity
 
-**Check this before assuming anything.** `CLAUDE.md` records *"F-Droid: MR
-!35850 at gitlab.com/fdroid/fdroiddata"*, which reads like a submission in
-flight. It is not:
+MR !35850 at https://gitlab.com/fdroid/fdroiddata/-/merge_requests/35850 was
+closed on 2026-07-04 for inactivity. It was not rejected. It had two open items:
 
-- MR **!35850 is CLOSED, never merged** — last updated 2026-07-04.
-- `metadata/com.cashpilot.android.yml` **does not exist** on `fdroiddata`
-  master (404, while a known-good file returns 200).
-- `https://f-droid.org/packages/com.cashpilot.android/` returns **404**, and
-  their API reports no versions.
+1. **The dependency info block.** Fixed: `dependenciesInfo` is off in
+   `app/build.gradle.kts` since v0.1.3.
+2. **"Fix the pipeline".** The root cause was version drift. `gradle.properties`
+   still said `VERSION_NAME=0.2.0` / `VERSION_CODE=200` at tag v0.3.0, while
+   `release.yml` built that tag as 0.3.0 / 300 through `-P` flags. F-Droid builds
+   from `gradle.properties` and then compares its APK with ours (`Binaries`), so
+   the two could never match. Fixed: the file is the only source, and the release
+   refuses a tag that disagrees with it.
 
-So the app is not in F-Droid, and has not been since the attempt a month ago.
-Nothing here says *why* the MR closed — read the thread before resubmitting,
-because resubmitting into the same objection wastes a reviewer's time and is
-exactly the kind of thing that makes a project unwelcome.
+The app is still not listed (`f-droid.org/packages/com.cashpilot.android/` is
+404).
 
-It is still the right track to do **before** Play: same metadata layout, no
-account fee, no identity verification, no data-safety form. But it is a
-*resubmission*, not a first attempt.
+We declare the **NonFreeAdd** anti-feature up front, because the install buttons
+promote non-free apps and several open referral links:
+https://f-droid.org/docs/Anti-Features/
 
-1. Read the closed MR's discussion and address whatever it raised.
-2. Confirm the build is reproducible from a clean checkout.
-3. Decide whether F-Droid builds from source and signs with their key, or
-   accepts the upstream signed APK — that choice determines whether a user can
-   later move between an F-Droid install and a Play install without
-   uninstalling.
+We keep our own signature (`Binaries` plus `AllowedAPKSigningKeys`). F-Droid
+publishes our signed APK once its own build matches it byte for byte. Users can
+then move between the F-Droid, IzzyOnDroid and GitHub installs without
+uninstalling. If the rebuild ever stops matching, the fallback is to drop those
+two keys and let F-Droid sign. That costs the interchangeability.
+
+To resubmit:
+
+1. Tag the release whose `gradle.properties` matches (v0.4.0 is the first).
+2. Copy `fdroid/com.cashpilot.android.yml` to `metadata/com.cashpilot.android.yml`
+   in a fork of fdroiddata, and put the tag's full commit sha in `commit:`.
+3. Run `fdroid lint com.cashpilot.android` and
+   `fdroid build -v -l com.cashpilot.android` there, then open the MR and answer
+   reviewers promptly. Inactivity is what closed the last one.
+
+**IzzyOnDroid** is the faster path. It ships our signed APK from the GitHub
+release, and the dependency info block is already off. Inclusion starts with an
+issue on its repository.
 
 ---
 
 ## Google Play
+
+### What stands in the way, as of 2026-11
+
+- **The proxy rule does not apply.** Play's Device and Network Abuse policy
+  limits apps that let third parties use the device as a proxy. This app
+  proxies nothing; it only watches other apps:
+  https://support.google.com/googleplay/android-developer/answer/9888379
+  Reviewers who see the names of bandwidth-sharing apps may still be wary,
+  given Google's enforcement against proxy SDKs.
+- **Closed testing first.** A personal developer account created after
+  2023-11-13 must run a closed test with at least 12 testers for 14 days before
+  production. Confirm the current numbers in Play Console.
+- **3 of the 11 monitored apps are not on Play** (Traffmonetizer, ByteBenefit,
+  Uprock return 404 for their package ids). Linking to apps outside Play from a
+  Play listing invites questions.
+- **Android developer verification.** Google started requiring verified
+  developer identities for sideloaded apps on 2026-09-30 in Brazil, Indonesia,
+  Singapore and Thailand, and plans it globally in 2027. That affects F-Droid,
+  IzzyOnDroid and GitHub installs too, not only Play.
 
 ### Start the slow thing first
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **The release refuses a tag that disagrees with `gradle.properties`.** v0.3.0 was built as 0.3.0 / 300 while the file still said 0.2.0 / 200. F-Droid builds from the file, so its APK could never match the one we publish. The file now says 0.4.0 / 400, and `scripts/check-release-version.sh` stops the release before it builds if the tag and the file differ.
+- Store listing: a corrected description, an icon and a feature graphic for F-Droid and Play, plus the F-Droid recipe in `fdroid/`.
+
 ### Security
 
 - **The fleet key no longer goes to a public host over plain `http://`.** The app sent its bearer token to any `http://` URL and only showed a warning. Now it refuses `http://` to any host that can be on the public internet, before a request leaves the phone and including for a URL saved by an older version: `http://` is accepted only for loopback, a private, link-local or Tailscale address (`192.168.x.x`, `10.x.x.x`, `172.16-31.x.x`, `169.254.x.x`, `100.64-127.x.x`, `fc00::/7`, `fe80::/10`) or a name ending in `.local`, `.lan`, `.home.arpa`, `.internal` or `.ts.net`. The URL field, the dashboard and the notification say why. `https://` works as before. The network security config keeps cleartext on at the base, because Android can allow plain http per name or domain suffix but never per address range and the common home setup is a server at `http://192.168.x.x`; a test reads the config through Android's own parser and fails if it ever refuses a host the app allows, or if the app stops refusing a public one.
