@@ -12,16 +12,17 @@ set -euo pipefail
 tag="${1:-}"
 props="${2:-$(dirname "$0")/../gradle.properties}"
 
-if [[ ! "$tag" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+if [[ ! "$tag" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
   echo "usage: $0 vMAJOR.MINOR.PATCH [gradle.properties]" >&2
   exit 2
 fi
 name="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
-# 10# keeps a leading zero from being read as octal.
+# Leading zeros are refused above: release.yml's shell arithmetic would read
+# them as octal and publish a different versionCode than F-Droid builds.
 code=$(( 10#${BASH_REMATCH[1]} * 10000 + 10#${BASH_REMATCH[2]} * 100 + 10#${BASH_REMATCH[3]} ))
 
-file_name="$(sed -n 's/^VERSION_NAME=//p' "$props" | tr -d '[:space:]')"
-file_code="$(sed -n 's/^VERSION_CODE=//p' "$props" | tr -d '[:space:]')"
+file_name="$(sed -n 's/^VERSION_NAME=//p' "$props" | tr -d '\r')"
+file_code="$(sed -n 's/^VERSION_CODE=//p' "$props" | tr -d '\r')"
 
 status=0
 if [ "$file_name" != "$name" ]; then
