@@ -21,13 +21,27 @@ name="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
 # them as octal and publish a different versionCode than F-Droid builds.
 code=$(( 10#${BASH_REMATCH[1]} * 10000 + 10#${BASH_REMATCH[2]} * 100 + 10#${BASH_REMATCH[3]} ))
 
-# Read a key the way Gradle does: blanks around the key and the = or : separator
-# are ignored, the value keeps its trailing blanks, and the last declaration wins.
+# Gradle reads Java properties, which allow blanks, ':' and backslash line
+# continuations; F-Droid's UpdateCheckData reads the plain KEY=value form only.
+# So the file must declare each key exactly once, as KEY=value at the start of a
+# line, with no continuation anywhere: then Gradle, F-Droid and this check all
+# read the same value. Anything else is refused rather than interpreted.
+clean="$(tr -d '\r' < "$props")"
+if grep -q '\\$' <<<"$clean"; then
+  echo "::error::gradle.properties has a line continuation (a line ending in \\); keep every property on one line" >&2
+  exit 1
+fi
 prop() {
-  sed -n -E "s/^[[:space:]]*$1[[:space:]]*[=:][[:space:]]*//p" "$props" | tr -d '\r' | tail -n 1
+  local n
+  n="$(grep -c -E "^[[:space:]]*$1[[:space:]]*[=:]" <<<"$clean" || true)"
+  if [ "$n" != 1 ] || ! grep -q -E "^$1=" <<<"$clean"; then
+    echo "::error::gradle.properties must declare $1 exactly once, as $1=value at the start of a line (found $n declarations)" >&2
+    return 1
+  fi
+  sed -n "s/^$1=//p" <<<"$clean"
 }
-file_name="$(prop VERSION_NAME)"
-file_code="$(prop VERSION_CODE)"
+file_name="$(prop VERSION_NAME)" || exit 1
+file_code="$(prop VERSION_CODE)" || exit 1
 
 status=0
 if [ "$file_name" != "$name" ]; then
