@@ -25,15 +25,16 @@ The version lives in `gradle.properties` (`VERSION_NAME`, `VERSION_CODE`). Pushi
 
 ## Documentation
 
-The site is built with MkDocs Material from `docs/` and `mkdocs.yml`. To preview it:
+The site is built with [Zensical](https://zensical.org/) from `docs/` and `zensical.toml`. To build it:
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r docs/requirements-docs.txt
-mkdocs serve
+python -m zensical build --clean --strict
+python -I .github/scripts/site-check.py site
 ```
 
-`mkdocs build --strict` is what the Docs check runs on every pull request; a broken link or a page missing from the nav fails it. `docs/research/` holds working notes, read on GitHub and never published.
+The Docs check runs the same two steps on every pull request. The strict build fails on a broken link or anchor; `site-check.py` fails on what the build lets through: a page left out of the nav, a nav entry for a missing file, a missing image, a link rooted at `/`. `python -m zensical serve` previews the site locally. `docs/research/` holds working notes, read on GitHub and never published.
 
 ## Stack
 
