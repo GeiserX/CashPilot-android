@@ -1,4 +1,4 @@
 - The app refuses to send your fleet key over plain http to a public address or host name. http still works for LAN, Tailscale and .local addresses. A host name is judged by its name, not by the address it resolves to.
 - Heartbeats now report the app version and the device type, so the server shows the right release and no longer treats a phone as a Docker host.
-- Traffmonetizer's sign-up link points at its new domain.
+- Current sign-up links for Traffmonetizer, MystNodes, ByteBenefit, Bytelixir and Grass.
 - New launcher icon, dependency updates.

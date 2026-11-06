@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-06
+
 ### Changed
 
+- **Native libraries are packaged exactly as their dependency ships them.** AGP strips debug symbols from `.so` files only when it finds the NDK it wants, so a builder with that NDK and one without produced different `lib/*/libdatastore_shared_counter.so`, and F-Droid's rebuild could not match our APK. `packaging.jniLibs.keepDebugSymbols` now keeps every `.so` untouched, and two clean builds, one with NDK 28.2 and one with none, give a byte-identical APK.
 - **The release refuses a tag that disagrees with `gradle.properties`.** v0.3.0 was built as 0.3.0 / 300 while the file still said 0.2.0 / 200. F-Droid builds from the file, so its APK could never match the one we publish. The file now says 0.4.0 / 400, and `scripts/check-release-version.sh` stops the release before it builds if the tag and the file differ.
 - Store listing: a corrected description, an icon and a feature graphic for F-Droid and Play, plus the F-Droid recipe in `fdroid/`.
 
@@ -18,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The install buttons for MystNodes, ByteBenefit, Bytelixir and Grass now open the same referral sign-up pages as the CashPilot web catalog. MystNodes and ByteBenefit had no link, Bytelixir and Grass used outdated URLs.
 - **The app now reports its own version to the server.** Every heartbeat's `system_info` carried `os`, `arch`, `os_version` and `device_type`, but never a `version`. The CashPilot server reads exactly that key to tell whether a worker is on a different release series from the UI, so every Android device showed as "version unknown" on the fleet page and there was no way to see which phones were running an outdated build.
 
   That is not cosmetic. Per-worker key enrollment shipped in 0.2.0, but two devices stayed on an older build for weeks, still authenticating with the shared bootstrap key, and nothing surfaced it — the fleet page had no version to show. It only came to light when the server began bounding how long an unconfirmed worker may keep using the shared key.
