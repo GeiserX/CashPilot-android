@@ -56,7 +56,7 @@ where the fonts can be pinned deliberately.
 - **Version source of truth:** `gradle.properties` (`VERSION_NAME`, `VERSION_CODE` = major*10000 + minor*100 + patch). Bump it in a PR before tagging: `release.yml` runs `scripts/check-release-version.sh` and refuses a tag that disagrees, because F-Droid builds from this file without our `-P` flags.
 - **Release workflow:** Push a `v*` tag -> GitHub Actions builds signed APK+AAB, creates GitHub Release
 - **CI workflow:** On push to main -> debug APK + lint + signed release APK. On PR -> debug + lint only (no keystore access)
-- **Signing keystore:** JKS at `~/repos/personal/keystores/cashpilot-release.jks` (alias: `cashpilot`). **The password is NOT recorded here — this repository is public.** It lives with the other credentials in `~/repos/personal/.claude/reference/`. The keystore is base64-encoded in the GitHub secret `KEYSTORE_BASE64`.
+- **Signing keystore:** a JKS file kept outside the repository (alias: `cashpilot`). **The password is NOT recorded here — this repository is public.** It is kept with the maintainer's other credentials. The keystore is base64-encoded in the GitHub secret `KEYSTORE_BASE64`.
 - **F-Droid: NOT listed yet.** MR !35850 closed for inactivity on 2026-07-04, not rejected. Its open items are fixed: the dependency info block (off since v0.1.3) and the pipeline, whose cause was version drift (`gradle.properties` said 0.2.0/200 at tag v0.3.0). The recipe to resubmit is `fdroid/com.cashpilot.android.yml`, with NonFreeAdd declared; steps in `PUBLISHING.md`.
 
 ## Architecture
