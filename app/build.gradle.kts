@@ -81,6 +81,18 @@ android {
         error += "UnusedResources"
     }
 
+    packaging {
+        jniLibs {
+            // Package prebuilt native libraries exactly as the dependency ships
+            // them. AGP strips debug symbols from .so files only when it finds an
+            // NDK, so a builder with one (GitHub's ubuntu runner) and a builder
+            // without one (F-Droid, a plain container) produced different
+            // lib/*/libdatastore_shared_counter.so and the APKs never matched.
+            // Keeping the symbols makes the packaging the same everywhere.
+            keepDebugSymbols += "**/*.so"
+        }
+    }
+
     buildFeatures {
         buildConfig = true
         compose = true

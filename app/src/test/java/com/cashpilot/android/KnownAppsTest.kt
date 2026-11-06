@@ -61,8 +61,16 @@ class KnownAppsTest {
     }
 
     @Test
-    fun `mysterium has no referral url`() {
+    fun `mysterium has referral url`() {
         val app = KnownApps.bySlug["mysterium"]
+        assertNotNull(app)
+        assertNotNull(app!!.referralUrl)
+        assertTrue(app.referralUrl!!.startsWith("https://"))
+    }
+
+    @Test
+    fun `nodle has no referral url`() {
+        val app = KnownApps.bySlug["nodle"]
         assertNotNull(app)
         assertNull(app!!.referralUrl)
     }
