@@ -112,9 +112,9 @@ issue on its repository.
 - **Closed testing first.** A personal developer account created after
   2023-11-13 must run a closed test with at least 12 testers for 14 days before
   production. Confirm the current numbers in Play Console.
-- **3 of the 11 monitored apps are not on Play** (Traffmonetizer, ByteBenefit,
-  Uprock return 404 for their package ids). Linking to apps outside Play from a
-  Play listing invites questions.
+- **2 of the 10 monitored apps are not on Play** (Traffmonetizer and ByteBenefit
+  return 404 for their package ids). Linking to apps outside Play from a Play
+  listing invites questions.
 - **Android developer verification.** Google started requiring verified
   developer identities for sideloaded apps on 2026-09-30 in Brazil, Indonesia,
   Singapore and Thailand, and plans it globally in 2027. That affects F-Droid,

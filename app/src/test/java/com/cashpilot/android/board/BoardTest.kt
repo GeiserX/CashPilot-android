@@ -187,7 +187,7 @@ class BoardTest {
         val b = Situations.problems
         assertEquals(6, b.watched.size)
         assertEquals(AppState.STOPPED, b.watched.first().state)
-        assertEquals(5, b.notInstalled.size)
+        assertEquals(4, b.notInstalled.size)
     }
 
     @Test
