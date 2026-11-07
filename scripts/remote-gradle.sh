@@ -66,6 +66,12 @@ rsync -a --delete \
 # m2/ keeps Robolectric's android-all jar (about 150 MB) between runs. The
 # container is thrown away each time, so without it every test run downloads
 # the jar again, and Maven Central answers repeat downloads with HTTP 429.
+#
+# Robolectric downloads into java.io.tmpdir, checks the SHA-512, then moves the
+# jar into m2/. With the container's /tmp that move crosses filesystems and
+# becomes a copy, so a container stopped mid-copy leaves a truncated jar that
+# every later run trusts. With tmpdir inside m2/ the move is a rename: the jar
+# is either complete or absent.
 echo "==> gradle $TASK"
 ssh "$HOST" "docker run --rm \
   -v $REMOTE_ROOT/sdk:/sdk \
@@ -73,7 +79,8 @@ ssh "$HOST" "docker run --rm \
   -v $REMOTE_ROOT/gradle:/root/.gradle \
   -v $REMOTE_ROOT/m2:/root/.m2 \
   -w /src -e ANDROID_HOME=/sdk -e ANDROID_SDK_ROOT=/sdk \
-  eclipse-temurin:17-jdk bash -lc './gradlew --no-daemon $TASK'"
+  -e JAVA_TOOL_OPTIONS=-Djava.io.tmpdir=/root/.m2/tmp \
+  eclipse-temurin:17-jdk bash -lc 'mkdir -p /root/.m2/tmp && ./gradlew --no-daemon $TASK'"
 
 # Bring back the SOURCE-TREE artefacts the build writes, which are the only
 # outputs that belong under version control: the Roborazzi goldens
