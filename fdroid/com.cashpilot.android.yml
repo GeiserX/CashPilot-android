@@ -16,7 +16,8 @@ AutoName: CashPilot
 
 RepoType: git
 Repo: https://github.com/GeiserX/CashPilot-android.git
-Binaries: https://github.com/GeiserX/CashPilot-android/releases/download/v%v/app-release.apk
+Binaries: 
+  https://github.com/GeiserX/CashPilot-android/releases/download/v%v/app-release.apk
 
 Builds:
   - versionName: 0.4.0
