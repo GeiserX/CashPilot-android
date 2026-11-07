@@ -52,13 +52,13 @@ private fun tasksOf(h: Home): List<Task> {
     val c = LocalCp.current
     val out = mutableListOf<Task>()
     h.stopped.sortedBy { it.lastActive }.forEach {
-        out += Task(R.drawable.ic_warning, c.bad, "${it.name} stopped ${ago(it.lastActive)}", "It isn't earning. Opening it usually starts it again.", "Open ${it.name}")
+        out += Task(R.drawable.ic_warning, c.bad, "${it.name} stopped ${ago(it.lastActive)}", "Opening it usually starts it again.", "Open ${it.name}")
     }
     if (h.server == ServerState.FAILING) {
         out += Task(R.drawable.ic_cloud_off, c.warn, "Your server isn't answering", "Nothing has reached ${h.host} ${forHowLong(h.lastReport)}. Earnings below are from ${ago(h.earningsAsOf)}.", "Check connection")
     }
     if (!h.battery) {
-        out += Task(R.drawable.ic_battery_alert, c.warn, "Android may pause CashPilot", "Background running is restricted, so reports can stop when the screen is off.", "Allow background")
+        out += Task(R.drawable.ic_battery_alert, c.warn, "Reports may arrive late", "Battery optimisation is on for CashPilot, so Android can hold reports back while the screen is off.", "Open battery settings")
     }
     return out
 }
@@ -123,6 +123,7 @@ private fun RunningChips(rows: List<AppRow>) {
 @Composable
 fun CHome(h: Home) {
     if (h.blind) return BlindHome(h)
+    if (h.watched.isEmpty()) return NoAppsHome(h)
     val c = LocalCp.current
     val tasks = tasksOf(h)
     Column(Modifier.fillMaxSize()) {
@@ -135,7 +136,7 @@ fun CHome(h: Home) {
                 Gap(16)
                 Text("Nothing to fix", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
                 Gap(6)
-                Text("${h.running.size} apps are earning on this phone.", style = MaterialTheme.typography.bodyLarge, color = c.text2)
+                Text("${h.running.size} supported apps are running on this phone.", style = MaterialTheme.typography.bodyLarge, color = c.text2)
             } else {
                 Text(
                     if (tasks.size == 1) "1 thing needs you" else "${tasks.size} things need you",
@@ -147,13 +148,13 @@ fun CHome(h: Home) {
             Gap(20)
             tasks.forEachIndexed { i, t -> TaskCard(t, i == 0) }
             if (tasks.isNotEmpty()) Gap(8)
-            SectionLabel(if (tasks.isEmpty()) "Earning now" else "Fine (${h.running.size})")
+            SectionLabel(if (tasks.isEmpty()) "Running" else "Fine (${h.running.size})")
             RunningChips(h.running)
             Gap(20)
             Panel(pad = PaddingValues(horizontal = 16.dp, vertical = 12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text("Earned in ${h.windowDays} days", style = MaterialTheme.typography.bodySmall, color = c.text2)
+                        Text("Your server reports, ${h.windowDays} days", style = MaterialTheme.typography.bodySmall, color = c.text2)
                         Text(
                             if (h.server == ServerState.NONE) "Needs a server" else money(h.total),
                             style = MaterialTheme.typography.titleMedium.merge(Tnum), fontWeight = FontWeight.SemiBold,

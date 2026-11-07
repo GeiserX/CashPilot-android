@@ -53,12 +53,12 @@ private fun ShareBar(rows: List<AppRow>, total: Double) {
 private fun Hero(h: Home) {
     val c = LocalCp.current
     Column(Modifier.padding(horizontal = 20.dp)) {
-        Text("Earned in the last ${h.windowDays} days", color = c.text2)
+        Text("Your providers report, last ${h.windowDays} days", color = c.text2)
         Gap(4)
         if (h.server == ServerState.NONE) {
             Text("—", fontSize = 52.sp, fontWeight = FontWeight.Bold, color = c.muted)
             Gap(6)
-            Text("Earnings come from your CashPilot server, which reads each provider's account.", color = c.text2, style = MaterialTheme.typography.bodyMedium)
+            Text("Figures come from your CashPilot server, which reads each provider's account. Without one, this list still shows what runs.", color = c.text2, style = MaterialTheme.typography.bodyMedium)
             Gap(14)
             Primary("Connect a server")
         } else {
@@ -92,7 +92,7 @@ private fun LedgerRow(a: AppRow, i: Int, paired: Boolean) {
                 Dot(stateColor(a.state), 7)
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    if (stopped) "${stateWord(a)} · not earning" else stateWord(a),
+                    stateWord(a),
                     style = MaterialTheme.typography.bodySmall, color = if (stopped) c.bad else c.text2,
                 )
             }
@@ -112,6 +112,7 @@ private fun LedgerRow(a: AppRow, i: Int, paired: Boolean) {
 @Composable
 fun BHome(h: Home) {
     if (h.blind) return BlindHome(h)
+    if (h.watched.isEmpty()) return NoAppsHome(h)
     val c = LocalCp.current
     Column(Modifier.fillMaxSize()) {
         TopBar("CashPilot") { Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { Ic(R.drawable.ic_settings) } }
@@ -143,47 +144,6 @@ fun BHome(h: Home) {
                     style = MaterialTheme.typography.bodySmall, color = c.muted, modifier = Modifier.padding(horizontal = 4.dp),
                 )
             }
-        }
-    }
-}
-
-/** The apps this phone could also run, framed as what they are: more ways to earn. */
-@Composable
-fun BAddApps(h: Home) {
-    val c = LocalCp.current
-    Column(Modifier.fillMaxSize()) {
-        Row(Modifier.padding(start = 8.dp, top = 24.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { Ic(R.drawable.ic_arrow_back, tint = c.text) }
-            Text("Add an earning app", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-        }
-        Column(Modifier.padding(horizontal = 16.dp)) {
-            Text(
-                "CashPilot supports ${h.notInstalled.size} more apps. Each one shares a little of your connection and pays for it; running several adds up.",
-                color = c.text2, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp),
-            )
-            Gap(8)
-            Panel(pad = PaddingValues(vertical = 4.dp)) {
-                h.notInstalled.forEachIndexed { i, a ->
-                    if (i > 0) Box(Modifier.padding(start = 70.dp)) { Divider() }
-                    Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        AppMark(a.name)
-                        Spacer(Modifier.width(14.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(a.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
-                            Text(
-                                if (referralOf(a.slug) != null) "Sign up with our invite, then install" else "Install from your app store",
-                                style = MaterialTheme.typography.bodySmall, color = c.text2,
-                            )
-                        }
-                        SmallAction("Get")
-                    }
-                }
-            }
-            Gap(10)
-            Text(
-                "Invite links support CashPilot's development at no cost to you.",
-                style = MaterialTheme.typography.bodySmall, color = c.muted, modifier = Modifier.padding(horizontal = 4.dp),
-            )
         }
     }
 }

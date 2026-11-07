@@ -87,7 +87,7 @@ object Fixtures {
         earnings = earnings,
         earningsAsOf = now - 2 * MIN,
         serverUrl = "https://cashpilot.home.example",
-        lastHeartbeat = now - 20_000,
+        lastHeartbeat = now - 6 * MIN,
         heartbeatFailed = false,
         notif = true, usage = true, battery = true,
     )
@@ -134,6 +134,9 @@ object Fixtures {
         notif = false, usage = false, battery = false,
         earnings = null, earningsAsOf = 0, lastHeartbeat = 0,
     )
+
+    /** No server, and none of the supported apps installed: what a store reviewer sees. */
+    val empty = standalone.copy(apps = build(emptyMap(), emptySet()))
 
     /** A fresh install: nothing granted, no server typed yet. */
     val firstRun = blind.copy(serverUrl = "")

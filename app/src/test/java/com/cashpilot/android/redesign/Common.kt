@@ -79,13 +79,13 @@ private fun Fact(icon: Int, title: String, body: String) {
 
 @Composable
 fun OnboardWelcome() = OnboardFrame(
-    0, "Know your earning apps are earning",
-    "CashPilot checks the passive-income apps on this phone and tells you the moment one stops.",
+    0, "Know when an earning app stops",
+    "CashPilot checks the passive-income apps on this phone and shows you which ones stopped, and how to start them again.",
     bottom = { Primary("Get started", Modifier.fillMaxWidth()) },
 ) {
-    Fact(R.drawable.ic_check_circle, "Which apps are running", "EarnApp, Pawns, Grass, MystNodes and 7 more, checked every 30 seconds.")
+    Fact(R.drawable.ic_check_circle, "Which apps are running", "EarnApp, Pawns, Grass, MystNodes and 7 more, checked whenever you open CashPilot.")
     Fact(R.drawable.ic_warning, "What to do when one stops", "One tap opens the app so you can start it again.")
-    Fact(R.drawable.ic_cloud, "Earnings, if you have a server", "Pair your CashPilot server to see what each app earned. Optional.")
+    Fact(R.drawable.ic_cloud, "Figures from your server, if you have one", "A CashPilot server reports what each app's account shows. Optional; reports go every 15 minutes.")
     Fact(R.drawable.ic_visibility_off, "Nothing leaves this phone", "Except to your own server, if you add one. No ads, no tracking.")
 }
 
@@ -127,18 +127,18 @@ fun OnboardPermissions(notif: Boolean, usage: Boolean, battery: Boolean) = Onboa
 ) {
     PermissionCard(
         R.drawable.ic_notifications, "Notification access",
-        "Each earning app keeps a notification up while it works. CashPilot checks that it is there.",
-        "Never reads what a notification says.", notif, required = true,
+        "These apps keep a notification up while they run. CashPilot checks whether it is there, for the 11 supported apps only.",
+        "Never reads notification text. You'll see exactly what it reads before Android asks.", notif, required = true,
     )
     PermissionCard(
         R.drawable.ic_query_stats, "Usage access",
-        "Shows when an app last ran and how much data it moved today, which proves it is working.",
-        "Never sees which websites or other apps you use.", usage, required = true,
+        "Shows when each supported app last ran and how much data it moved today, which shows it is working.",
+        "Never looks at other apps or websites. You'll see exactly what it reads first.", usage, required = true,
     )
     PermissionCard(
         R.drawable.ic_battery_alert, "Background running",
-        "Stops Android from pausing CashPilot when the screen is off.",
-        "Recommended. CashPilot only sends a small report every 30 seconds.", battery, required = false,
+        "Opens Android's battery list, where you can set CashPilot to Don't optimize.",
+        "Optional. Keeps the 15-minute reports on time with the screen off.", battery, required = false,
     )
 }
 
@@ -147,7 +147,7 @@ enum class PairResult { NONE, OK, KEY_REFUSED }
 @Composable
 fun OnboardServer(result: PairResult) = OnboardFrame(
     2, "Connect your server",
-    "Optional. With a CashPilot server you also see earnings, and this phone shows up in your fleet.",
+    "Optional. Without one you still see which apps run and which stopped. A server adds the figures its provider accounts show, and lists this phone in your fleet.",
     bottom = {
         Primary(if (result == PairResult.OK) "Finish" else "Test and finish", Modifier.fillMaxWidth(), enabled = result != PairResult.KEY_REFUSED)
         Gap(8)
@@ -166,6 +166,11 @@ fun OnboardServer(result: PairResult) = OnboardFrame(
         label = { Text("API key") }, singleLine = true, modifier = Modifier.fillMaxWidth(),
         visualTransformation = PasswordVisualTransformation(),
         supportingText = { Text("On your server: Fleet → Reveal API Key. Stored only on this phone.") },
+    )
+    Gap(4)
+    Text(
+        "Use https://. Plain http:// works only for an address on your own network, such as 192.168.x.x or a .local or Tailscale name.",
+        style = MaterialTheme.typography.bodySmall, color = c.muted,
     )
     Gap(16)
     when (result) {
@@ -209,7 +214,7 @@ fun BlindHome(h: Home) {
         Text("CashPilot can't see your apps yet", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Gap(10)
         Text(
-            "${h.watched.size} earning apps are installed, but Android won't show CashPilot whether they run until you allow two things.",
+            "${h.watched.size} supported apps are installed, but Android won't show CashPilot whether they run until you allow two things. Each one explains what it reads first.",
             style = MaterialTheme.typography.bodyLarge, color = c.text2,
         )
         Gap(24)
@@ -251,7 +256,7 @@ fun SettingsCommon(h: Home) {
                 if (h.server == ServerState.FAILING) {
                     SettingRow(h.host, "Not answering · last report ${ago(h.lastReport)}", c.warn)
                 } else {
-                    SettingRow(h.host, "Reporting every 30 s · last report ${ago(h.lastReport)}", c.ok)
+                    SettingRow(h.host, "Reports every 15 min · last report ${ago(h.lastReport)}", c.ok)
                 }
                 Divider()
                 SettingRow("API key", "•••• •••• 7b9a · stored on this phone only")
@@ -265,7 +270,7 @@ fun SettingsCommon(h: Home) {
                 Divider()
                 SettingRow("Usage access", if (h.usage) "Allowed" else "Off · no last-seen times", if (h.usage) c.ok else c.bad)
                 Divider()
-                SettingRow("Background running", if (h.battery) "Allowed" else "Restricted · Android may pause reports", if (h.battery) c.ok else c.warn)
+                SettingRow("Battery optimisation", if (h.battery) "Off for CashPilot" else "On · reports may arrive late", if (h.battery) c.ok else c.warn)
             }
             Gap(20)
             SectionLabel("Apps to watch")
@@ -286,6 +291,8 @@ fun SettingsCommon(h: Home) {
             SectionLabel("About")
             Panel(pad = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
                 SettingRow("CashPilot for Android 0.4.0", "Source code, licence and the server project")
+                Divider()
+                SettingRow("Demo mode", "Shows the screens with sample data")
             }
         }
     }

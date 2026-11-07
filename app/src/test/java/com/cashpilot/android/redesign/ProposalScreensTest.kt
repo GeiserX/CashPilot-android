@@ -19,6 +19,7 @@ class ProposalScreensTest {
     private val problems = Fixtures.problems.toHome()
     private val standalone = Fixtures.standalone.toHome()
     private val blind = Fixtures.blind.toHome()
+    private val empty = Fixtures.empty.toHome()
 
     private fun shot(path: String, dark: Boolean = true, content: @Composable () -> Unit) {
         captureRoboImage("$OUT/$path.png") { CpTheme(dark) { content() } }
@@ -28,6 +29,7 @@ class ProposalScreensTest {
         shot("$id/home_healthy") { home(healthy) }
         shot("$id/home_problems") { home(problems) }
         shot("$id/home_standalone") { home(standalone) }
+        shot("$id/home_demo") { DemoFrame { home(healthy) } }
         shot("$id/home_healthy_light", dark = false) { home(healthy) }
         shot("$id/home_problems_light", dark = false) { home(problems) }
         shot("$id/detail") { extra() }
@@ -38,7 +40,7 @@ class ProposalScreensTest {
         renderGate()
         val grass = problems.apps.first { it.slug == "grass" && it.state == AppState.STOPPED }
         direction("a", { AHome(it) }) { AAppDetail(grass, problems) }
-        direction("b", { BHome(it) }) { BAddApps(healthy) }
+        direction("b", { BHome(it) }) { SupportedApps(healthy) }
         direction("c", { CHome(it) }) { CApps(problems) }
     }
 
@@ -51,6 +53,10 @@ class ProposalScreensTest {
         shot("common/onboard_3_server_ok") { OnboardServer(PairResult.OK) }
         shot("common/onboard_3_server_refused") { OnboardServer(PairResult.KEY_REFUSED) }
         shot("common/blind") { BlindHome(blind) }
+        shot("common/disclose_notifications") { Disclosure(Access.NOTIFICATIONS) }
+        shot("common/disclose_usage") { Disclosure(Access.USAGE) }
+        shot("common/no_apps") { NoAppsHome(empty) }
+        shot("common/supported_apps") { SupportedApps(healthy) }
         shot("common/settings") { SettingsCommon(problems) }
     }
 }

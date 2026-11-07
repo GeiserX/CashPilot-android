@@ -43,7 +43,7 @@ private fun Verdict(h: Home) {
     val c = LocalCp.current
     val bad = h.stopped.size
     val (ring, title, sub) = when {
-        bad > 0 -> Triple(c.bad, "$bad of ${h.watched.size} apps stopped", "They aren't earning until you open them again.")
+        bad > 0 -> Triple(c.bad, "$bad of ${h.watched.size} apps stopped", "Opening a stopped app usually starts it again.")
         h.server == ServerState.FAILING -> Triple(c.warn, "All ${h.watched.size} apps running", "But your server hasn't heard from this phone.")
         else -> Triple(c.ok, "All ${h.watched.size} apps running", "Nothing needs you right now.")
     }
@@ -92,9 +92,9 @@ private fun EarningsStrip(h: Home) {
     Panel(pad = PaddingValues(horizontal = 16.dp, vertical = 14.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text("Earned in ${h.windowDays} days", style = MaterialTheme.typography.bodySmall, color = c.text2)
+                Text("Your server reports, ${h.windowDays} days", style = MaterialTheme.typography.bodySmall, color = c.text2)
                 when {
-                    h.server == ServerState.NONE -> Text("Connect a server to see earnings", fontWeight = FontWeight.SemiBold, color = c.accent)
+                    h.server == ServerState.NONE -> Text("Add a server to see figures", fontWeight = FontWeight.SemiBold, color = c.accent)
                     h.total == null -> Text("Nothing read yet", fontWeight = FontWeight.SemiBold)
                     else -> Text(money(h.total), style = MaterialTheme.typography.titleLarge.merge(Tnum), fontWeight = FontWeight.Bold)
                 }
@@ -107,6 +107,7 @@ private fun EarningsStrip(h: Home) {
 @Composable
 fun AHome(h: Home) {
     if (h.blind) return BlindHome(h)
+    if (h.watched.isEmpty()) return NoAppsHome(h)
     val c = LocalCp.current
     Column(Modifier.fillMaxSize()) {
         TopBar("CashPilot") { Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { Ic(R.drawable.ic_settings) } }
@@ -133,7 +134,7 @@ fun AHome(h: Home) {
             EarningsStrip(h)
             Gap(12)
             Text(
-                "${h.notInstalled.size} more supported apps you could add  ›",
+                "${h.notInstalled.size} other supported apps  ›",
                 style = MaterialTheme.typography.bodyMedium, color = c.accent, fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(start = 4.dp),
             )
@@ -167,12 +168,12 @@ fun AAppDetail(a: AppRow, h: Home) {
             Primary("Open ${a.name}", Modifier.fillMaxWidth())
             Gap(8)
             Text(
-                "Most earning apps stop when Android clears them from memory. Opening the app starts it again.",
+                "These apps often stop when Android clears them from memory. Opening the app usually starts it again.",
                 style = MaterialTheme.typography.bodySmall, color = c.muted,
             )
             Gap(24)
             Panel(pad = PaddingValues(0.dp)) {
-                Fact2("Earned in ${h.windowDays} days", money(a.usd) + if (a.shared) " · whole account" else "")
+                Fact2("Server reports, ${h.windowDays} days", money(a.usd) + if (a.shared) " · whole account" else "")
                 Divider()
                 Fact2("Data moved, last 24 h", FormatUtils.formatBytes(a.bytes24h))
                 Divider()

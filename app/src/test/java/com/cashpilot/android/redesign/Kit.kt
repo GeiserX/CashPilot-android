@@ -320,11 +320,11 @@ fun Pill(text: String, color: Color, soft: Color) = Text(
 fun ServerLine(h: Home, modifier: Modifier = Modifier) {
     val c = LocalCp.current
     val (color, text) = when (h.server) {
-        ServerState.NONE -> c.muted to "Not connected to a server · status stays on this phone"
+        ServerState.NONE -> c.muted to "No server · everything stays on this phone"
         ServerState.OK -> if (h.lastReport == 0L) {
             c.muted to "Paired with ${h.host} · waiting for the first report"
         } else {
-            c.ok to "Reporting to ${h.host} · ${ago(h.lastReport)}"
+            c.ok to "Last report ${ago(h.lastReport)} · sent every 15 min"
         }
         ServerState.FAILING -> c.warn to "Can't reach ${h.host} ${forHowLong(h.lastReport)}"
     }
