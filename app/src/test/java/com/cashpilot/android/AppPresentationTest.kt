@@ -149,7 +149,7 @@ class AppPresentationTest {
         // grid reshuffles under the user's thumb on every 30-second refresh.
         val once = AppPresentation.sortForDashboard(
             listOf(
-                info(AppState.STOPPED, "uprock", "Uprock"),
+                info(AppState.STOPPED, "wipter", "Wipter"),
                 info(AppState.STOPPED, "earnapp", "EarnApp"),
                 info(AppState.STOPPED, "grass", "Grass"),
             ),
@@ -157,11 +157,11 @@ class AppPresentationTest {
         val again = AppPresentation.sortForDashboard(
             listOf(
                 info(AppState.STOPPED, "grass", "Grass"),
-                info(AppState.STOPPED, "uprock", "Uprock"),
+                info(AppState.STOPPED, "wipter", "Wipter"),
                 info(AppState.STOPPED, "earnapp", "EarnApp"),
             ),
         )
-        assertEquals(listOf("earnapp", "grass", "uprock"), once.map { it.app.slug })
+        assertEquals(listOf("earnapp", "grass", "wipter"), once.map { it.app.slug })
         assertEquals(once.map { it.app.slug }, again.map { it.app.slug })
     }
 
