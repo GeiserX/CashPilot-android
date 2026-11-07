@@ -61,7 +61,7 @@ class EarningsPresentationTest {
         // Some platforms unread is normal; the total covers the ones that were.
         assertEquals(
             Mode.FIGURE,
-            EarningsPresentation.mode(earnings(3.0, without = listOf("titan", "uprock")), serverConfigured = true),
+            EarningsPresentation.mode(earnings(3.0, without = listOf("titan", "wipter")), serverConfigured = true),
         )
     }
 

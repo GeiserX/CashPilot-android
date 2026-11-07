@@ -35,8 +35,6 @@ object KnownApps {
         MonitoredApp("titan", "com.titan_network_vip.titan_app", "Titan Network",
             referralUrl = "https://edge.titannet.info/signup?inviteCode=2GKKJ495"),
         MonitoredApp("nodle", "io.nodle.cash", "Nodle Cash"),
-        MonitoredApp("uprock", "com.uprock.mining", "Uprock",
-            referralUrl = "https://link.uprock.com/i/33e8492e"),
         MonitoredApp("wipter", "com.wipter.app", "Wipter"),
     )
 

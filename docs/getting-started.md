@@ -29,7 +29,7 @@ The main button unlocks once both accesses are granted. It reads **Continue to D
 
 ## What a working start looks like
 
-- The dashboard lists the 11 monitored apps. Installed ones show **Running**, **Stopped** or **Can't tell**; the others show **Not installed — tap to install**. The summary at the top counts them.
+- The dashboard lists the 10 monitored apps. Installed ones show **Running**, **Stopped** or **Can't tell**; the others show **Not installed — tap to install**. The summary at the top counts them.
 - With a server, the dashboard's summary shows a green dot and **Last report** with its age, for example **Last report 6 min ago · sent every 15 min**, and the phone appears on the server's fleet page as its maker and model plus a short device id, for example `Google Pixel 8 (a1b2c3d4)`. The first heartbeat also enrolls the phone: the server issues it its own key ([Configuration](configuration.md#the-fleet-key-and-enrollment)).
 - Without a server, the summary shows **Not paired — running standalone**. That is a supported mode, not an error.
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **Uprock is no longer watched on Android.** Google Play Protect removes Uprock's own app from phones, so a Play-listed CashPilot that sends people to install it would put the app's Play review at risk. The app now watches 10 apps. CashPilot web and Desktop keep Uprock.
+
 ### Changed
 
 - **Heartbeats run every 15 minutes on WorkManager instead of every 30 seconds from a foreground service.** The always-on special-use foreground service and its permanent notification are gone, and so is the restart-on-boot receiver: WorkManager keeps the schedule across restarts. The app also reports once when it is opened and once when the server URL or key changes. The last report and the last earnings figure are kept on disk, so the dashboard still shows them after Android stops the app between runs, and it now says "Last report 6 min ago · sent every 15 min" instead of implying live monitoring.
