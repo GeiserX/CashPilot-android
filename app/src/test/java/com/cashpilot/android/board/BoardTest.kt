@@ -265,7 +265,7 @@ class BoardTest {
 
     @Test
     fun `the API key is masked to its last four characters`() {
-        assertEquals("•••• •••• 9a7b", Words.maskKey("cp_live_8f2c1d9a7b"))
+        assertEquals("•••• •••• 9a7b", Words.maskKey("example-key-9a7b"))
         assertEquals("••••", Words.maskKey("short"))
         assertEquals("Not set", Words.maskKey(""))
     }

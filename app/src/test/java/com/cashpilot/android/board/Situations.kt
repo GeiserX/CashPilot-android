@@ -58,7 +58,7 @@ object Situations {
         platformsWithoutReadings = listOf("grass"),
     )
 
-    private val paired = Settings(serverUrl = "https://cashpilot.home.example", apiKey = "cp_live_8f2c1d9a7b9a", setupCompleted = true)
+    private val paired = Settings(serverUrl = "https://cashpilot.home.example", apiKey = "example-fleet-k-7b9a", setupCompleted = true)
 
     fun board(
         apps: List<AppDisplayInfo>,

@@ -61,7 +61,7 @@ object Screens {
             ?: b.watched.first()
 
     private fun form(b: Board, result: PairResult = PairResult.NONE) =
-        if (b.paired) ServerForm("https://cashpilot.home.example", "cp_live_8f2c1d9a7b9a", "cp_live_8f2c1d9a7b9a", result) else ServerForm("", "", "", result)
+        if (b.paired) ServerForm("https://cashpilot.home.example", "example-fleet-k-7b9a", "example-fleet-k-7b9a", result) else ServerForm("", "", "", result)
 
     private fun both(name: String, content: @Composable () -> Unit) =
         listOf(Shot("${name}_dark", true, content = content), Shot("${name}_light", false, content = content))
@@ -76,7 +76,7 @@ object Screens {
         }
         addAll(both("onboard_1_welcome") { OnboardWelcome {} })
         for (r in listOf(PairResult.NONE, PairResult.OK, PairResult.KEY_REFUSED, PairResult.UNREACHABLE)) {
-            val (url, key) = if (r == PairResult.NONE) "" to "" else "https://cashpilot.home.example" to "cp_live_8f2c1d9a7b9a"
+            val (url, key) = if (r == PairResult.NONE) "" to "" else "https://cashpilot.home.example" to "example-fleet-k-7b9a"
             addAll(both("onboard_3_server_${r.name.lowercase()}") { OnboardServer(url, key, {}, {}, r, DEVICE, {}, {}, {}) })
         }
         addAll(both("disclose_notifications") { DisclosureScreen(Access.NOTIFICATIONS, {}, {}) })
