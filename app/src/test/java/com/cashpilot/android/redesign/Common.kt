@@ -98,9 +98,12 @@ private fun PermissionCard(icon: Int, title: String, why: String, notRead: Strin
             Spacer(Modifier.width(12.dp))
             Text(title, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             when {
-                granted -> Pill("Allowed", c.ok, c.okSoft)
+                granted -> Pill(if (required) "Allowed" else "Done", c.ok, c.okSoft)
                 required -> SmallAction("Allow", filled = true)
-                else -> SmallAction("Allow")
+                // Optional, and not a permission: it only opens Android's
+                // battery settings list. No exemption dialog, so the button
+                // never reads as "Allow".
+                else -> SmallAction("Open settings", color = c.text)
             }
         }
         Gap(8)
@@ -136,9 +139,9 @@ fun OnboardPermissions(notif: Boolean, usage: Boolean, battery: Boolean) = Onboa
         "Never looks at other apps or websites. You'll see exactly what it reads first.", usage, required = true,
     )
     PermissionCard(
-        R.drawable.ic_battery_alert, "Background running",
-        "Opens Android's battery list, where you can set CashPilot to Don't optimize.",
-        "Optional. Keeps the 15-minute reports on time with the screen off.", battery, required = false,
+        R.drawable.ic_battery_alert, "Battery optimisation",
+        "CashPilot reports every 15 minutes. With battery optimisation on, Android can hold those reports back while the screen is off.",
+        "Optional. Opens Android's battery list: choose All apps, then CashPilot, then Don't optimize.", battery, required = false,
     )
 }
 
