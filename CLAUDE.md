@@ -1,7 +1,7 @@
 # CLAUDE.md — CashPilot Android
 
 ## Overview
-Android monitoring agent for CashPilot that tracks passive income apps (EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, Uprock, Wipter) without root, reporting their status to the CashPilot fleet dashboard via periodic heartbeats.
+Android monitoring agent for CashPilot that tracks passive income apps (EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, Wipter) without root, reporting their status to the CashPilot fleet dashboard via periodic heartbeats.
 
 ## Tech Stack
 - Kotlin 2.1+
@@ -103,7 +103,7 @@ POST to `{serverUrl}/api/workers/heartbeat` with bearer auth (fleet API key via 
 
 ## Known Apps
 
-11 passive income apps with verified Android package names defined in `KnownApps.kt`. All verified via `adb shell pm list packages`.
+10 passive income apps with verified Android package names defined in `KnownApps.kt`. All verified via `adb shell pm list packages`.
 
 When adding new apps:
 1. **Verify exact package name** via `adb shell pm list packages | grep -i <name>` — Play Store URLs are unreliable
