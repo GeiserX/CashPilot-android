@@ -142,6 +142,7 @@ dependencies {
     testImplementation(libs.junit4)
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.14.4")
     testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.work.testing)
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.junit.rule)

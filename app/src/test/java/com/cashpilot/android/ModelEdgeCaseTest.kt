@@ -436,7 +436,7 @@ class ModelEdgeCaseTest {
         assertTrue("titan" in slugs)
     }
 
-    // --- Container building pattern (from HeartbeatService) ---
+    // --- Container building pattern (from Heartbeat.send) ---
 
     @Test
     fun `container building from app status running`() {

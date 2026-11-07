@@ -9,7 +9,7 @@ How it knows:
 
 All of this is read on the phone. Without a server, the app list is the whole app.
 
-With a self-hosted CashPilot server (https://github.com/GeiserX/CashPilot), the phone also joins your fleet. A small foreground service sends the apps' status to your server on a schedule, and the dashboard shows your earnings from the server. The phone sends app status, never notification content.
+With a self-hosted CashPilot server (https://github.com/GeiserX/CashPilot), the phone also joins your fleet. The app sends the apps' status to your server every 15 minutes, and the dashboard shows your earnings from the server. The phone sends app status, never notification content.
 
 Privacy: no account, no analytics, no ads. Data goes only to the server you set. Once a server is set, the app makes one request to api.ipify.org to show your public IP.
 

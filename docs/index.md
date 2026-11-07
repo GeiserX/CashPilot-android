@@ -32,7 +32,7 @@ hide:
 
     ---
 
-    Grant two accesses and the battery exemption, and pair a server if you have one.
+    Grant two accesses, and pair a server if you have one.
 
 -   :material-view-dashboard-outline: **[Usage](usage.md)**
 
@@ -53,7 +53,7 @@ hide:
 - Shows every monitored app as **Running**, **Stopped**, **Can't tell**, **Disabled** or **Not installed**, the ones that need attention first.
 - Sees a running app the moment its ongoing notification appears, and confirms quiet ones from their recent foreground use and network traffic.
 - Says **Can't tell** when a missing permission hides an app, instead of calling it stopped, so you fix the permission rather than restart an app that was fine.
-- Sends a heartbeat to your CashPilot server every 30 seconds, so the fleet page lists the phone and its apps next to your servers.
+- Sends a heartbeat to your CashPilot server every 15 minutes, and when you open or return to the app, so the fleet page lists the phone and its apps next to your servers.
 - Shows the earnings the server recorded for the platforms on the phone, marks figures older than an hour, and never shows a missing figure as zero.
 - Works without a server as a monitor for the phone alone.
 
@@ -61,8 +61,8 @@ hide:
 
 ## How it runs
 
-- One foreground service with a quiet notification, restarted when the phone boots. No root, no ADB, no accessibility service.
-- Two special accesses, Notification Access and Usage Access, plus an exemption from battery optimization so Android does not stop the service with the screen off.
+- No always-running service and no permanent notification: Android's WorkManager runs the heartbeat, and keeps the schedule across restarts. No root, no ADB, no accessibility service.
+- Two special accesses, Notification Access and Usage Access. Turning battery optimization off for CashPilot is optional and keeps reports on time with the screen off.
 - One `POST /api/workers/heartbeat` to your server per interval, authenticated with this phone's own key after the first one. The settings are on [Configuration](configuration.md).
 - Installed from the APK on [GitHub releases](https://github.com/GeiserX/CashPilot-android/releases/latest); it is not in Google Play or F-Droid.
 

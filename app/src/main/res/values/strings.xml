@@ -16,8 +16,10 @@
     <string name="setup_server_optional">Optional — skip this if you don\'t have a server</string>
     <string name="setup_server_what_it_adds">Without a server CashPilot still detects which apps are running on this device and warns you when one stops. Pairing adds fleet-wide totals and earnings history across all your machines. You can pair later from Settings.</string>
     <string name="setup_continue_standalone">Continue without a server</string>
-    <string name="no_heartbeat_yet">No heartbeat yet</string>
-    <string name="last_heartbeat">Last heartbeat %s</string>
+    <string name="no_heartbeat_yet">No report sent yet</string>
+    <!-- Reports go out every 15 minutes (WorkManager's minimum), not live, so the
+         line says how old the last one is and how often they go. -->
+    <string name="last_heartbeat">Last report %s · sent every 15 min</string>
 
     <!-- Permission banner -->
     <string name="permissions_needed">Permissions needed</string>
@@ -37,7 +39,7 @@
     <string name="setup_usage_title">Usage Access</string>
     <string name="setup_usage_desc">Allows CashPilot to check when apps were last active and measure per-app network usage. This data stays on your device and is only sent to your own server.</string>
     <string name="setup_battery_title">Battery Optimization</string>
-    <string name="setup_battery_desc">Disable battery optimization so Android doesn\'t kill CashPilot\'s background service. Without this, heartbeats may stop when the screen is off.</string>
+    <string name="setup_battery_desc">Lets Android send CashPilot\'s reports on time while the screen is off; without it they can arrive late. In the list that opens, choose All apps, then CashPilot, then Don\'t optimize.</string>
     <string name="setup_grant_access">Open Settings</string>
     <string name="setup_continue">Continue to Dashboard</string>
     <string name="setup_skip">Skip for now</string>

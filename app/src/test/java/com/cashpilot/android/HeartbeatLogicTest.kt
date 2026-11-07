@@ -5,77 +5,13 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 /**
- * Tests the pure logic patterns extracted from HeartbeatService:
- * - Exponential backoff calculation
+ * Tests the pure logic patterns used by Heartbeat.send:
  * - URL building from settings
  * - Server readiness checks
  */
 class HeartbeatLogicTest {
 
-    // --- Backoff calculation (matches HeartbeatService.onStartCommand) ---
-
-    private fun computeBackoff(baseIntervalSeconds: Int, consecutiveFailures: Int): Long {
-        val baseDelay = (baseIntervalSeconds * 1000L).coerceAtLeast(5_000L)
-        return if (consecutiveFailures > 0) {
-            (baseDelay * (1L shl consecutiveFailures.coerceAtMost(3)))
-                .coerceAtMost(300_000L)
-        } else {
-            baseDelay
-        }
-    }
-
-    @Test
-    fun `backoff with zero failures returns base delay`() {
-        assertEquals(30_000L, computeBackoff(30, 0))
-    }
-
-    @Test
-    fun `backoff with 1 failure doubles delay`() {
-        assertEquals(60_000L, computeBackoff(30, 1))
-    }
-
-    @Test
-    fun `backoff with 2 failures quadruples delay`() {
-        assertEquals(120_000L, computeBackoff(30, 2))
-    }
-
-    @Test
-    fun `backoff with 3 failures 8x delay`() {
-        assertEquals(240_000L, computeBackoff(30, 3))
-    }
-
-    @Test
-    fun `backoff with 4+ failures capped at 3 shifts`() {
-        // consecutiveFailures.coerceAtMost(3) means 4 failures = same as 3
-        assertEquals(240_000L, computeBackoff(30, 4))
-        assertEquals(240_000L, computeBackoff(30, 10))
-        assertEquals(240_000L, computeBackoff(30, 100))
-    }
-
-    @Test
-    fun `backoff capped at 5 minutes`() {
-        // With a 60s base interval and 3 failures: 60000 * 8 = 480000, capped at 300000
-        assertEquals(300_000L, computeBackoff(60, 3))
-    }
-
-    @Test
-    fun `backoff minimum base delay is 5 seconds`() {
-        // If interval is 0, coerceAtLeast(5000) kicks in
-        assertEquals(5_000L, computeBackoff(0, 0))
-        assertEquals(10_000L, computeBackoff(0, 1))
-    }
-
-    @Test
-    fun `backoff with 1 second interval uses minimum 5 seconds`() {
-        assertEquals(5_000L, computeBackoff(1, 0))
-    }
-
-    @Test
-    fun `backoff with negative interval uses minimum 5 seconds`() {
-        assertEquals(5_000L, computeBackoff(-10, 0))
-    }
-
-    // --- URL building (matches HeartbeatService.sendHeartbeat) ---
+    // --- URL building (matches Heartbeat.send) ---
 
     private fun buildHeartbeatUrl(serverUrl: String): String =
         serverUrl.trimEnd('/') + "/api/workers/heartbeat"
