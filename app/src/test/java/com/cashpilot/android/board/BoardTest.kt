@@ -3,6 +3,7 @@ package com.cashpilot.android.board
 import com.cashpilot.android.board.Situations.NOW
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.Settings
+import com.cashpilot.android.model.WorkerHeartbeatResponse
 import com.cashpilot.android.service.Heartbeat
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.EarningsPresentation
@@ -136,14 +137,27 @@ class BoardTest {
     // ---- Tasks (the ordered list) -------------------------------------------
 
     @Test
-    fun `tasks come in order - longest stopped first, then server, then battery`() {
+    fun `tasks come in order - stopped apps by name, then server, then battery`() {
         val t = Situations.problems.tasks()
         assertEquals(
             listOf(TaskKind.STOPPED_APP, TaskKind.STOPPED_APP, TaskKind.SERVER, TaskKind.BATTERY),
             t.map { it.kind },
         )
-        assertEquals("traffmonetizer", t[0].slug) // stopped 26 h ago, before grass at 3 h
-        assertEquals("grass", t[1].slug)
+        // Android knows when an app was last opened, not when it stopped, so no
+        // task claims a stop time and none is ranked by one.
+        assertEquals("grass", t[0].slug)
+        assertEquals("traffmonetizer", t[1].slug)
+        assertEquals("Traffmonetizer stopped", t[1].title)
+    }
+
+    @Test
+    fun `every installed app switched off reads as nothing watched, never all running`() {
+        val installed = setOf("earnapp", "grass")
+        val b = Situations.board(Situations.apps(emptyMap(), installed, disabled = installed))
+        assertTrue(b.watched.isEmpty())
+        val v = b.verdict()
+        assertEquals("No apps watched", v.title)
+        assertEquals(Tone.MUTED, v.tone)
     }
 
     @Test
@@ -197,9 +211,9 @@ class BoardTest {
     }
 
     @Test
-    fun `a stopped row says when it was last seen`() {
+    fun `a stopped row says when it was last opened`() {
         val grass = Situations.problems.watched.first { it.slug == "grass" }
-        assertEquals("Stopped · last seen 3 h ago", grass.rowLine(NOW))
+        assertEquals("Stopped · last opened 3 h ago", grass.rowLine(NOW))
     }
 
     @Test
@@ -282,8 +296,25 @@ class BoardTest {
         assertEquals(PairResult.UNREACHABLE, pairResultOf(Heartbeat.Outcome.UNREACHABLE))
         assertEquals(PairResult.URL_REFUSED, pairResultOf(Heartbeat.Outcome.URL_REFUSED))
         assertEquals(PairResult.REJECTED, pairResultOf(Heartbeat.Outcome.REJECTED))
+        assertEquals(PairResult.NOT_CASHPILOT, pairResultOf(Heartbeat.Outcome.NOT_CASHPILOT))
         val titles = PairResult.entries.mapNotNull { pairMessage(it, "h", "Phone")?.title }
         assertEquals(titles.size, titles.toSet().size, "two results share a message: $titles")
+    }
+
+    @Test
+    fun `only a CashPilot answer counts as accepted, not any 200`() {
+        assertTrue(Heartbeat.acceptedBy(WorkerHeartbeatResponse(status = "ok", workerId = 7)))
+        assertFalse(Heartbeat.acceptedBy(WorkerHeartbeatResponse())) // a 200 whose JSON is something else
+        assertFalse(Heartbeat.acceptedBy(null)) // a login page: not JSON at all
+    }
+
+    @Test
+    fun `a new shared key drops the phone's own key, the same key keeps it`() {
+        val enrolled = Settings(serverUrl = "https://s.example", apiKey = "old", workerKey = "issued")
+        assertEquals("issued", enrolled.withApiKey("old").workerKey)
+        val changed = enrolled.withApiKey("new")
+        assertEquals("", changed.workerKey)
+        assertEquals("new", changed.activeKey)
     }
 
     @Test

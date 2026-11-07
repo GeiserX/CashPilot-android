@@ -57,7 +57,14 @@ object Heartbeat {
      * answered": the first means copy the key again, the second means check the
      * address or the network.
      */
-    enum class Outcome { SENT, NOT_CONFIGURED, URL_REFUSED, KEY_REFUSED, REJECTED, UNREACHABLE }
+    enum class Outcome { SENT, NOT_CONFIGURED, URL_REFUSED, KEY_REFUSED, REJECTED, NOT_CASHPILOT, UNREACHABLE }
+
+    /**
+     * Whether a 2xx answer came from a CashPilot server. Both the web server and
+     * Desktop's fleet server answer `{"status": "ok", "worker_id": ...}`; a login
+     * page, a proxy or another app on that address answers 200 with something else.
+     */
+    fun acceptedBy(body: WorkerHeartbeatResponse?): Boolean = body?.status == "ok"
 
     /** The outcome for an HTTP status that was not a success. */
     fun outcomeOf(status: Int): Outcome = if (status == 401 || status == 403) Outcome.KEY_REFUSED else Outcome.REJECTED
@@ -275,8 +282,12 @@ object Heartbeat {
                 setBody(heartbeat)
             }
 
-            if (response.status.isSuccess()) {
-                val body = runCatching { response.body<WorkerHeartbeatResponse>() }.getOrNull()
+            val body = if (response.status.isSuccess()) runCatching { response.body<WorkerHeartbeatResponse>() }.getOrNull() else null
+            if (response.status.isSuccess() && !acceptedBy(body)) {
+                ifStillServer(settings) { _lastHeartbeatFailed.value = true }
+                Log.w(TAG, "Heartbeat answered ${response.status.value}, but not by a CashPilot server")
+                Outcome.NOT_CASHPILOT
+            } else if (response.status.isSuccess()) {
                 ifStillServer(settings) {
                     _lastHeartbeat.value = System.currentTimeMillis()
                     _lastHeartbeatFailed.value = false

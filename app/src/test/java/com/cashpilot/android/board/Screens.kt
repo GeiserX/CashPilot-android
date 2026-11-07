@@ -72,6 +72,7 @@ object Screens {
             addAll(both("detail_$s") { AppDetailScreen(detailRow(b), b, none) {} })
             addAll(both("settings_$s") { SettingsScreen(b, form(b), VERSION, DEVICE, none, SettingsActions()) {} })
             addAll(both("supported_$s") { SupportedAppsScreen(b, none) {} })
+            addAll(both("supported_all_$s") { SupportedAppsScreen(b, none, all = true) {} })
             addAll(both("onboard_2_permissions_$s") { OnboardPermissions(b.notif, b.usage, b.battery, {}, {}, {}) {} })
         }
         addAll(both("onboard_1_welcome") { OnboardWelcome {} })

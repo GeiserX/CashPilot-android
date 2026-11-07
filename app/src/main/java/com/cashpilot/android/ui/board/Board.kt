@@ -185,7 +185,7 @@ fun Board.ago(millis: Long?) = Words.ago(millis, now)
 
 fun AppRow.stateWord(now: Long): String = when (state) {
     AppState.RUNNING -> "Running"
-    AppState.STOPPED -> "Stopped" + (lastActive?.let { " · last seen " + Words.ago(it, now) } ?: "")
+    AppState.STOPPED -> "Stopped" + (lastActive?.let { " · last opened " + Words.ago(it, now) } ?: "")
     AppState.UNKNOWN -> "Can't see it"
     AppState.DISABLED -> "Not watched"
     AppState.NOT_INSTALLED -> "Not installed"
@@ -227,6 +227,10 @@ fun Board.verdict(): Verdict {
     val n = watched.size
     val all = if (n == 1) "Your app is running" else "All $n apps running"
     return when {
+        n == 0 -> Verdict(
+            Tone.MUTED, null, "No apps watched",
+            "Every installed app is switched off. Turn them back on in Settings, Apps to watch.",
+        )
         stopped.isNotEmpty() -> Verdict(
             Tone.BAD, stopped.size, "${stopped.size} of ${Words.apps(n)} stopped",
             "Opening a stopped app usually starts it again.",
@@ -247,17 +251,18 @@ enum class TaskKind { STOPPED_APP, SERVER, NOTIFICATIONS, USAGE, BATTERY }
 data class Task(val kind: TaskKind, val tone: Tone, val title: String, val body: String, val action: String, val slug: String? = null)
 
 /**
- * Everything that needs the user, most urgent first: stopped apps (longest
- * stopped first), then the server, then missing access, then battery.
+ * Everything that needs the user, most urgent first: stopped apps (by name:
+ * Android tells us when an app was last opened, never when it stopped), then
+ * the server, then missing access, then battery.
  *
  * Both accesses missing is the blind screen, not a pair of tasks.
  */
 fun Board.tasks(): List<Task> {
     val out = mutableListOf<Task>()
-    stopped.sortedBy { it.lastActive ?: 0L }.forEach {
+    stopped.sortedBy { it.name }.forEach {
         out += Task(
             TaskKind.STOPPED_APP, Tone.BAD,
-            "${it.name} stopped" + (it.lastActive?.let { t -> " " + ago(t) } ?: ""),
+            "${it.name} stopped",
             "Opening it usually starts it again.", "Open ${it.name}", it.slug,
         )
     }
@@ -323,7 +328,7 @@ fun Board.earningsLine(): EarningsLine {
 const val SHARED_FOOTNOTE =
     "* Runs on more than one of your devices. The provider reports one balance for the account, so this is not this phone alone."
 
-const val NO_READING_NOTE = "No reading means your server has no login for that provider yet. It is not \$0."
+const val NO_READING_NOTE = "No reading means your server has sent no figure for that provider. It is not \$0."
 
 fun Board.footnotes(): List<String> = buildList {
     if (earningsMode == EarningsPresentation.Mode.FIGURE && anyShared) add(SHARED_FOOTNOTE)
@@ -355,7 +360,7 @@ fun Board.serverSetting(): Line = when (server) {
 // Pairing: what a connection test says.
 // ---------------------------------------------------------------------------
 
-enum class PairResult { NONE, TESTING, OK, KEY_REFUSED, UNREACHABLE, URL_REFUSED, REJECTED }
+enum class PairResult { NONE, TESTING, OK, KEY_REFUSED, UNREACHABLE, URL_REFUSED, REJECTED, NOT_CASHPILOT }
 
 fun pairResultOf(outcome: Heartbeat.Outcome): PairResult = when (outcome) {
     Heartbeat.Outcome.SENT -> PairResult.OK
@@ -363,6 +368,7 @@ fun pairResultOf(outcome: Heartbeat.Outcome): PairResult = when (outcome) {
     Heartbeat.Outcome.UNREACHABLE -> PairResult.UNREACHABLE
     Heartbeat.Outcome.URL_REFUSED -> PairResult.URL_REFUSED
     Heartbeat.Outcome.REJECTED -> PairResult.REJECTED
+    Heartbeat.Outcome.NOT_CASHPILOT -> PairResult.NOT_CASHPILOT
     Heartbeat.Outcome.NOT_CONFIGURED -> PairResult.NONE
 }
 
@@ -387,5 +393,9 @@ fun pairMessage(result: PairResult, host: String, deviceName: String): PairMessa
     PairResult.REJECTED -> PairMessage(
         Tone.BAD, "The server answered with an error",
         "It is reachable but did not accept the report. Check that it runs a recent CashPilot release.",
+    )
+    PairResult.NOT_CASHPILOT -> PairMessage(
+        Tone.BAD, "$host answered, but not as CashPilot",
+        "Something else answers at this address, such as a login page or another app. Use the address you open the CashPilot dashboard at.",
     )
 }

@@ -8,7 +8,7 @@ From top to bottom:
 
 - **The verdict.** One line that answers "is everything running?": **All 6 apps running**, **2 of 6 apps stopped**, or **4 of 6 apps running** when CashPilot can't see the rest. The ring beside it is green, amber or red to match.
 - **The server line.** **No server · everything stays on this phone** without a server. With one: **Last report 6 min ago · sent every 15 min**, **Paired with … · waiting for the first report** before the first, or **Can't reach … for 25 min** in amber when reports fail.
-- **What needs you.** When more than one thing is wrong, a numbered list in the order to fix them: stopped apps (the longest stopped first), then the server, then a missing access, then battery optimisation. Each item has its button. A single stopped app needs no list: its row has an **Open** button.
+- **What needs you.** When more than one thing is wrong, a numbered list in the order to fix them: stopped apps (by name), then the server, then a missing access, then battery optimisation. Each item has its button. A single stopped app needs no list: its row has an **Open** button.
 - **The apps.** One row per installed, watched app, problems first. Tap a row for its details.
 - **The earnings strip** (below), and **N other supported apps** for the ones not installed.
 
@@ -19,7 +19,7 @@ Pull the screen down to check every app again. The app also checks each time you
 | State | Colour | Meaning | What to do |
 |---|---|---|---|
 | Running | green | One signal proved the app is alive: an ongoing notification, foreground use in the last 15 minutes, or more than 1 KB of traffic in the last 2 hours. The row shows its traffic over the last 24 hours. | Nothing. |
-| Stopped | red | Every signal was available and none showed life. The row says when it was last seen. | Tap **Open**. Opening the app usually starts it again. |
+| Stopped | red | Every signal was available and none showed life. The row says when it was last opened. Android records that, not when the app stopped. | Tap **Open**. Opening the app usually starts it again. |
 | Can't see it | amber | Nothing showed life, and one of the two accesses is missing, so the app cannot know. | Turn the missing access back on; do not restart the app. |
 | Not watched | grey | You switched the app off. It leaves the home screen and the reports. | Switch it back on in Settings, Apps to watch. |
 
@@ -27,7 +27,7 @@ Can't see it is not Stopped on purpose. A phone that cannot see used to report e
 
 ## An app's details
 
-Tap a row to see the app's state, an **Open** button, the server's figure for it, its data use over the last 24 hours, when it was last seen working, and a **Watched by CashPilot** switch. If the app has no launcher entry, **Open** shows its page in Android's settings instead.
+Tap a row to see the app's state, an **Open** button, the server's figure for it, its data use over the last 24 hours, when it was last opened, and a **Watched by CashPilot** switch. If the app has no launcher entry, **Open** shows its page in Android's settings instead.
 
 ## When the app cannot see
 

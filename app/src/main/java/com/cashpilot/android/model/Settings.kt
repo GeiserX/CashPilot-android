@@ -19,4 +19,11 @@ data class Settings(
 ) {
     /** The key to authenticate heartbeats with: our own once enrolled, else the shared bootstrap key. */
     val activeKey: String get() = workerKey.ifBlank { apiKey }
+
+    /**
+     * The settings with a new shared key typed in. A different key drops this
+     * phone's own key, so the next report enrolls with the key just typed and a
+     * connection test proves that key, not the one issued earlier.
+     */
+    fun withApiKey(key: String): Settings = if (key.trim() == apiKey.trim()) copy(apiKey = key) else copy(apiKey = key, workerKey = "")
 }

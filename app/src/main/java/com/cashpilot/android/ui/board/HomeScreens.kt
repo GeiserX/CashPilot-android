@@ -48,6 +48,7 @@ data class BoardActions(
     val showApp: (String) -> Unit = {},
     val openSettings: () -> Unit = {},
     val showSupported: () -> Unit = {},
+    val showAllSupported: () -> Unit = {},
     val install: (AppRow) -> Unit = {},
     val allowNotifications: () -> Unit = {},
     val allowUsage: () -> Unit = {},
@@ -272,7 +273,7 @@ fun AppDetailScreen(a: AppRow, b: Board, actions: BoardActions, onBack: () -> Un
                 Spacer(Modifier.width(8.dp))
                 Text(
                     when (a.state) {
-                        AppState.STOPPED -> "Stopped. Last seen working ${b.ago(a.lastActive)}."
+                        AppState.STOPPED -> "Stopped. Last opened ${b.ago(a.lastActive)}."
                         AppState.UNKNOWN -> "CashPilot can't see whether it runs."
                         else -> a.stateWord(b.now)
                     },
@@ -295,7 +296,7 @@ fun AppDetailScreen(a: AppRow, b: Board, actions: BoardActions, onBack: () -> Un
                 Divider()
                 Fact("Data moved, last 24 h", FormatUtils.formatBytes(a.bytes24h))
                 Divider()
-                Fact("Last seen working", b.ago(a.lastActive))
+                Fact("Last opened", b.ago(a.lastActive))
                 Divider()
                 // The whole row is the switch: one 56 dp target, one TalkBack stop.
                 Row(
@@ -408,16 +409,21 @@ fun NoAppsHome(b: Board, actions: BoardActions) {
     }
 }
 
-/** The supported apps this phone does not have, with the referral disclosure at the top. */
+/**
+ * The supported apps, with the referral disclosure at the top. From the home
+ * screen, the ones this phone does not have; from Settings ([all]), every one,
+ * the installed ones with Open instead of Get.
+ */
 @Composable
-fun SupportedAppsScreen(b: Board, actions: BoardActions, onBack: () -> Unit) {
+fun SupportedAppsScreen(b: Board, actions: BoardActions, all: Boolean = false, onBack: () -> Unit) {
     val c = LocalPalette.current
-    val rows = b.notInstalled.ifEmpty { b.apps }
+    val rows = if (all) b.apps else b.notInstalled.ifEmpty { b.apps }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         BackBar("Supported apps", onBack)
         Column(Modifier.padding(horizontal = 16.dp)) {
             Text(
-                "CashPilot can watch these apps if you install them. What any of them pays depends on the provider, your connection and your region.",
+                (if (all) "The apps CashPilot can watch." else "CashPilot can watch these apps if you install them.") +
+                    " What any of them pays depends on the provider, your connection and your region.",
                 color = c.text2,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp),
@@ -432,6 +438,7 @@ fun SupportedAppsScreen(b: Board, actions: BoardActions, onBack: () -> Unit) {
             Gap(12)
             Panel(pad = PaddingValues(vertical = 4.dp)) {
                 rows.forEachIndexed { i, a ->
+                    val have = a.state != AppState.NOT_INSTALLED
                     if (i > 0) Divider(Modifier.padding(start = 70.dp))
                     Row(
                         Modifier.fillMaxWidth().semantics(mergeDescendants = true) {}.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -442,16 +449,20 @@ fun SupportedAppsScreen(b: Board, actions: BoardActions, onBack: () -> Unit) {
                         Column(Modifier.weight(1f)) {
                             Text(a.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                             Text(
-                                if (a.referralUrl != null) "Referral · provider's sign-up page" else "App store page",
+                                when {
+                                    have -> "Installed"
+                                    a.referralUrl != null -> "Referral · provider's sign-up page"
+                                    else -> "App store page"
+                                },
                                 style = MaterialTheme.typography.bodySmall,
                                 color = c.muted,
                             )
                         }
                         SmallAction(
-                            "Get",
-                            { actions.install(a) },
+                            if (have) "Open" else "Get",
+                            { if (have) actions.openApp(a) else actions.install(a) },
                             color = c.text,
-                            modifier = Modifier.semantics { contentDescription = "Get ${a.name}" },
+                            modifier = Modifier.semantics { contentDescription = (if (have) "Open " else "Get ") + a.name },
                         )
                     }
                 }

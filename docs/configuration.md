@@ -8,7 +8,7 @@ Everything the app stores, where you set it, and what it does. There are no conf
 |---|---|---|---|---|
 | Server address | Setup step 3, or Settings, Server | `server_url` | empty | Base URL of your CashPilot server. Heartbeats go to `<url>/api/workers/heartbeat`; a trailing `/` is ignored. Empty means standalone: no heartbeats, no earnings. |
 | API key | Setup step 3, or Settings, Server | `api_key` | empty | The server's `CASHPILOT_API_KEY`. Used only until the phone has its own key (next section). |
-| Per-worker key | Nothing to set: the server issues it | `worker_key` | empty | This phone's own key, received on its first heartbeat and used for every heartbeat after that. |
+| Per-worker key | Nothing to set: the server issues it | `worker_key` | empty | This phone's own key, received on its first heartbeat and used for every heartbeat after that. Typing a different API key drops it, so the next heartbeat enrolls again with the new key. |
 | Watched apps | Settings, Apps to watch, or an app's detail page | `enabled_slugs` | all 10 on | Which apps the home screen and the heartbeat include. A switched-off app leaves both. |
 | Heartbeat interval | No control in the app | `heartbeat_interval` | 30 seconds | Stored but no longer used. Heartbeats run every 15 minutes, the shortest period Android's WorkManager allows. |
 | Setup completed | Finishing the three setup steps | `setup_completed` | false | Whether setup is shown at launch. An install that already had a URL and a key before this setting existed counts as set up. |

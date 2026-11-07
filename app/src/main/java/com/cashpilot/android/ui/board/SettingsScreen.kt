@@ -147,7 +147,7 @@ fun SettingsScreen(
                 SettingRow(
                     "All ${b.apps.size} supported apps",
                     "${b.installed.size} installed · ${b.notInstalled.size} not installed",
-                    onClick = actions.showSupported,
+                    onClick = actions.showAllSupported,
                 )
             }
             Gap(20)

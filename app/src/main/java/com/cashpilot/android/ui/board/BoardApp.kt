@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.listSaver
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.cashpilot.android.BuildConfig
 import com.cashpilot.android.ui.MainViewModel
+import kotlinx.coroutines.delay
 
 /** The device name the server lists this phone under, minus the short id it appends. */
 val deviceName: String get() = "${Build.MANUFACTURER.replaceFirstChar { it.uppercase() }} ${Build.MODEL}"
@@ -58,8 +60,8 @@ fun BoardApp(vm: MainViewModel) {
     var step by rememberSaveable { mutableStateOf(0) }
 
     // The server fields as typed. Written through the ViewModel's debounced
-    // setters; filled from storage once, so a slow DataStore read never
-    // overwrites what the user is typing.
+    // setters; filled from storage once, and never after the user has typed in
+    // that field, so a slow DataStore read cannot overwrite the newer input.
     var url by rememberSaveable { mutableStateOf("") }
     var key by rememberSaveable { mutableStateOf("") }
     var urlSynced by rememberSaveable { mutableStateOf(false) }
@@ -71,7 +73,13 @@ fun BoardApp(vm: MainViewModel) {
         if (!keySynced && settings.apiKey.isNotEmpty()) { key = settings.apiKey; keySynced = true }
     }
 
-    val now = System.currentTimeMillis()
+    // Ages and the stale-earnings label move while the screen stays open.
+    val now by produceState(System.currentTimeMillis()) {
+        while (true) {
+            delay(30_000)
+            value = System.currentTimeMillis()
+        }
+    }
     val real = Board.from(apps, settings, lastHeartbeat, failed, earnings, earningsAsOf, notif, usage, battery, now)
     val board = if (demo) Demo.board(now) else real
 
@@ -83,6 +91,7 @@ fun BoardApp(vm: MainViewModel) {
         showApp = { push("$APP$it") },
         openSettings = { if (!demo) push(SETTINGS) },
         showSupported = { push(SUPPORTED) },
+        showAllSupported = { push(SUPPORTED_ALL) },
         install = { if (!demo) install(context, it) },
         allowNotifications = { push(DISCLOSE + Access.NOTIFICATIONS.name) },
         allowUsage = { push(DISCLOSE + Access.USAGE.name) },
@@ -92,8 +101,8 @@ fun BoardApp(vm: MainViewModel) {
         toggleApp = { if (!demo) vm.toggleApp(it) },
     )
     val settingsActions = SettingsActions(
-        onUrl = { url = it; vm.clearPairResult(); vm.updateServerUrl(it) },
-        onKey = { key = it; vm.clearPairResult(); vm.updateApiKey(it) },
+        onUrl = { url = it; urlSynced = true; vm.clearPairResult(); vm.updateServerUrl(it) },
+        onKey = { key = it; keySynced = true; vm.clearPairResult(); vm.updateApiKey(it) },
         testConnection = { vm.testConnection(url, key) },
         openUrl = { openUri(context, it) },
     )
@@ -133,7 +142,7 @@ fun BoardApp(vm: MainViewModel) {
                 else -> OnboardServer(
                     url, key, settingsActions.onUrl, settingsActions.onKey, pair, deviceName,
                     onTest = settingsActions.testConnection,
-                    onFinish = { vm.finishSetup(keepServer = true) },
+                    onFinish = { vm.finishSetup(keepServer = true, url = url, key = key) },
                     onSkip = { url = ""; key = ""; vm.finishSetup(keepServer = false) },
                 )
             }
@@ -145,10 +154,16 @@ fun BoardApp(vm: MainViewModel) {
                     board, ServerForm(url, key, settings.apiKey, pair), BuildConfig.VERSION_NAME, deviceName,
                     actions, settingsActions, ::pop,
                 )
-                route == SUPPORTED -> SupportedAppsScreen(board, actions, ::pop)
+                route == SUPPORTED -> SupportedAppsScreen(board, actions, onBack = ::pop)
+                route == SUPPORTED_ALL -> SupportedAppsScreen(board, actions, all = true, onBack = ::pop)
                 route.startsWith(APP) -> {
                     val row = board.apps.firstOrNull { it.slug == route.removePrefix(APP) }
-                    if (row == null) LaunchedEffect(route) { pop() } else AppDetailScreen(row, board, actions, ::pop)
+                    when {
+                        row != null -> AppDetailScreen(row, board, actions, ::pop)
+                        // After process death the route is restored before the first
+                        // detection lists the apps; only a finished list can say it is gone.
+                        apps.isNotEmpty() -> LaunchedEffect(route) { pop() }
+                    }
                 }
                 // Pull down to check every app again; it also checks on every return to the app.
                 demo -> HomeScreen(board, actions)
@@ -162,6 +177,7 @@ fun BoardApp(vm: MainViewModel) {
 private const val HOME = "home"
 private const val SETTINGS = "settings"
 private const val SUPPORTED = "supported"
+private const val SUPPORTED_ALL = "supported/all"
 private const val APP = "app/"
 private const val DISCLOSE = "disclose/"
 

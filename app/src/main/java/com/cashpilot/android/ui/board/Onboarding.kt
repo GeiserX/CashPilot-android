@@ -290,7 +290,7 @@ fun DisclosureScreen(kind: Access, onContinue: () -> Unit, onNotNow: () -> Unit)
             icon = R.drawable.ic_notifications
             title = "notification access"
             reads = "Only whether one of the $n apps below is showing an ongoing notification right now. That notification is how those apps show they are running."
-            never = "The text of any notification, and anything from any other app. Nothing about notifications is stored or sent; only the running or stopped result, and only to your own server if you add one."
+            never = "The text of any notification, and anything from any other app. Only two things go out, and only to your own server if you add one: whether each of these apps has that notification up, and whether it is running."
         }
         Access.USAGE -> {
             icon = R.drawable.ic_query_stats

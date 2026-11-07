@@ -216,7 +216,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         apiKeyJob?.cancel()
         apiKeyJob = viewModelScope.launch {
             delay(500)
-            SettingsStore.update(getApplication()) { it.copy(apiKey = key) }
+            SettingsStore.update(getApplication()) { it.withApiKey(key) }
             HeartbeatWorker.runNow(getApplication())
         }
     }
@@ -226,8 +226,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /** What the last connection test said; NONE until one runs or after the fields change. */
     val pairResult: StateFlow<PairResult> = _pairResult.asStateFlow()
 
+    private var testJob: Job? = null
+
+    /** The fields changed: any result, even one still on its way, is about other details. */
     fun clearPairResult() {
-        if (_pairResult.value != PairResult.TESTING) _pairResult.value = PairResult.NONE
+        testJob?.cancel()
+        _pairResult.value = PairResult.NONE
     }
 
     /**
@@ -239,27 +243,42 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun testConnection(url: String, key: String) {
         serverUrlJob?.cancel()
         apiKeyJob?.cancel()
-        viewModelScope.launch {
+        testJob?.cancel()
+        testJob = viewModelScope.launch {
             _pairResult.value = PairResult.TESTING
             val app = getApplication<Application>()
-            SettingsStore.update(app) { it.copy(serverUrl = url.trim(), apiKey = key.trim()) }
-            Heartbeat.matchServer(app, url.trim())
-            _pairResult.value = pairResultOf(Heartbeat.sendOnce(app))
+            saveServer(url, key)
+            val outcome = withContext(Dispatchers.IO) { Heartbeat.sendOnce(app) }
+            // An edit while the report was out cancelled this job: its answer is
+            // about details that are no longer in the fields, so it is not shown.
+            coroutineContext.ensureActive()
+            _pairResult.value = pairResultOf(outcome)
         }
     }
 
+    private suspend fun saveServer(url: String, key: String) {
+        val app = getApplication<Application>()
+        SettingsStore.update(app) { it.copy(serverUrl = url.trim()).withApiKey(key.trim()) }
+        Heartbeat.matchServer(app, url.trim())
+    }
+
     /**
-     * Leave onboarding. Without a server the typed details are dropped, and the
-     * pending debounced writes are cancelled so they cannot put them back.
+     * Leave onboarding. The pending debounced writes are cancelled, so the
+     * details in the fields are saved here: as typed with a server, cleared
+     * without one, where the cancelled writes cannot put them back.
      */
-    fun finishSetup(keepServer: Boolean) {
+    fun finishSetup(keepServer: Boolean, url: String = "", key: String = "") {
         serverUrlJob?.cancel()
         apiKeyJob?.cancel()
+        testJob?.cancel()
         viewModelScope.launch {
-            SettingsStore.update(getApplication()) {
-                if (keepServer) it.copy(setupCompleted = true) else it.copy(serverUrl = "", apiKey = "", setupCompleted = true)
+            if (keepServer) {
+                saveServer(url, key)
+                SettingsStore.update(getApplication()) { it.copy(setupCompleted = true) }
+            } else {
+                SettingsStore.update(getApplication()) { it.copy(serverUrl = "", apiKey = "", workerKey = "", setupCompleted = true) }
+                Heartbeat.matchServer(getApplication(), "")
             }
-            if (!keepServer) Heartbeat.matchServer(getApplication(), "")
             _pairResult.value = PairResult.NONE
         }
     }

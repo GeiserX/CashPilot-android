@@ -125,7 +125,7 @@ class AccessibilityTest {
         rule.setContent { CashPilotTheme(darkTheme = true) { HomeScreen(Situations.problems, BoardActions()) } }
         val spoken = nodes().map(::label).filter { it.isNotBlank() }
         fun at(prefix: String) = spoken.indexOfFirst { it.startsWith(prefix) }.also { assertTrue("'$prefix' is not read at all: $spoken", it >= 0) }
-        val order = listOf("CashPilot", "Settings", "2 of 6 apps stopped", "Can't reach", "4 things need you", "1. Traffmonetizer stopped", "Grass Stopped", "Traffmonetizer Stopped", "Your server reports")
+        val order = listOf("CashPilot", "Settings", "2 of 6 apps stopped", "Can't reach", "4 things need you", "1. Grass stopped", "2. Traffmonetizer stopped", "Grass Stopped", "Traffmonetizer Stopped", "Your server reports")
         val indexes = order.map(::at)
         assertEquals("read in the wrong order: $spoken", indexes.sorted(), indexes)
     }

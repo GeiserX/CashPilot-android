@@ -43,7 +43,8 @@ host; without that the record task looks like it did nothing.
 Screen goldens are stable because Robolectric's NATIVE graphics draw text with
 the fonts bundled in its android-all jar (not the machine's), the SDK is pinned
 to 34, and every age and the version string on screen come from fixed test
-values (`board/Situations.kt`), never the clock or `BuildConfig`. Look at a
+values (the clock in `board/Situations.kt`, the version string in `board/Screens.kt`),
+never the real clock or `BuildConfig`. Look at a
 re-recorded image before committing it: a golden only proves "unchanged".
 
 The screen list in `board/Screens.kt` also drives `AccessibilityTest` (48 dp
