@@ -118,7 +118,7 @@ fun AHome(h: Home) {
             if (h.server == ServerState.FAILING) {
                 Panel(border = c.warn, fill = c.warnSoft, pad = PaddingValues(horizontal = 16.dp, vertical = 12.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Reports are queued until the server answers.", style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                        Text("The next report goes out once the server answers.", style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
                         SmallAction("Check", c.warn)
                     }
                 }

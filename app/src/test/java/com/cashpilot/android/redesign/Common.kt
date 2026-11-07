@@ -256,10 +256,15 @@ fun SettingsCommon(h: Home) {
             Gap(8)
             SectionLabel("Server")
             Panel(pad = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
-                if (h.server == ServerState.FAILING) {
-                    SettingRow(h.host, "Not answering · last report ${ago(h.lastReport)}", c.warn)
-                } else {
-                    SettingRow(h.host, "Reports every 15 min · last report ${ago(h.lastReport)}", c.ok)
+                when {
+                    h.server == ServerState.NONE ->
+                        SettingRow("No server", "Everything stays on this phone · add one for figures", c.muted)
+                    h.server == ServerState.FAILING ->
+                        SettingRow(h.host, if (h.lastReport == 0L) "Not answering · no report yet" else "Not answering · last report ${ago(h.lastReport)}", c.warn)
+                    h.lastReport == 0L ->
+                        SettingRow(h.host, "Paired · waiting for the first report", c.muted)
+                    else ->
+                        SettingRow(h.host, "Reports every 15 min · last report ${ago(h.lastReport)}", c.ok)
                 }
                 Divider()
                 SettingRow("API key", "•••• •••• 7b9a · stored on this phone only")

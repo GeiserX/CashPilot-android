@@ -27,6 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -55,7 +57,15 @@ private fun tasksOf(h: Home): List<Task> {
         out += Task(R.drawable.ic_warning, c.bad, "${it.name} stopped ${ago(it.lastActive)}", "Opening it usually starts it again.", "Open ${it.name}")
     }
     if (h.server == ServerState.FAILING) {
-        out += Task(R.drawable.ic_cloud_off, c.warn, "Your server isn't answering", "Nothing has reached ${h.host} ${forHowLong(h.lastReport)}. Earnings below are from ${ago(h.earningsAsOf)}.", "Check connection")
+        val since = if (h.lastReport == 0L) "No report has reached ${h.host} yet." else "Nothing has reached ${h.host} ${forHowLong(h.lastReport)}."
+        out += Task(R.drawable.ic_cloud_off, c.warn, "Your server isn't answering", since, "Check connection")
+    }
+    // One permission missing (both missing is the blind screen instead).
+    if (!h.notif) {
+        out += Task(R.drawable.ic_notifications, c.bad, "Notification access is off", "CashPilot can't tell which apps are running until it's back on.", "Turn on")
+    }
+    if (!h.usage) {
+        out += Task(R.drawable.ic_query_stats, c.warn, "Usage access is off", "No last-seen times or data use until it's back on.", "Turn on")
     }
     if (!h.battery) {
         out += Task(R.drawable.ic_battery_alert, c.warn, "Reports may arrive late", "Battery optimisation is on for CashPilot, so Android can hold reports back while the screen is off.", "Open battery settings")
@@ -127,7 +137,7 @@ fun CHome(h: Home) {
     val c = LocalCp.current
     val tasks = tasksOf(h)
     Column(Modifier.fillMaxSize()) {
-        Column(Modifier.weight(1f).padding(horizontal = 16.dp)) {
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp)) {
             Gap(36)
             if (tasks.isEmpty()) {
                 Box(Modifier.size(56.dp).clip(CircleShape).background(c.okSoft), contentAlignment = Alignment.Center) {
@@ -154,13 +164,17 @@ fun CHome(h: Home) {
             Panel(pad = PaddingValues(horizontal = 16.dp, vertical = 12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text("Your server reports, ${h.windowDays} days", style = MaterialTheme.typography.bodySmall, color = c.text2)
+                        val label = buildString {
+                            append("Your server reports, ${h.windowDays} days")
+                            if (h.watched.any { it.shared }) append(" · includes whole-account balances")
+                        }
+                        Text(label, style = MaterialTheme.typography.bodySmall, color = c.text2)
                         Text(
                             if (h.server == ServerState.NONE) "Needs a server" else money(h.total),
                             style = MaterialTheme.typography.titleMedium.merge(Tnum), fontWeight = FontWeight.SemiBold,
                         )
                     }
-                    Ic(R.drawable.ic_chevron_right, tint = c.muted, size = 18)
+                    if (h.stale) Pill("From ${ago(h.earningsAsOf)}", c.warn, c.warnSoft) else Ic(R.drawable.ic_chevron_right, tint = c.muted, size = 18)
                 }
             }
             Gap(12)
@@ -199,7 +213,10 @@ fun CApps(h: Home) {
                                 style = MaterialTheme.typography.bodySmall, color = if (a.state == AppState.STOPPED) c.bad else c.text2,
                             )
                         }
-                        Text(money(a.usd), style = MaterialTheme.typography.bodyLarge.merge(Tnum), color = if (a.usd == null) c.muted else c.text)
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(money(a.usd), style = MaterialTheme.typography.bodyLarge.merge(Tnum), color = if (a.usd == null) c.muted else c.text)
+                            if (a.shared) Text("whole account", style = MaterialTheme.typography.labelSmall, color = c.muted)
+                        }
                     }
                 }
             }

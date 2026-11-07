@@ -326,7 +326,11 @@ fun ServerLine(h: Home, modifier: Modifier = Modifier) {
         } else {
             c.ok to "Last report ${ago(h.lastReport)} · sent every 15 min"
         }
-        ServerState.FAILING -> c.warn to "Can't reach ${h.host} ${forHowLong(h.lastReport)}"
+        ServerState.FAILING -> c.warn to if (h.lastReport == 0L) {
+            "Can't reach ${h.host} · no report has gone through yet"
+        } else {
+            "Can't reach ${h.host} ${forHowLong(h.lastReport)}"
+        }
     }
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Dot(color)
