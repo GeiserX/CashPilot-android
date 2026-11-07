@@ -182,7 +182,10 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     val excludes = listOf(
         "**/R.class", "**/R\$*.class", "**/BuildConfig.class",
         // Android framework classes (require instrumented tests, not unit tests)
-        "**/ui/screen/*Screen*",
+        // Composables: covered by the screen goldens and accessibility tests,
+        // which JaCoCo does not count as line coverage.
+        "**/ui/board/*Screen*", "**/ui/board/*ScreensKt*", "**/ui/board/KitKt*",
+        "**/ui/board/OnboardingKt*", "**/ui/board/BoardAppKt*",
         "**/ui/theme/*",
         "**/ui/MainActivity*",
         "**/ui/MainViewModel.class",

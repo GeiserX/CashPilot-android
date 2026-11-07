@@ -45,6 +45,6 @@ The server's answer can carry this phone's own key (see [Configuration](configur
 
 ## Privacy
 
-All app status data is sent only to your own CashPilot server. The app makes one more request, to `api.ipify.org`, to show your public IP on the dashboard, and only after the server URL and API key are configured. It sends app status to no other service; links you tap in the app (GitHub, signup pages, the Play Store) open in your browser.
+The app talks to one server: your own CashPilot server, and only once you add one. It makes no other request; links you tap in the app (GitHub, signup pages, the Play Store) open in your browser.
 
 The app sends the bearer token over `http://` only to a host that cannot be on the public internet (loopback, a private, link-local or Tailscale address, or a name ending in `.local`, `.lan`, `.home.arpa`, `.internal` or `.ts.net`) and refuses `http://` to anything else; see [the server URL](configuration.md#the-server-url-use-https). Use an `https://` URL for any server that is not on your own network.
