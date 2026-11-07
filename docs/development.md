@@ -11,13 +11,13 @@
 
 ```bash
 ./gradlew test                    # unit tests (JVM, Robolectric; no emulator)
-./gradlew verifyRoborazziDebug    # icon goldens: fails on any visual change to an icon
+./gradlew verifyRoborazziDebug    # icon and screen goldens: fails on any visual change
 ./gradlew lintDebug               # lint against app/lint-baseline.xml; new errors fail
 ```
 
-The icon goldens live in `app/src/test/screenshots/`. Re-record them with `./gradlew recordRoborazziDebug` only when an icon change is intended.
+The icon goldens live in `app/src/test/screenshots/`, the screen goldens in `app/src/test/screenshots/screens/`: every screen in four situations (healthy, problems, no server, no access), dark and light, plus three at font scale 1.3. Re-record them with `./gradlew recordRoborazziDebug` only when a visual change is intended, and look at the new images before committing them. The list of screens is `app/src/test/java/com/cashpilot/android/board/Screens.kt`; the same list drives the accessibility checks in `AccessibilityTest`.
 
-CI (`.github/workflows/ci.yml`) runs on pull requests and pushes to `main` that touch the app or the Gradle files: a check for credentials written into tracked files (`scripts/check-no-committed-credentials.sh`), the tests with coverage (`./gradlew jacocoTestReport`, sent to Codecov) and the icon goldens.
+CI (`.github/workflows/ci.yml`) runs on pull requests and pushes to `main` that touch the app or the Gradle files: a check for credentials written into tracked files (`scripts/check-no-committed-credentials.sh`), the tests with coverage (`./gradlew jacocoTestReport`, sent to Codecov) and the goldens.
 
 ## Releases
 

@@ -25,11 +25,12 @@ Android monitoring agent for CashPilot that tracks passive income apps (EarnApp,
 
 **No working JVM on either Mac** — the dev machine has no Java, and the other Mac's Temurin 17 crashes at startup (`SIGBUS ... CodeHeap::allocate`, even on `java -version` and in `-Xint`). Use `scripts/remote-gradle.sh test|assembleDebug|lintDebug`, which runs Gradle in `eclipse-temurin:17-jdk` on a build host you name in `CASHPILOT_BUILD_HOST` and `CASHPILOT_BUILD_ROOT` (environment or the git-ignored `scripts/remote-gradle.env`; no defaults) (~26s warm). That is a **faster pre-check, not a replacement for CI** — CI additionally builds the signed release variant and runs lint against the baseline, so never report a green local run as "CI passed". Lint baseline at `app/lint-baseline.xml` — new lint errors are fatal.
 
-### Icon goldens
+### Goldens
 
-`app/src/test/screenshots/` holds one golden PNG per icon the app draws.
-Roborazzi renders Compose on the JVM through Robolectric, so there is no
-emulator and no device involved and it runs anywhere Gradle does.
+`app/src/test/screenshots/` holds one golden PNG per icon, and `screens/` one per
+screen: every screen in four situations (healthy, problems, standalone, blind),
+dark and light, plus three at font scale 1.3. Roborazzi renders Compose on the
+JVM through Robolectric, so there is no emulator and it runs anywhere Gradle does.
 
 ```bash
 ./scripts/remote-gradle.sh verifyRoborazziDebug   # fail on any visual change (what CI runs)
@@ -39,16 +40,18 @@ emulator and no device involved and it runs anywhere Gradle does.
 `remote-gradle.sh` syncs the goldens and any failure diffs back from the build
 host; without that the record task looks like it did nothing.
 
-They exist for one job: `material-icons-extended` is frozen at 1.7.8 and the
-migration to per-icon vector drawables is sixteen substitutions whose only
-acceptable outcome is "nothing changed visually". A diff during that migration
-means the glyph is not the same one.
+Screen goldens are stable because Robolectric's NATIVE graphics draw text with
+the fonts bundled in its android-all jar (not the machine's), the SDK is pinned
+to 34, and every age and the version string on screen come from fixed test
+values (the clock in `board/Situations.kt`, the version string in `board/Screens.kt`),
+never the real clock or `BuildConfig`. Look at a
+re-recorded image before committing it: a golden only proves "unchanged".
 
-**Icons only, not whole screens — on purpose.** Screen goldens are dominated by
-text, and text rendering depends on the fonts on the machine that rendered it,
-so they fail for reasons unrelated to the change and then get muted. Icons are
-pure vector geometry. Screen-level goldens belong with the UI-renewal work,
-where the fonts can be pinned deliberately.
+The screen list in `board/Screens.kt` also drives `AccessibilityTest` (48 dp
+targets measured on the node's own size, since Compose widens touch bounds of
+every clickable; a name on every tappable node; a heading per screen; no text
+unreachable at font scale 1.3; TalkBack order on the home screen). Contrast is
+`PaletteContrastTest`.
 
 ### Repository & Infrastructure
 
@@ -66,9 +69,8 @@ com.cashpilot.android/
 ├── model/           # Data classes (Heartbeat, AppStatus, MonitoredApp, Settings)
 ├── service/         # Background work (Heartbeat, HeartbeatWorker, AppNotificationListener, AppDetector)
 ├── ui/              # Compose UI (MainActivity, screens, theme, components)
-│   ├── screen/      # Full-screen composables (Dashboard, Settings)
-│   ├── theme/       # Material 3 theme
-│   └── component/   # Reusable composable components
+│   ├── board/       # The screens: Board.kt (every word and colour, pure, unit-tested), Kit, HomeScreens, Onboarding, SettingsScreen, BoardApp (navigation)
+│   └── theme/       # Classic night and Light palettes
 └── util/            # Utilities (SettingsStore, formatters)
 ```
 

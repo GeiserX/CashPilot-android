@@ -1,51 +1,69 @@
 # Usage
 
-Day to day you open the dashboard, look at what needs attention, and leave the app alone. It keeps checking in the background.
+Day to day you open the app, read the first line, and leave it alone. It keeps checking in the background.
 
-## The dashboard
+## The home screen
 
 From top to bottom:
 
-- **The summary.** How many monitored apps are **Running**, **Stopped**, **unknown** and **N/A** (not installed), the upload and download traffic of all monitored apps over the last 24 hours, and, once a server is set, the phone's public IP.
-- **The server line.** **Not paired — running standalone** without a server (tap it to open Settings). With a server: a green dot and **Last report** with its age and **sent every 15 min**, a red dot when the last report failed, a grey one and **No report sent yet** before the first.
-- **The earnings card** (below).
-- **One card per app**, the apps that need attention first: Stopped, then Can't tell, then Running, then Disabled, then Not installed.
+- **The verdict.** One line that answers "is everything running?": **All 6 apps running**, **2 of 6 apps stopped**, or **4 of 6 apps running** when CashPilot can't see the rest. The ring beside it is green, amber or red to match.
+- **The server line.** **No server · everything stays on this phone** without a server. With one: **Last report 6 min ago · sent every 15 min**, **Paired with … · waiting for the first report** before the first, **No report has reached … for 25 min** in amber when reports fail, or **Last report 2 h ago · reports are late** in amber when none has gone out for over an hour.
+- **What needs you.** When more than one thing is wrong, a numbered list in the order to fix them: stopped apps (by name), then the server, then a missing access, then battery optimisation. Each item has its button. A single stopped app needs no list: its row has an **Open** button.
+- **The apps.** One row per installed, watched app, problems first. Tap a row for its details.
+- **The earnings strip** (below), and **N other supported apps** for the ones not installed.
 
-Pull the list down to check every app again. The app also checks each time you come back to it, for example after granting a permission.
+Pull the screen down to check every app again. The app also checks each time you come back to it, for example after granting an access.
 
 ## What each app state means
 
 | State | Colour | Meaning | What to do |
 |---|---|---|---|
-| Running | green | One signal proved the app is alive: an ongoing notification, foreground use in the last 15 minutes, or more than 1 KB of traffic in the last 2 hours. | Nothing. |
-| Stopped | red | Every signal was available and none showed life. The card shows **Last:** with the last foreground time when there is one. | Open the app and start it again. |
-| Can't tell | amber | Nothing showed life, and one of the two accesses is missing, so the app cannot know. | Grant the missing access; do not restart the app. |
-| Disabled | grey | You switched the app off in Settings. | Switch it back on if you want it watched. |
-| Not installed — tap to install | faded | The app is not on this phone. | Tap to open its signup page, or its Play Store page. |
+| Running | green | One signal proved the app is alive: an ongoing notification, foreground use in the last 15 minutes, or more than 1 KB of traffic in the last 2 hours. The row shows its traffic over the last 24 hours. | Nothing. |
+| Stopped | red | Every signal was available and none showed life. The row says when it was last opened. Android records that, not when the app stopped. | Tap **Open**. Opening the app usually starts it again. |
+| Can't see it | amber | Nothing showed life, and one of the two accesses is missing, so the app cannot know. | Turn the missing access back on; do not restart the app. |
+| Not watched | grey | You switched the app off. It leaves the home screen and the reports. | Switch it back on in Settings, Apps to watch. |
 
-A card with an ongoing notification also shows **Notification active**.
+Can't see it is not Stopped on purpose. A phone that cannot see used to report every app as stopped, and a restart does not fix a missing permission. The server gets the same three answers: `running`, `stopped` or `unknown`.
 
-Can't tell is not Stopped on purpose. A phone that cannot see used to report every app as stopped, and a restart does not fix a missing permission. The server gets the same three answers: `running`, `stopped` or `unknown`.
+## An app's details
+
+Tap a row to see the app's state, an **Open** button, the server's figure for it, its data use over the last 24 hours, when it was last opened, and a **Watched by CashPilot** switch. If the app has no launcher entry, **Open** shows its page in Android's settings instead.
 
 ## When the app cannot see
 
-- **Neither access granted:** the app list is replaced by one card, **CashPilot can't see your apps**, with **Grant Notification Access** and **Grant Usage Access** buttons. It cannot be dismissed, because the list would say nothing true.
-- **One access missing:** a **Permissions needed** banner above the list with the button for the missing one. You can dismiss it; it comes back if a permission is revoked.
+- **Neither access granted:** the home screen is replaced by **CashPilot can't see your apps yet**, with **Allow notification access** and **Allow usage access**. Nothing is shown as stopped, because nothing is known.
+- **One access missing:** it appears in the list of what needs you, with **Turn on**.
+
+Each **Allow** or **Turn on** first shows what CashPilot reads and what it never reads, then opens Android's settings. **Not now** goes back without opening them.
 
 ## Earnings
 
-With a server paired, each heartbeat's answer can carry what the server has recorded for the platforms on this phone. The card shows the total for the **Last 30 days** (the server picks the window) and each app card shows its own figure.
+With a server paired, each report's answer can carry what the server has recorded for the platforms on this phone. The strip shows the total for the last 30 days (the server picks the window), and each app's detail page shows its own figure.
 
-- **Nothing read yet** means the server has no figure for these apps. It is not zero, and the app never shows `$0.00` for it. Apps without a figure show a dash.
-- **May be out of date** and **Last updated** appear when the newest figure is more than an hour old. The app keeps the last figure while the phone is offline rather than blanking it.
-- **Shared across your devices** marks a platform whose provider reports one balance for your whole account, so the figure is not what this phone earned alone.
-- Without a server the card reads **Pair a CashPilot server to see earnings**.
+- **Nothing read yet** means the server has no figure for these apps. It is not zero, and the app never shows `$0.00` for it.
+- **From 7 h ago** appears when the newest figure is more than an hour old. The app keeps the last figure while the phone is offline rather than blanking it.
+- A figure marked **\*** is a provider balance for your whole account, because the app runs on more than one of your devices; one footnote under the strip says so.
+- Without a server the strip reads **Add a server to see figures**; tap it to open Settings.
+
+## No supported app installed
+
+The home screen says **No supported app on this phone yet**, explains that CashPilot works without a server, and offers **Show a demo with sample data** and the list of supported apps. Installed apps appear by themselves.
+
+## Supported apps
+
+The list of apps CashPilot can watch, with a note at the top: links marked **Referral** open the provider's sign-up page with CashPilot's referral code, which supports the project; the others open the app store. What any app pays depends on the provider, your connection and your region.
+
+## Demo mode
+
+Settings, **Demo mode** (or the button on the empty home screen) shows the home screen with sample data under a **Demo · sample data, nothing here is real** banner. **Exit** or Back leaves it.
 
 ## Settings
 
-The gear icon on the dashboard opens Settings:
+The gear icon on the home screen opens Settings, grouped by what you are checking:
 
-- **Server Connection:** the server URL and the Fleet API Key ([Configuration](configuration.md)).
-- **Disable Battery Optimization**, or **Battery optimization disabled** when it already is.
-- **Monitored Apps:** a switch per app, with its package name. Only installed apps are reported.
-- **About:** links to this app's and CashPilot's GitHub pages, and to the sponsor page.
+- **Server:** its state, the API key masked to its last four characters, the address and key fields, and **Test connection**, which sends one report now and says what the server answered ([Configuration](configuration.md)).
+- **This phone:** notification access, usage access and battery optimisation, each with its current state. Tap one to change it.
+- **Apps to watch:** a switch per installed app, and the full list of supported apps.
+- **About:** the version and source code, the CashPilot server project, the sponsor page, and demo mode.
+
+The app follows the phone's dark or light setting, with the CashPilot web dashboard's Classic night and Light colours.

@@ -50,6 +50,26 @@ import kotlinx.coroutines.sync.withLock
  * heartbeat yet" and "nothing read yet" for up to 15 minutes.
  */
 object Heartbeat {
+
+    /**
+     * What one send ended with, so a screen can say what the server answered.
+     * The pairing step needs to tell "the server refused the key" from "nothing
+     * answered": the first means copy the key again, the second means check the
+     * address or the network.
+     */
+    enum class Outcome { SENT, NOT_CONFIGURED, URL_REFUSED, KEY_REFUSED, REJECTED, NOT_CASHPILOT, UNREACHABLE }
+
+    /**
+     * Whether a 2xx answer came from a CashPilot server that registered this
+     * phone. Both the web server and Desktop's fleet server answer
+     * `{"status": "ok", "worker_id": ...}`; a login page, a proxy or another
+     * endpoint answers 200 with something else, even a bare `{"status": "ok"}`.
+     */
+    fun acceptedBy(body: WorkerHeartbeatResponse?): Boolean = body?.status == "ok" && body.workerId != null
+
+    /** The outcome for an HTTP status that was not a success. */
+    fun outcomeOf(status: Int): Outcome = if (status == 401 || status == 403) Outcome.KEY_REFUSED else Outcome.REJECTED
+
     private const val TAG = "Heartbeat"
     private const val PREFS = "heartbeat_state"
     private const val K_LAST = "last_heartbeat"
@@ -198,10 +218,10 @@ object Heartbeat {
      * Settings are read inside the lock, so each run uses what is stored when it
      * starts, not what was stored when it was queued.
      */
-    suspend fun sendOnce(context: Context) = sendLock.withLock {
+    suspend fun sendOnce(context: Context): Outcome = sendLock.withLock {
         val settings = SettingsStore.settings(context).first()
         matchServer(context, settings.serverUrl)
-        if (settings.serverUrl.isBlank() || settings.activeKey.isBlank()) return@withLock
+        if (settings.serverUrl.isBlank() || settings.activeKey.isBlank()) return@withLock Outcome.NOT_CONFIGURED
         try {
             send(context, settings)
         } finally {
@@ -214,16 +234,16 @@ object Heartbeat {
         synchronized(this) { if (reportedServer == settings.serverUrl) block() }
     }
 
-    private suspend fun send(context: Context, settings: Settings, retried: Boolean = false) {
+    private suspend fun send(context: Context, settings: Settings, retried: Boolean = false): Outcome {
         val url = settings.serverUrl.trimEnd('/') + "/api/workers/heartbeat"
         // http to a public host would hand the fleet key to every network on the way.
         if (!ServerUrlPolicy.allowsToken(url)) {
             ifStillServer(settings) { _lastHeartbeatFailed.value = true }
             Log.w(TAG, "Heartbeat not sent: server URL is not https and not a private address")
-            return
+            return Outcome.URL_REFUSED
         }
         val client = newClient()
-        try {
+        return try {
             val apps = AppDetector(context).detectAll(settings.enabledSlugs)
 
             // Send apps in both formats for backward compatibility:
@@ -263,8 +283,12 @@ object Heartbeat {
                 setBody(heartbeat)
             }
 
-            if (response.status.isSuccess()) {
-                val body = runCatching { response.body<WorkerHeartbeatResponse>() }.getOrNull()
+            val body = if (response.status.isSuccess()) runCatching { response.body<WorkerHeartbeatResponse>() }.getOrNull() else null
+            if (response.status.isSuccess() && !acceptedBy(body)) {
+                ifStillServer(settings) { _lastHeartbeatFailed.value = true }
+                Log.w(TAG, "Heartbeat answered ${response.status.value}, but not by a CashPilot server")
+                Outcome.NOT_CASHPILOT
+            } else if (response.status.isSuccess()) {
                 ifStillServer(settings) {
                     _lastHeartbeat.value = System.currentTimeMillis()
                     _lastHeartbeatFailed.value = false
@@ -282,6 +306,7 @@ object Heartbeat {
                         SettingsStore.update(context) { current -> settingsAfterAccepted(current, settings, body) }
                     }.onFailure { Log.w(TAG, "Could not store this device's own fleet key: ${it.message}") }
                 }
+                Outcome.SENT
             } else {
                 ifStillServer(settings) { _lastHeartbeatFailed.value = true }
                 Log.w(TAG, "Heartbeat rejected: HTTP ${response.status.value}")
@@ -295,11 +320,13 @@ object Heartbeat {
                         return send(context, settings.copy(workerKey = ""), retried = true)
                     }
                 }
+                outcomeOf(response.status.value)
             }
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
             ifStillServer(settings) { _lastHeartbeatFailed.value = true }
             Log.w(TAG, "Heartbeat failed: ${e.message}")
+            Outcome.UNREACHABLE
         } finally {
             client.close()
         }

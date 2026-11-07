@@ -6,14 +6,14 @@ Everything the app stores, where you set it, and what it does. There are no conf
 
 | Setting | Where you set it | Stored as | Default | What it does |
 |---|---|---|---|---|
-| CashPilot Server URL | Setup step 1, or Settings, Server Connection | `server_url` | empty | Base URL of your CashPilot server. Heartbeats go to `<url>/api/workers/heartbeat`; a trailing `/` is ignored. Empty means standalone: no heartbeats, no earnings. |
-| Fleet API Key | Setup step 1, or Settings, Server Connection | `api_key` | empty | The server's `CASHPILOT_API_KEY`. Used only until the phone has its own key (next section). |
-| Per-worker key | Nothing to set: the server issues it | `worker_key` | empty | This phone's own key, received on its first heartbeat and used for every heartbeat after that. |
-| Monitored apps | Settings, Monitored Apps | `enabled_slugs` | all 10 on | Which apps the dashboard and the heartbeat include. A switched-off app shows as **Disabled** and is left out of the heartbeat. |
+| Server address | Setup step 3, or Settings, Server | `server_url` | empty | Base URL of your CashPilot server. Heartbeats go to `<url>/api/workers/heartbeat`; a trailing `/` is ignored. Empty means standalone: no heartbeats, no earnings. |
+| API key | Setup step 3, or Settings, Server | `api_key` | empty | The server's `CASHPILOT_API_KEY`. Used only until the phone has its own key (next section). |
+| Per-worker key | Nothing to set: the server issues it | `worker_key` | empty | This phone's own key, received on its first heartbeat and used for every heartbeat after that. Typing a different API key drops it, so the next heartbeat enrolls again with the new key. |
+| Watched apps | Settings, Apps to watch, or an app's detail page | `enabled_slugs` | all 10 on | Which apps the home screen and the heartbeat include. A switched-off app leaves both. |
 | Heartbeat interval | No control in the app | `heartbeat_interval` | 30 seconds | Stored but no longer used. Heartbeats run every 15 minutes, the shortest period Android's WorkManager allows. |
-| Setup completed | Finishing or skipping the setup screen | `setup_completed` | false | Whether the setup screen is shown at launch. An install that already had a URL and a key before this setting existed counts as set up. |
+| Setup completed | Finishing the three setup steps | `setup_completed` | false | Whether setup is shown at launch. An install that already had a URL and a key before this setting existed counts as set up. |
 
-Changes to the URL and the key are saved half a second after you stop typing. The heartbeat reads the settings again every time it runs, so a change takes effect on the next one; no restart is needed.
+Changes to the address and the key are saved half a second after you stop typing, and at once when you tap **Test connection**. **Use without a server** at the end of setup clears both. The heartbeat reads the settings again every time it runs, so a change takes effect on the next one; no restart is needed.
 
 ## The server URL: use https
 
@@ -26,16 +26,16 @@ The app accepts an `http://` URL only for a server it can tell is private, becau
 
 A public host over `http://` is refused (`http://cashpilot.example.com`, `http://8.8.8.8`). Android itself lets an app allow plain http per host name or domain suffix, never per address range, so the app keeps cleartext on at the platform level and does the refusing itself, before any request is made.
 
-On the hosts above, the fleet key, the per-worker key and the app data travel unencrypted, and the URL field turns red with **Insecure: API key and app data will be sent unencrypted. Use https:// if possible.** Any other `http://` URL is refused: the field shows **CashPilot sends your API key over http:// only to a server on your own network: localhost, a LAN, link-local or Tailscale address, a name ending in .local, .lan, .home.arpa, .internal or .ts.net, or a bare name with no dot. Use https:// for anything else.**, the dashboard reads **Not sending heartbeats: this server URL needs https://**, and no request leaves the phone. An `http://` URL saved by an older version is refused the same way.
+On the hosts above, the fleet key, the per-worker key and the app data travel unencrypted, and the address field says so: **Plain http:// on your own network: the key and app list travel unencrypted on it.** Any other `http://` URL is refused: the field turns red with **This address is on the public internet, so it needs https://. CashPilot never sends the key over plain http:// there.**, the home screen reads **Not sending to … · it needs https://**, and no request leaves the phone. An `http://` URL saved by an older version is refused the same way.
 
 ## The fleet key and enrollment
 
 CashPilot servers from 1.0.0 give every worker its own key; the shared `CASHPILOT_API_KEY` is only for a worker's first contact.
 
-1. The first heartbeat authenticates with the Fleet API Key you entered.
+1. The first heartbeat authenticates with the API key you entered (the fleet key).
 2. The server answers with a key for this phone. The app stores it as `worker_key` and uses it from the next heartbeat on. The server repeats the key in its answers until the phone has used it once.
-3. From then on the phone keeps working even if you clear the Fleet API Key in Settings.
-4. If the server answers **401** to the per-worker key (for example after the worker was removed on the server), the app deletes that key and enrolls again on the next heartbeat with the Fleet API Key.
+3. From then on the phone keeps working even if you clear the API key in Settings.
+4. If the server answers **401** to the per-worker key (for example after the worker was removed on the server), the app deletes that key and enrolls again on the next heartbeat with the fleet key.
 
 The server side of this is on CashPilot's [fleet page](https://geiserx.github.io/CashPilot/fleet/#authentication).
 

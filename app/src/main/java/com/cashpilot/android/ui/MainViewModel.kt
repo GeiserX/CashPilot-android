@@ -1,5 +1,6 @@
 package com.cashpilot.android.ui
 
+import android.util.Log
 import android.app.AppOpsManager
 import android.app.Application
 import android.os.PowerManager
@@ -20,7 +21,10 @@ import com.cashpilot.android.service.Detection
 import com.cashpilot.android.service.AppNotificationListener
 import com.cashpilot.android.service.Heartbeat
 import com.cashpilot.android.service.HeartbeatWorker
+import com.cashpilot.android.ui.board.PairResult
+import com.cashpilot.android.ui.board.pairResultOf
 import com.cashpilot.android.util.SettingsStore
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -33,7 +37,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.URL
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -80,10 +83,6 @@ data class FleetSummary(
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val detector = AppDetector(application)
-
-    companion object {
-        private const val PUBLIC_IP_URL = "https://api.ipify.org"
-    }
 
     val settings: StateFlow<Settings> = SettingsStore.settings(application)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Settings())
@@ -134,10 +133,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      */
     val earnings: StateFlow<Earnings?> = Heartbeat.earnings
     val earningsAsOf: StateFlow<Long> = Heartbeat.earningsAsOf
-
-    private val _publicIp = MutableStateFlow<String?>(null)
-    val publicIp: StateFlow<String?> = _publicIp.asStateFlow()
-    private var publicIpFailed = false
 
     private var refreshJob: Job? = null
 
@@ -196,14 +191,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _apps.value = result
         _summary.value = AppPresentation.summarise(result)
         checkPermissions()
-        // Only fetch public IP when fully configured, and don't retry on failure
-        val serverReady = settings.value.serverUrl.isNotBlank() && settings.value.apiKey.isNotBlank()
-        if (serverReady && _publicIp.value == null && !publicIpFailed) {
-            fetchPublicIp()
-        } else if (!serverReady) {
-            _publicIp.value = null
-            publicIpFailed = false
-        }
         _isRefreshing.value = false
     }
 
@@ -220,7 +207,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         serverUrlJob?.cancel()
         serverUrlJob = viewModelScope.launch {
             delay(500)
-            SettingsStore.update(getApplication()) { it.copy(serverUrl = url) }
+            SettingsStore.update(getApplication()) { it.withServerUrl(url) }
             Heartbeat.matchServer(getApplication(), url)
             // Try the new address now, not on the next 15-minute period.
             HeartbeatWorker.runNow(getApplication())
@@ -231,25 +218,78 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         apiKeyJob?.cancel()
         apiKeyJob = viewModelScope.launch {
             delay(500)
-            SettingsStore.update(getApplication()) { it.copy(apiKey = key) }
+            SettingsStore.update(getApplication()) { it.withApiKey(key) }
             HeartbeatWorker.runNow(getApplication())
         }
     }
 
-    private fun fetchPublicIp() {
+    private val _pairResult = MutableStateFlow(PairResult.NONE)
+
+    /** What the last connection test said; NONE until one runs or after the fields change. */
+    val pairResult: StateFlow<PairResult> = _pairResult.asStateFlow()
+
+    private var testJob: Job? = null
+
+    /** The fields changed: any result, even one still on its way, is about other details. */
+    fun clearPairResult() {
+        testJob?.cancel()
+        _pairResult.value = PairResult.NONE
+    }
+
+    /**
+     * Save the typed server details now and send one real report with them.
+     *
+     * A real report rather than a ping, so "Connected" means exactly what the
+     * 15-minute schedule will do: same URL policy, same key, same enrollment.
+     */
+    fun testConnection(url: String, key: String) {
+        serverUrlJob?.cancel()
+        apiKeyJob?.cancel()
+        testJob?.cancel()
+        testJob = viewModelScope.launch {
+            _pairResult.value = PairResult.TESTING
+            val app = getApplication<Application>()
+            try {
+                saveServer(url, key)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.w("MainViewModel", "Could not save the server details: ${e.javaClass.simpleName}")
+                _pairResult.value = PairResult.SAVE_FAILED
+                return@launch
+            }
+            val outcome = withContext(Dispatchers.IO) { Heartbeat.sendOnce(app) }
+            // An edit while the report was out cancelled this job: its answer is
+            // about details that are no longer in the fields, so it is not shown.
+            coroutineContext.ensureActive()
+            _pairResult.value = pairResultOf(outcome)
+        }
+    }
+
+    private suspend fun saveServer(url: String, key: String) {
+        val app = getApplication<Application>()
+        SettingsStore.update(app) { it.withServerUrl(url.trim()).withApiKey(key.trim()) }
+        Heartbeat.matchServer(app, url.trim())
+    }
+
+    /**
+     * Leave onboarding. The pending debounced writes are cancelled, so the
+     * details in the fields are saved here: as typed with a server, cleared
+     * without one, where the cancelled writes cannot put them back.
+     */
+    fun finishSetup(keepServer: Boolean, url: String = "", key: String = "") {
+        serverUrlJob?.cancel()
+        apiKeyJob?.cancel()
+        testJob?.cancel()
         viewModelScope.launch {
-            val ip = withContext(Dispatchers.IO) {
-                try {
-                    URL(PUBLIC_IP_URL).readText().trim()
-                } catch (_: Exception) {
-                    null
-                }
-            }
-            if (ip != null) {
-                _publicIp.value = ip
+            if (keepServer) {
+                saveServer(url, key)
+                SettingsStore.update(getApplication()) { it.copy(setupCompleted = true) }
             } else {
-                publicIpFailed = true
+                SettingsStore.update(getApplication()) { it.copy(serverUrl = "", apiKey = "", workerKey = "", setupCompleted = true) }
+                Heartbeat.matchServer(getApplication(), "")
             }
+            _pairResult.value = PairResult.NONE
         }
     }
 
