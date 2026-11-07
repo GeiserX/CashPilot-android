@@ -44,7 +44,7 @@ CashPilot Android 1.0 ships alongside [CashPilot](https://github.com/GeiserX/Cas
 2. Grant Notification Access and Usage Access. Turning battery optimisation off for CashPilot is optional and makes late reports less likely; Android can still delay them.
 3. In Settings, enter your CashPilot server URL and the fleet key (`CASHPILOT_API_KEY` on the server). Use `https://`; the app accepts `http://` only for a server on your own network: `localhost`, a LAN, link-local or Tailscale address (`192.168.x.x`, `10.x.x.x`, `172.16-31.x.x`, `169.254.x.x`, `100.64-127.x.x`), or a private name (`.local`, `.lan`, `.home.arpa`, `.internal`, Tailscale `.ts.net`).
 
-Needs Android 8.0 (API 26) or later and a reachable CashPilot 1.x server.
+Needs Android 8.0 (API 26) or later. To report to a server, it needs a reachable CashPilot server, 1.73.2 or newer (including 2.x), or CashPilot Desktop 0.39.6 or newer (including 1.x).
 
 ## Documentation
 
