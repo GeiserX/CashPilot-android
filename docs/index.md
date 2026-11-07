@@ -38,7 +38,7 @@ hide:
 
     ---
 
-    The dashboard, what Running, Stopped and Can't tell mean, and the earnings card.
+    The status board, what Running, Stopped and Can't see it mean, and the earnings strip.
 
 -   :material-format-list-bulleted: **[Configuration](configuration.md)**
 
@@ -50,9 +50,9 @@ hide:
 
 ## What it does
 
-- Shows every monitored app as **Running**, **Stopped**, **Can't tell**, **Disabled** or **Not installed**, the ones that need attention first.
+- Leads with one line saying whether every app is running, then each watched app as **Running**, **Stopped** or **Can't see it**, the ones that need attention first, with an **Open** button on a stopped one.
 - Sees a running app the moment its ongoing notification appears, and confirms quiet ones from their recent foreground use and network traffic.
-- Says **Can't tell** when a missing permission hides an app, instead of calling it stopped, so you fix the permission rather than restart an app that was fine.
+- Says **Can't see it** when a missing permission hides an app, instead of calling it stopped, so you fix the permission rather than restart an app that was fine.
 - Sends a heartbeat to your CashPilot server every 15 minutes, and when you open or return to the app, so the fleet page lists the phone and its apps next to your servers.
 - Shows the earnings the server recorded for the platforms on the phone, marks figures older than an hour, and never shows a missing figure as zero.
 - Works without a server as a monitor for the phone alone.
@@ -75,7 +75,7 @@ hide:
 
 ## Privacy
 
-- App states go only to the CashPilot server you enter. The one other request is to `api.ipify.org`, to show the phone's public IP, and only once a server is set.
+- App states go only to the CashPilot server you enter, and the app makes no other request.
 - The heartbeat carries the phone's maker and model, a short Android ID, the Android version and the monitored apps' states and traffic; nothing about other apps. [How it works](how-it-works.md#what-a-heartbeat-carries) lists every field.
 - The app sends the key over `http://` only to loopback or a private name (`.lan`, `.local`, a Tailscale `.ts.net` name) and refuses `http://` to anything else, LAN and Tailscale IP addresses included. Use `https://` for any server outside your own network.
 

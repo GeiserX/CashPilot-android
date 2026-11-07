@@ -73,7 +73,7 @@ jobs:
       #
       # verify, never record: a CI job that RE-RECORDS makes every change agree
       # with itself, which is the one outcome a visual gate must never produce.
-      - name: Verify icon goldens
+      - name: Verify icon and screen goldens
         if: github.event_name != 'pull_request' || steps.filter.outputs.code == 'true'
         run: ./gradlew verifyRoborazziDebug
 

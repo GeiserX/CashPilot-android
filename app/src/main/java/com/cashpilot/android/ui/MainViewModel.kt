@@ -20,6 +20,8 @@ import com.cashpilot.android.service.Detection
 import com.cashpilot.android.service.AppNotificationListener
 import com.cashpilot.android.service.Heartbeat
 import com.cashpilot.android.service.HeartbeatWorker
+import com.cashpilot.android.ui.board.PairResult
+import com.cashpilot.android.ui.board.pairResultOf
 import com.cashpilot.android.util.SettingsStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,7 +35,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.URL
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -80,10 +81,6 @@ data class FleetSummary(
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val detector = AppDetector(application)
-
-    companion object {
-        private const val PUBLIC_IP_URL = "https://api.ipify.org"
-    }
 
     val settings: StateFlow<Settings> = SettingsStore.settings(application)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Settings())
@@ -134,10 +131,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      */
     val earnings: StateFlow<Earnings?> = Heartbeat.earnings
     val earningsAsOf: StateFlow<Long> = Heartbeat.earningsAsOf
-
-    private val _publicIp = MutableStateFlow<String?>(null)
-    val publicIp: StateFlow<String?> = _publicIp.asStateFlow()
-    private var publicIpFailed = false
 
     private var refreshJob: Job? = null
 
@@ -196,14 +189,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _apps.value = result
         _summary.value = AppPresentation.summarise(result)
         checkPermissions()
-        // Only fetch public IP when fully configured, and don't retry on failure
-        val serverReady = settings.value.serverUrl.isNotBlank() && settings.value.apiKey.isNotBlank()
-        if (serverReady && _publicIp.value == null && !publicIpFailed) {
-            fetchPublicIp()
-        } else if (!serverReady) {
-            _publicIp.value = null
-            publicIpFailed = false
-        }
         _isRefreshing.value = false
     }
 
@@ -236,20 +221,46 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun fetchPublicIp() {
+    private val _pairResult = MutableStateFlow(PairResult.NONE)
+
+    /** What the last connection test said; NONE until one runs or after the fields change. */
+    val pairResult: StateFlow<PairResult> = _pairResult.asStateFlow()
+
+    fun clearPairResult() {
+        if (_pairResult.value != PairResult.TESTING) _pairResult.value = PairResult.NONE
+    }
+
+    /**
+     * Save the typed server details now and send one real report with them.
+     *
+     * A real report rather than a ping, so "Connected" means exactly what the
+     * 15-minute schedule will do: same URL policy, same key, same enrollment.
+     */
+    fun testConnection(url: String, key: String) {
+        serverUrlJob?.cancel()
+        apiKeyJob?.cancel()
         viewModelScope.launch {
-            val ip = withContext(Dispatchers.IO) {
-                try {
-                    URL(PUBLIC_IP_URL).readText().trim()
-                } catch (_: Exception) {
-                    null
-                }
+            _pairResult.value = PairResult.TESTING
+            val app = getApplication<Application>()
+            SettingsStore.update(app) { it.copy(serverUrl = url.trim(), apiKey = key.trim()) }
+            Heartbeat.matchServer(app, url.trim())
+            _pairResult.value = pairResultOf(Heartbeat.sendOnce(app))
+        }
+    }
+
+    /**
+     * Leave onboarding. Without a server the typed details are dropped, and the
+     * pending debounced writes are cancelled so they cannot put them back.
+     */
+    fun finishSetup(keepServer: Boolean) {
+        serverUrlJob?.cancel()
+        apiKeyJob?.cancel()
+        viewModelScope.launch {
+            SettingsStore.update(getApplication()) {
+                if (keepServer) it.copy(setupCompleted = true) else it.copy(serverUrl = "", apiKey = "", setupCompleted = true)
             }
-            if (ip != null) {
-                _publicIp.value = ip
-            } else {
-                publicIpFailed = true
-            }
+            if (!keepServer) Heartbeat.matchServer(getApplication(), "")
+            _pairResult.value = PairResult.NONE
         }
     }
 

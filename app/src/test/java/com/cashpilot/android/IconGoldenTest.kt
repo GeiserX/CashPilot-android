@@ -71,7 +71,7 @@ import java.io.File
 class IconGoldenTest {
 
     /** Drawables that are not part of the migrated icon set and need no golden. */
-    private val NOT_AN_ICON = setOf("ic_github", "ic_launcher_background")
+    private val NOT_AN_ICON = setOf("ic_launcher_background")
 
 
     /**
@@ -86,16 +86,11 @@ class IconGoldenTest {
      */
     private val icons: List<Pair<String, Int>> = listOf(
         "arrow_back" to R.drawable.ic_arrow_back,
-        "arrow_downward" to R.drawable.ic_arrow_downward,
-        "arrow_upward" to R.drawable.ic_arrow_upward,
         "battery_alert" to R.drawable.ic_battery_alert,
         "check_circle" to R.drawable.ic_check_circle,
         "chevron_right" to R.drawable.ic_chevron_right,
-        "circle" to R.drawable.ic_circle,
-        "close" to R.drawable.ic_close,
         "cloud" to R.drawable.ic_cloud,
         "cloud_off" to R.drawable.ic_cloud_off,
-        "language" to R.drawable.ic_language,
         "notifications" to R.drawable.ic_notifications,
         "query_stats" to R.drawable.ic_query_stats,
         "settings" to R.drawable.ic_settings,
