@@ -1,32 +1,32 @@
 package com.cashpilot.android
 
-import com.cashpilot.android.service.HeartbeatService
+import com.cashpilot.android.service.Heartbeat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class HeartbeatServiceCompanionTest {
+class HeartbeatCompanionTest {
 
     @Test
     fun `lastHeartbeat initial value is zero`() {
-        assertEquals(0L, HeartbeatService.lastHeartbeat.value)
+        assertEquals(0L, Heartbeat.lastHeartbeat.value)
     }
 
     @Test
     fun `lastHeartbeatFailed initial value is false`() {
-        assertFalse(HeartbeatService.lastHeartbeatFailed.value)
+        assertFalse(Heartbeat.lastHeartbeatFailed.value)
     }
 
     @Test
     fun `lastHeartbeat is a StateFlow`() {
         // Verify it's accessible as a non-null StateFlow
-        val flow = HeartbeatService.lastHeartbeat
+        val flow = Heartbeat.lastHeartbeat
         assertNotNull(flow)
         assertNotNull(flow.value)
     }
 
     @Test
     fun `lastHeartbeatFailed is a StateFlow`() {
-        val flow = HeartbeatService.lastHeartbeatFailed
+        val flow = Heartbeat.lastHeartbeatFailed
         assertNotNull(flow)
         assertNotNull(flow.value)
     }

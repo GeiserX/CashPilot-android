@@ -18,7 +18,8 @@ import com.cashpilot.android.model.Settings
 import com.cashpilot.android.service.AppDetector
 import com.cashpilot.android.service.Detection
 import com.cashpilot.android.service.AppNotificationListener
-import com.cashpilot.android.service.HeartbeatService
+import com.cashpilot.android.service.Heartbeat
+import com.cashpilot.android.service.HeartbeatWorker
 import com.cashpilot.android.util.SettingsStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -116,8 +117,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Detection.isBlind(canSeeNotifications = notif, canSeeUsage = usage)
     }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
-    val lastHeartbeat: StateFlow<Long> = HeartbeatService.lastHeartbeat
-    val lastHeartbeatFailed: StateFlow<Boolean> = HeartbeatService.lastHeartbeatFailed
+    val lastHeartbeat: StateFlow<Long> = Heartbeat.lastHeartbeat
+    val lastHeartbeatFailed: StateFlow<Boolean> = Heartbeat.lastHeartbeatFailed
 
     /**
      * What the server says these platforms earned.
@@ -131,8 +132,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * dashboard can say a figure is stale instead of presenting it as current;
      * a phone is offline often, so the last known value is kept deliberately.
      */
-    val earnings: StateFlow<Earnings?> = HeartbeatService.earnings
-    val earningsAsOf: StateFlow<Long> = HeartbeatService.earningsAsOf
+    val earnings: StateFlow<Earnings?> = Heartbeat.earnings
+    val earningsAsOf: StateFlow<Long> = Heartbeat.earningsAsOf
 
     private val _publicIp = MutableStateFlow<String?>(null)
     val publicIp: StateFlow<String?> = _publicIp.asStateFlow()
@@ -220,6 +221,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         serverUrlJob = viewModelScope.launch {
             delay(500)
             SettingsStore.update(getApplication()) { it.copy(serverUrl = url) }
+            Heartbeat.matchServer(getApplication(), url)
+            // Try the new address now, not on the next 15-minute period.
+            HeartbeatWorker.runNow(getApplication())
         }
     }
 
@@ -228,6 +232,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         apiKeyJob = viewModelScope.launch {
             delay(500)
             SettingsStore.update(getApplication()) { it.copy(apiKey = key) }
+            HeartbeatWorker.runNow(getApplication())
         }
     }
 

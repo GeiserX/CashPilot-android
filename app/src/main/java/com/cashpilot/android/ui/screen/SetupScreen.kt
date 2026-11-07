@@ -296,20 +296,13 @@ private fun openUsageAccessSettings(context: Context) {
     )
 }
 
+// Opens the system list of battery-optimised apps, where the user picks
+// CashPilot. Never ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: that direct
+// dialog needs the REQUEST_IGNORE_BATTERY_OPTIMIZATIONS permission, which Google
+// Play allows only for chat, VoIP, safety, automation and peripheral apps.
 private fun openBatteryOptimizationSettings(context: Context) {
-    try {
-        // Direct prompt for this app specifically
-        context.startActivity(
-            Intent(
-                AndroidSettings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                android.net.Uri.parse("package:${context.packageName}"),
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-        )
-    } catch (_: Exception) {
-        // Fallback to global list
-        context.startActivity(
-            Intent(AndroidSettings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-        )
-    }
+    context.startActivity(
+        Intent(AndroidSettings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
 }

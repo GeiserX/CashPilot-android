@@ -32,8 +32,6 @@ ignore:
   - "**/ui/theme/**"
   - "**/ui/MainActivity*"
   - "**/ui/MainViewModel*"
-  - "**/service/BootReceiver*"
   - "**/service/AppDetector*"
-  - "**/service/HeartbeatService.kt"
   - "**/util/SettingsStore*"
   - "**/CashPilotApp*"

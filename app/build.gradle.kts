@@ -142,6 +142,7 @@ dependencies {
     testImplementation(libs.junit4)
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.14.4")
     testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.work.testing)
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.junit.rule)
@@ -186,10 +187,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/ui/MainActivity*",
         "**/ui/MainViewModel.class",
         "**/ui/MainViewModel\$*.class",
-        "**/service/BootReceiver*",
         "**/service/AppDetector*",
-        "**/service/HeartbeatService.class",
-        "**/service/HeartbeatService\$*.class",
         // AppNotificationListener instance methods require Android NotificationListenerService;
         // only the Companion (static helper methods) is unit-testable
         "**/service/AppNotificationListener.class",

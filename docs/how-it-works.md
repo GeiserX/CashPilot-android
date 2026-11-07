@@ -16,7 +16,7 @@ CashPilot Server (fleet dashboard)
         | POST /api/workers/heartbeat (Bearer auth; HTTPS if the server URL uses it)
         |
 CashPilot Android
-├── HeartbeatService (foreground, periodic POST)
+├── HeartbeatWorker (WorkManager, POST every 15 min)
 ├── AppNotificationListener (instant app detection)
 ├── AppDetector (UsageStats + NetworkStats)
 └── Jetpack Compose UI (dashboard + settings)

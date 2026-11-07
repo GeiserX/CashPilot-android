@@ -71,7 +71,7 @@ import java.io.File
 class IconGoldenTest {
 
     /** Drawables that are not part of the migrated icon set and need no golden. */
-    private val NOT_AN_ICON = setOf("ic_github", "ic_notification", "ic_launcher_background")
+    private val NOT_AN_ICON = setOf("ic_github", "ic_launcher_background")
 
 
     /**
