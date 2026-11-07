@@ -34,7 +34,7 @@ decision**, not a missing feature. Decide it deliberately before submitting.
 | Release signing | **Done.** `app/build.gradle.kts` reads `CASHPILOT_KEYSTORE_PATH`, `_PASSWORD`, `CASHPILOT_KEY_ALIAS`, `_KEY_PASSWORD` from Gradle properties or the environment, and only applies the config when all four are present. The keystore is never in the repository. |
 | Release artifacts | **Done.** `release.yml` builds **both** `app-release.aab` (what Play wants) and `app-release.apk` (what F-Droid and direct installs want). |
 | Version in one place | **Done.** `gradle.properties` holds `VERSION_NAME` and `VERSION_CODE` (major*10000 + minor*100 + patch). `release.yml` runs `scripts/check-release-version.sh` first and refuses a tag that disagrees with the file. F-Droid builds from that file without our `-P` flags, so the two must agree. |
-| Special-use foreground service | **Done, and this one usually bites.** `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` is declared with a justification string. Google requires it and rejects builds that declare `FOREGROUND_SERVICE_SPECIAL_USE` without one. |
+| Special-use foreground service | **Gone.** The heartbeat runs on WorkManager every 15 minutes, so there is no special-use foreground service to justify. WorkManager's merged manifest still lists `FOREGROUND_SERVICE` for its own optional service, which the app never starts. |
 | Store text and graphics | **Done.** `fastlane/metadata/android/en-US/` has `title.txt`, `short_description.txt`, `full_description.txt`, `changelogs/<versionCode>.txt`, `images/icon.png` (512x512, from `docs/images/icon.svg`) and `images/featureGraphic.png` (1024x500, from `docs/images/banner.svg`). |
 | F-Droid recipe | **Done.** `fdroid/com.cashpilot.android.yml` is the file to place in fdroiddata as `metadata/com.cashpilot.android.yml`. Fill in the tag's full commit sha first. |
 | Licence | **Done.** GPL-3.0, no proprietary dependencies — which is what makes F-Droid possible at all. |
@@ -149,8 +149,8 @@ must say so precisely.
 | `PACKAGE_USAGE_STATS` | Special access, granted by the user in system settings. Detects whether a monitored earning app is actually running rather than merely installed. |
 | `BIND_NOTIFICATION_LISTENER_SERVICE` | Special access. Several earning apps report their state only through a persistent notification; reading it is how the app knows they are alive. |
 | `FOREGROUND_SERVICE_SPECIAL_USE` | The heartbeat that reports app status to the user's own server. Justification string already declared in the manifest. |
-| `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | Play restricts this and it is a common rejection. Be ready to argue that a monitoring app whose service is dozed reports stale state, and to accept the answer if they disagree. |
-| `RECEIVE_BOOT_COMPLETED` | Resume monitoring after a restart without the user reopening the app. |
+| `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | **Not requested.** Play allows it only for chat, VoIP, safety, automation and peripheral apps. The app opens the battery settings list instead, which needs no permission; `BackgroundPolicyTest` fails if the permission or the direct dialog comes back. |
+| `RECEIVE_BOOT_COMPLETED` | Added by WorkManager, which uses it to restore the heartbeat schedule after a restart. |
 | `READ_NETWORK_USAGE_HISTORY` | **The app genuinely depends on this** — `NetworkStatsManager` is the third of `AppDetector`'s three detection signals (per-app bytes tx/rx, ~2h buckets), alongside usage stats and notifications. Do not drop it to dodge a question; the per-app byte counts are how a running-but-silent app is distinguished from an idle one. Note the effective grant comes from usage access, so expect the reviewer to treat the two together. |
 
 State plainly that notification and usage data are read **on device**, are used

@@ -3,7 +3,7 @@ package com.cashpilot.android
 import com.cashpilot.android.model.Earnings
 import com.cashpilot.android.model.PlatformEarnings
 import com.cashpilot.android.model.WorkerHeartbeatResponse
-import com.cashpilot.android.service.HeartbeatService
+import com.cashpilot.android.service.Heartbeat
 import com.cashpilot.android.util.FormatUtils
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -82,18 +82,18 @@ class EarningsDisplayTest {
     @Test
     fun `a response without earnings keeps the previous figures`() {
         val previous = Earnings(totalUsd = 5.0)
-        assertEquals(previous, HeartbeatService.earningsToKeep(previous, null))
+        assertEquals(previous, Heartbeat.earningsToKeep(previous, null))
     }
 
     @Test
     fun `a response with earnings replaces them`() {
         val fresh = Earnings(totalUsd = 9.0)
-        assertEquals(fresh, HeartbeatService.earningsToKeep(Earnings(totalUsd = 5.0), fresh))
+        assertEquals(fresh, Heartbeat.earningsToKeep(Earnings(totalUsd = 5.0), fresh))
     }
 
     @Test
     fun `nothing known stays nothing known`() {
-        assertNull(HeartbeatService.earningsToKeep(null, null))
+        assertNull(Heartbeat.earningsToKeep(null, null))
     }
 
     // --- the wire format --------------------------------------------------

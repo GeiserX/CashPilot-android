@@ -14,11 +14,11 @@ Symptom, cause, fix. The texts in bold are what the app shows.
 
 **Fix:** pull the dashboard down to check again after a few minutes. If it stays Stopped while the app is earning, open an issue with the app's name and version.
 
-## Heartbeats stop when the screen is off
+## Heartbeats arrive late when the screen is off
 
-**Cause:** battery optimization. Android pauses or kills background services of optimized apps, and some makers add their own limits on top.
+**Cause:** battery optimization. Android holds back scheduled work of optimized apps while the phone is idle, and some makers add their own limits on top. Heartbeats are due every 15 minutes, so a gap of up to about an hour on an idle phone is Android's doing, not a fault.
 
-**Fix:** Settings, **Disable Battery Optimization**, until it reads **Battery optimization disabled**. On phones with an extra "auto-start" or "background activity" setting, allow CashPilot there too. The service starts again on its own after a restart of the phone.
+**Fix:** Settings, **Disable Battery Optimization**. It opens Android's list; choose All apps, then CashPilot, then Don't optimize, until the app reads **Battery optimization disabled**. On phones with an extra "auto-start" or "background activity" setting, allow CashPilot there too. The schedule survives a restart of the phone.
 
 ## Server rejected heartbeat (401)
 

@@ -2,7 +2,7 @@ package com.cashpilot.android
 
 import com.cashpilot.android.model.Settings
 import com.cashpilot.android.model.WorkerHeartbeatResponse
-import com.cashpilot.android.service.HeartbeatService
+import com.cashpilot.android.service.Heartbeat
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -24,47 +24,47 @@ class PerWorkerKeyTest {
         assertEquals("own", Settings(apiKey = "shared", workerKey = "own").activeKey)
     }
 
-    // --- HeartbeatService.keyToPersist -------------------------------------
+    // --- Heartbeat.keyToPersist -------------------------------------
 
     @Test
     fun `keyToPersist adopts a newly issued key`() {
-        assertEquals("issued", HeartbeatService.keyToPersist(current = "", issued = "issued"))
+        assertEquals("issued", Heartbeat.keyToPersist(current = "", issued = "issued"))
     }
 
     @Test
     fun `keyToPersist ignores an unchanged key`() {
-        assertNull(HeartbeatService.keyToPersist(current = "own", issued = "own"))
+        assertNull(Heartbeat.keyToPersist(current = "own", issued = "own"))
     }
 
     @Test
     fun `keyToPersist ignores absent or blank keys`() {
-        assertNull(HeartbeatService.keyToPersist(current = "own", issued = null))
-        assertNull(HeartbeatService.keyToPersist(current = "own", issued = ""))
-        assertNull(HeartbeatService.keyToPersist(current = "own", issued = "   "))
+        assertNull(Heartbeat.keyToPersist(current = "own", issued = null))
+        assertNull(Heartbeat.keyToPersist(current = "own", issued = ""))
+        assertNull(Heartbeat.keyToPersist(current = "own", issued = "   "))
     }
 
-    // --- HeartbeatService.settingsAfterHeartbeat ----------------------------
+    // --- Heartbeat.settingsAfterHeartbeat ----------------------------
 
     @Test
     fun `settingsAfterHeartbeat adopts a newly issued worker key`() {
         val settings = Settings(apiKey = "shared", workerKey = "")
         val body = WorkerHeartbeatResponse(status = "ok", workerKey = "issued")
-        assertEquals("issued", HeartbeatService.settingsAfterHeartbeat(settings, body)?.workerKey)
+        assertEquals("issued", Heartbeat.settingsAfterHeartbeat(settings, body)?.workerKey)
     }
 
     @Test
     fun `settingsAfterHeartbeat returns null when the worker key is unchanged, blank, or absent`() {
         val settings = Settings(apiKey = "shared", workerKey = "own")
-        assertNull(HeartbeatService.settingsAfterHeartbeat(settings, WorkerHeartbeatResponse(status = "ok", workerKey = "own")))
-        assertNull(HeartbeatService.settingsAfterHeartbeat(settings, WorkerHeartbeatResponse(status = "ok", workerKey = "")))
-        assertNull(HeartbeatService.settingsAfterHeartbeat(settings, WorkerHeartbeatResponse(status = "ok", workerKey = null)))
+        assertNull(Heartbeat.settingsAfterHeartbeat(settings, WorkerHeartbeatResponse(status = "ok", workerKey = "own")))
+        assertNull(Heartbeat.settingsAfterHeartbeat(settings, WorkerHeartbeatResponse(status = "ok", workerKey = "")))
+        assertNull(Heartbeat.settingsAfterHeartbeat(settings, WorkerHeartbeatResponse(status = "ok", workerKey = null)))
     }
 
     @Test
     fun `settingsAfterHeartbeat compares against the current worker key, not the api key`() {
         val settings = Settings(apiKey = "different", workerKey = "own")
         val body = WorkerHeartbeatResponse(status = "ok", workerKey = "own")
-        assertNull(HeartbeatService.settingsAfterHeartbeat(settings, body))
+        assertNull(Heartbeat.settingsAfterHeartbeat(settings, body))
     }
 
     // --- WorkerHeartbeatResponse deserialization ---------------------------

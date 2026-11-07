@@ -10,7 +10,7 @@ Everything the app stores, where you set it, and what it does. There are no conf
 | Fleet API Key | Setup step 1, or Settings, Server Connection | `api_key` | empty | The server's `CASHPILOT_API_KEY`. Used only until the phone has its own key (next section). |
 | Per-worker key | Nothing to set: the server issues it | `worker_key` | empty | This phone's own key, received on its first heartbeat and used for every heartbeat after that. |
 | Monitored apps | Settings, Monitored Apps | `enabled_slugs` | all 11 on | Which apps the dashboard and the heartbeat include. A switched-off app shows as **Disabled** and is left out of the heartbeat. |
-| Heartbeat interval | No control in the app | `heartbeat_interval` | 30 seconds | Time between heartbeats. The service never goes below 5 seconds. |
+| Heartbeat interval | No control in the app | `heartbeat_interval` | 30 seconds | Stored but no longer used. Heartbeats run every 15 minutes, the shortest period Android's WorkManager allows. |
 | Setup completed | Finishing or skipping the setup screen | `setup_completed` | false | Whether the setup screen is shown at launch. An install that already had a URL and a key before this setting existed counts as set up. |
 
 Changes to the URL and the key are saved half a second after you stop typing. The heartbeat service reads the settings again before every heartbeat, so a change takes effect on the next one; no restart is needed.
@@ -41,7 +41,7 @@ The server side of this is on CashPilot's [fleet page](https://geiserx.github.io
 
 ## Heartbeat timing
 
-- One heartbeat every 30 seconds while a server URL and a key are set.
+- One heartbeat every 15 minutes while a server URL and a key are set, plus one when you open the app and one when you change the server URL or key. Android may delay a scheduled one while the phone is idle.
 - After a failed heartbeat the wait doubles, up to eight times the interval and never more than 5 minutes: 60, 120, 240, then 240 seconds again with the default interval. The first successful heartbeat resets it.
 - Each request gives up after 15 seconds (10 seconds to connect).
 - The service starts when the app opens and again after the phone restarts.

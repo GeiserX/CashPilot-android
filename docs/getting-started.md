@@ -24,7 +24,7 @@ The first launch opens **Welcome to CashPilot**, four steps on one screen.
 1. **Server Connection** (optional). Enter the **CashPilot Server URL**, for example `https://cashpilot.example.com`, and the **Fleet API Key**: the server's `CASHPILOT_API_KEY`, which the owner can copy from the fleet page with **Reveal API Key** ([how the server's keys work](https://geiserx.github.io/CashPilot/fleet/#authentication)). Leave both empty to run without a server; you can pair later from Settings.
 2. **Notification Access**. **Open Settings** takes you to Android's list; switch CashPilot on. The app only checks whether a monitored app has an ongoing notification; it does not read notification content.
 3. **Usage Access**. **Open Settings**, then switch CashPilot on. This gives the app each monitored app's last foreground time and its network traffic.
-4. **Battery Optimization**. **Open Settings** and allow CashPilot to run unrestricted, or Android may stop the background service when the screen is off.
+4. **Battery Optimization**. Optional. **Open Settings** opens Android's list of battery-optimised apps; choose All apps, then CashPilot, then Don't optimize. Without it, reports can arrive late while the screen is off.
 
 The main button unlocks once both accesses are granted. It reads **Continue to Dashboard** when a server URL and key are filled in, and **Continue without a server** when they are not. **Skip for now** leaves the setup screen without the permissions; the dashboard then asks for them.
 
