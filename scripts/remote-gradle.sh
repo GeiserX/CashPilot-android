@@ -72,6 +72,10 @@ rsync -a --delete \
 # becomes a copy, so a container stopped mid-copy leaves a truncated jar that
 # every later run trusts. With tmpdir inside m2/ the move is a rename: the jar
 # is either complete or absent.
+#
+# The tmpdir is emptied at the start of each run. It now outlives the container,
+# so Robolectric's per-test directories, which it often fails to delete, would
+# otherwise pile up in the cache (2.1 GB after one day of screen tests).
 echo "==> gradle $TASK"
 ssh "$HOST" "docker run --rm \
   -v $REMOTE_ROOT/sdk:/sdk \
@@ -80,7 +84,7 @@ ssh "$HOST" "docker run --rm \
   -v $REMOTE_ROOT/m2:/root/.m2 \
   -w /src -e ANDROID_HOME=/sdk -e ANDROID_SDK_ROOT=/sdk \
   -e JAVA_TOOL_OPTIONS=-Djava.io.tmpdir=/root/.m2/tmp \
-  eclipse-temurin:17-jdk bash -lc 'mkdir -p /root/.m2/tmp && ./gradlew --no-daemon $TASK'"
+  eclipse-temurin:17-jdk bash -lc 'rm -rf /root/.m2/tmp && mkdir -p /root/.m2/tmp && ./gradlew --no-daemon $TASK'"
 
 # Bring back the SOURCE-TREE artefacts the build writes, which are the only
 # outputs that belong under version control: the Roborazzi goldens
