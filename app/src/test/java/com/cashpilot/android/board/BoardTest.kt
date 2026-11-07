@@ -9,6 +9,7 @@ import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.EarningsPresentation
 import com.cashpilot.android.ui.board.Board
 import com.cashpilot.android.ui.board.Demo
+import com.cashpilot.android.ui.board.NOT_MEASURED
 import com.cashpilot.android.ui.board.NO_READING_NOTE
 import com.cashpilot.android.ui.board.PairResult
 import com.cashpilot.android.ui.board.SHARED_FOOTNOTE
@@ -19,6 +20,7 @@ import com.cashpilot.android.ui.board.Words
 import com.cashpilot.android.ui.board.appEarnings
 import com.cashpilot.android.ui.board.earningsLine
 import com.cashpilot.android.ui.board.footnotes
+import com.cashpilot.android.ui.board.measuredUse
 import com.cashpilot.android.ui.board.pairMessage
 import com.cashpilot.android.ui.board.pairResultOf
 import com.cashpilot.android.ui.board.rowLine
@@ -70,7 +72,7 @@ class BoardTest {
 
     @Test
     fun `a failing server says for how long`() {
-        assertEquals("Can't reach cashpilot.home.example for 25 min", Situations.problems.serverLine().text)
+        assertEquals("No report has reached cashpilot.home.example for 25 min", Situations.problems.serverLine().text)
         assertEquals(Tone.WARN, Situations.problems.serverLine().tone)
     }
 
@@ -305,7 +307,39 @@ class BoardTest {
     fun `only a CashPilot answer counts as accepted, not any 200`() {
         assertTrue(Heartbeat.acceptedBy(WorkerHeartbeatResponse(status = "ok", workerId = 7)))
         assertFalse(Heartbeat.acceptedBy(WorkerHeartbeatResponse())) // a 200 whose JSON is something else
+        assertFalse(Heartbeat.acceptedBy(WorkerHeartbeatResponse(status = "ok"))) // some other endpoint's ok: nothing registered
         assertFalse(Heartbeat.acceptedBy(null)) // a login page: not JSON at all
+    }
+
+    @Test
+    fun `a new server address drops the phone's own key, so it never goes to another host`() {
+        val enrolled = Settings(serverUrl = "https://a.example", apiKey = "fleet", workerKey = "issued-by-a")
+        assertEquals("issued-by-a", enrolled.withServerUrl("https://a.example ").workerKey)
+        val moved = enrolled.withServerUrl("https://b.example")
+        assertEquals("", moved.workerKey)
+        assertEquals("fleet", moved.activeKey)
+    }
+
+    @Test
+    fun `a report overdue by more than an hour is late, not fine`() {
+        val late = Situations.board(Situations.apps(emptyMap(), setOf("earnapp")), lastHeartbeat = NOW - 2 * 60 * 60 * 1000L)
+        assertEquals(ServerState.LATE, late.server)
+        assertEquals(Tone.WARN, late.serverLine().tone)
+        assertEquals("Last report 2 h ago · reports are late", late.serverLine().text)
+        assertTrue(late.tasks().any { it.kind == TaskKind.SERVER && it.title == "Reports are late" })
+        val onTime = Situations.board(Situations.apps(emptyMap(), setOf("earnapp")), lastHeartbeat = NOW - 50 * 60 * 1000L)
+        assertEquals(ServerState.OK, onTime.server)
+    }
+
+    @Test
+    fun `no reading shows as not measured, never 0 B or never`() {
+        val b = Situations.board(Situations.apps(emptyMap(), setOf("earnapp", "grass"), disabled = setOf("grass")))
+        val grass = b.apps.first { it.slug == "grass" }
+        assertEquals(NOT_MEASURED to NOT_MEASURED, b.measuredUse(grass))
+        val blindUsage = Situations.board(Situations.apps(mapOf("earnapp" to Situations.running("earnapp", 1, 1)), setOf("earnapp")), usage = false)
+        assertEquals(NOT_MEASURED to NOT_MEASURED, blindUsage.measuredUse(blindUsage.apps.first { it.slug == "earnapp" }))
+        val earnapp = Situations.healthy.apps.first { it.slug == "earnapp" }
+        assertEquals("450.0 MB", Situations.healthy.measuredUse(earnapp).first)
     }
 
     @Test

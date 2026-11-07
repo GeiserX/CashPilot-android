@@ -68,6 +68,9 @@ data class BoardActions(
 @Composable
 fun HomeScreen(b: Board, actions: BoardActions) {
     when {
+        // Every known app gets a row once the first detection has run; before
+        // that, an empty list is "not looked yet", never "nothing installed".
+        b.apps.isEmpty() -> return Box(Modifier.fillMaxSize())
         b.installed.isEmpty() -> return NoAppsHome(b, actions)
         b.blind -> return BlindHome(b, actions)
     }
@@ -294,9 +297,10 @@ fun AppDetailScreen(a: AppRow, b: Board, actions: BoardActions, onBack: () -> Un
             Panel(pad = PaddingValues(0.dp)) {
                 Fact("Server reports, last ${b.windowDays} days", b.appEarnings(a))
                 Divider()
-                Fact("Data moved, last 24 h", FormatUtils.formatBytes(a.bytes24h))
+                val (moved, opened) = b.measuredUse(a)
+                Fact("Data moved, last 24 h", moved)
                 Divider()
-                Fact("Last opened", b.ago(a.lastActive))
+                Fact("Last opened", opened)
                 Divider()
                 // The whole row is the switch: one 56 dp target, one TalkBack stop.
                 Row(
@@ -357,6 +361,11 @@ fun BlindHome(b: Board, actions: BoardActions) {
         Gap(10)
         Secondary("Allow usage access", actions.allowUsage, Modifier.fillMaxWidth())
         Gap(12)
+        if (b.paired) {
+            Gap(20)
+            EarningsStrip(b, actions)
+        }
+        Gap(12)
         LinkRow("Settings", actions.openSettings)
         Gap(12)
         ServerLine(b)
@@ -395,7 +404,7 @@ fun NoAppsHome(b: Board, actions: BoardActions) {
             Text("Works without a server", fontWeight = FontWeight.SemiBold)
             Gap(6)
             Text(
-                "On its own, CashPilot shows which apps run, when one stopped, and opens it for you. A CashPilot server adds earnings figures and lists this phone with your other machines.",
+                "On its own, CashPilot shows which apps run, which have stopped, and opens them for you. A CashPilot server adds earnings figures and lists this phone with your other machines.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = c.text2,
             )

@@ -96,7 +96,9 @@ fun BoardApp(vm: MainViewModel) {
         allowNotifications = { push(DISCLOSE + Access.NOTIFICATIONS.name) },
         allowUsage = { push(DISCLOSE + Access.USAGE.name) },
         openBattery = { openSystem(context, AndroidSettings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS) },
-        checkServer = { push(SETTINGS); vm.testConnection(settings.serverUrl, settings.apiKey) },
+        // The fields as typed: an edit still inside its debounce is what Settings
+        // will show, so it is what gets tested.
+        checkServer = { push(SETTINGS); vm.testConnection(url.ifEmpty { settings.serverUrl }, key.ifEmpty { settings.apiKey }) },
         startDemo = { demo = true; stack.clear(); stack.add(HOME) },
         toggleApp = { if (!demo) vm.toggleApp(it) },
     )

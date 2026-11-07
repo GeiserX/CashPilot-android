@@ -35,8 +35,16 @@ enum class ServerState {
     /** An http:// address on the public internet. The key is never sent there. */
     NEEDS_HTTPS,
     OK,
+
+    /** The last report went through, but none has gone out for over [LATE_AFTER_MS]. */
+    LATE,
+
+    /** The last report did not get through: no answer, or the server refused it. */
     FAILING,
 }
+
+/** Four missed 15-minute periods: past what Android's normal deferral explains. */
+const val LATE_AFTER_MS = 60 * 60 * 1000L
 
 data class AppRow(
     val slug: String,
@@ -50,6 +58,8 @@ data class AppRow(
     /** The provider reports one balance for the whole account, not this phone. */
     val shared: Boolean,
     val referralUrl: String?,
+    /** False when detection has no reading for this app (switched off, or no access): its data use and last-opened time are unknown, not zero. */
+    val measured: Boolean = true,
 )
 
 data class Board(
@@ -111,12 +121,14 @@ data class Board(
                         usd = p?.usd,
                         shared = p?.sharedWithOtherWorkers == true,
                         referralUrl = info.app.referralUrl,
+                        measured = info.status != null,
                     )
                 },
                 server = when {
                     !configured -> ServerState.NONE
                     !ServerUrlPolicy.allowsToken(url) -> ServerState.NEEDS_HTTPS
                     heartbeatFailed -> ServerState.FAILING
+                    lastHeartbeat > 0L && now - lastHeartbeat > LATE_AFTER_MS -> ServerState.LATE
                     else -> ServerState.OK
                 },
                 host = hostOf(url),
@@ -213,10 +225,11 @@ fun Board.serverLine(): Line = when (server) {
     } else {
         Line(Tone.OK, "Last report ${ago(lastReport)} · sent every 15 min")
     }
+    ServerState.LATE -> Line(Tone.WARN, "Last report ${ago(lastReport)} · reports are late")
     ServerState.FAILING -> if (lastReport <= 0L) {
-        Line(Tone.WARN, "Can't reach $host · no report has gone through yet")
+        Line(Tone.WARN, "No report has reached $host yet")
     } else {
-        Line(Tone.WARN, "Can't reach $host ${Words.forHowLong(lastReport, now)}")
+        Line(Tone.WARN, "No report has reached $host ${Words.forHowLong(lastReport, now)}")
     }
 }
 
@@ -241,6 +254,9 @@ fun Board.verdict(): Verdict {
         )
         server == ServerState.FAILING || server == ServerState.NEEDS_HTTPS -> Verdict(
             Tone.WARN, null, all, "But your server isn't getting this phone's reports.",
+        )
+        server == ServerState.LATE -> Verdict(
+            Tone.WARN, null, all, "But no report has gone out ${Words.forHowLong(lastReport, now)}.",
         )
         else -> Verdict(Tone.OK, null, all, "Nothing needs you right now.")
     }
@@ -268,8 +284,14 @@ fun Board.tasks(): List<Task> {
     }
     when (server) {
         ServerState.FAILING -> out += Task(
-            TaskKind.SERVER, Tone.WARN, "Your server isn't answering",
-            if (lastReport <= 0L) "No report has reached $host yet." else "Nothing has reached $host ${Words.forHowLong(lastReport, now)}.",
+            TaskKind.SERVER, Tone.WARN, "Reports aren't getting through",
+            (if (lastReport <= 0L) "No report has reached $host yet." else "Nothing has reached $host ${Words.forHowLong(lastReport, now)}.") +
+                " Check connection says why.",
+            "Check connection",
+        )
+        ServerState.LATE -> out += Task(
+            TaskKind.SERVER, Tone.WARN, "Reports are late",
+            "No report has gone out ${Words.forHowLong(lastReport, now)}. Android holds background work back, more so with battery optimisation on or no network.",
             "Check connection",
         )
         ServerState.NEEDS_HTTPS -> out += Task(
@@ -328,6 +350,13 @@ fun Board.earningsLine(): EarningsLine {
 const val SHARED_FOOTNOTE =
     "* Runs on more than one of your devices. The provider reports one balance for the account, so this is not this phone alone."
 
+/** A detail value with no reading behind it, so it is never shown as 0 B or "never". */
+const val NOT_MEASURED = "Not measured"
+
+/** Data use and last-opened time: only real readings, which need usage access and a detected app. */
+fun Board.measuredUse(a: AppRow): Pair<String, String> =
+    if (a.measured && usage) FormatUtils.formatBytes(a.bytes24h) to ago(a.lastActive) else NOT_MEASURED to NOT_MEASURED
+
 const val NO_READING_NOTE = "No reading means your server has sent no figure for that provider. It is not \$0."
 
 fun Board.footnotes(): List<String> = buildList {
@@ -348,7 +377,8 @@ fun Board.appEarnings(a: AppRow): String = when {
 fun Board.serverSetting(): Line = when (server) {
     ServerState.NONE -> Line(Tone.MUTED, "Everything stays on this phone · add a server for figures")
     ServerState.NEEDS_HTTPS -> Line(Tone.WARN, "Not sending · this address needs https://")
-    ServerState.FAILING -> Line(Tone.WARN, if (lastReport <= 0L) "Not answering · no report yet" else "Not answering · last report ${ago(lastReport)}")
+    ServerState.FAILING -> Line(Tone.WARN, if (lastReport <= 0L) "Not getting through · no report yet" else "Not getting through · last report ${ago(lastReport)}")
+    ServerState.LATE -> Line(Tone.WARN, "Reports are late · last report ${ago(lastReport)}")
     ServerState.OK -> if (lastReport <= 0L) {
         Line(Tone.MUTED, "Paired · waiting for the first report")
     } else {
@@ -360,7 +390,7 @@ fun Board.serverSetting(): Line = when (server) {
 // Pairing: what a connection test says.
 // ---------------------------------------------------------------------------
 
-enum class PairResult { NONE, TESTING, OK, KEY_REFUSED, UNREACHABLE, URL_REFUSED, REJECTED, NOT_CASHPILOT }
+enum class PairResult { NONE, TESTING, OK, KEY_REFUSED, UNREACHABLE, URL_REFUSED, REJECTED, NOT_CASHPILOT, SAVE_FAILED }
 
 fun pairResultOf(outcome: Heartbeat.Outcome): PairResult = when (outcome) {
     Heartbeat.Outcome.SENT -> PairResult.OK
@@ -397,5 +427,9 @@ fun pairMessage(result: PairResult, host: String, deviceName: String): PairMessa
     PairResult.NOT_CASHPILOT -> PairMessage(
         Tone.BAD, "$host answered, but not as CashPilot",
         "Something else answers at this address, such as a login page or another app. Use the address you open the CashPilot dashboard at.",
+    )
+    PairResult.SAVE_FAILED -> PairMessage(
+        Tone.BAD, "Couldn't save the details",
+        "Android didn't store the address and key, so nothing was sent. Try again.",
     )
 }

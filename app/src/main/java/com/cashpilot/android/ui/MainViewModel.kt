@@ -1,5 +1,6 @@
 package com.cashpilot.android.ui
 
+import android.util.Log
 import android.app.AppOpsManager
 import android.app.Application
 import android.os.PowerManager
@@ -23,6 +24,7 @@ import com.cashpilot.android.service.HeartbeatWorker
 import com.cashpilot.android.ui.board.PairResult
 import com.cashpilot.android.ui.board.pairResultOf
 import com.cashpilot.android.util.SettingsStore
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -205,7 +207,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         serverUrlJob?.cancel()
         serverUrlJob = viewModelScope.launch {
             delay(500)
-            SettingsStore.update(getApplication()) { it.copy(serverUrl = url) }
+            SettingsStore.update(getApplication()) { it.withServerUrl(url) }
             Heartbeat.matchServer(getApplication(), url)
             // Try the new address now, not on the next 15-minute period.
             HeartbeatWorker.runNow(getApplication())
@@ -247,7 +249,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         testJob = viewModelScope.launch {
             _pairResult.value = PairResult.TESTING
             val app = getApplication<Application>()
-            saveServer(url, key)
+            try {
+                saveServer(url, key)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.w("MainViewModel", "Could not save the server details: ${e.javaClass.simpleName}")
+                _pairResult.value = PairResult.SAVE_FAILED
+                return@launch
+            }
             val outcome = withContext(Dispatchers.IO) { Heartbeat.sendOnce(app) }
             // An edit while the report was out cancelled this job: its answer is
             // about details that are no longer in the fields, so it is not shown.
@@ -258,7 +268,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private suspend fun saveServer(url: String, key: String) {
         val app = getApplication<Application>()
-        SettingsStore.update(app) { it.copy(serverUrl = url.trim()).withApiKey(key.trim()) }
+        SettingsStore.update(app) { it.withServerUrl(url.trim()).withApiKey(key.trim()) }
         Heartbeat.matchServer(app, url.trim())
     }
 

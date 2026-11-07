@@ -32,11 +32,17 @@ Symptom, cause, fix. The texts in bold are what the app shows.
 
 **Fix:** enter the server's base URL only, for example `https://cashpilot.example.com`, without `/api/...`. The app adds `/api/workers/heartbeat` itself. Check the server's log for the 5xx.
 
-## Can't reach your server
+## No report has reached your server
 
-**Cause:** the last report failed; the home screen reads **Can't reach … for …** and lists **Your server isn't answering**. If the server answered with an error, see the 401 and other-code entries above. Otherwise the phone cannot reach the server: wrong host or port, the phone is off your network, or a certificate the phone does not trust (the app trusts only the system certificate authorities, so a self-signed certificate, or one from an authority you installed on the phone yourself, fails). The app tries again at the next 15-minute report, or when you open it or change the server URL or key.
+**Cause:** the last report failed; the home screen reads **No report has reached … for …** and lists **Reports aren't getting through**. If the server answered with an error, see the 401 and other-code entries above. Otherwise the phone cannot reach the server: wrong host or port, the phone is off your network, or a certificate the phone does not trust (the app trusts only the system certificate authorities, so a self-signed certificate, or one from an authority you installed on the phone yourself, fails). The app tries again at the next 15-minute report, or when you open it or change the server URL or key.
 
-**Fix:** **Check connection** (or Settings, **Test connection**) sends a report now and names the cause: **No answer from …**, **The server refused this API key**, or **The server answered with an error**. Then open the server URL in the phone's browser. If the browser cannot load it, neither can the app. A server that is only on your home network needs the phone on that network or on a VPN to it.
+**Fix:** **Check connection** (or Settings, **Test connection**) sends a report now and names the cause: **No answer from …**, **The server refused this API key**, **The server answered with an error**, or **… answered, but not as CashPilot** (the address is a login page or another app). Then open the server URL in the phone's browser. If the browser cannot load it, neither can the app. A server that is only on your home network needs the phone on that network or on a VPN to it.
+
+## Reports are late
+
+**Cause:** the last report went through, but none has gone out for over an hour. Android runs background work when it chooses: battery optimisation, Doze while the screen is off, or no network all hold it back.
+
+**Fix:** open the app, which sends a report at once. If it keeps happening, turn battery optimisation off for CashPilot.
 
 ## Not sending to …: it needs https://
 

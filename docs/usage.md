@@ -7,7 +7,7 @@ Day to day you open the app, read the first line, and leave it alone. It keeps c
 From top to bottom:
 
 - **The verdict.** One line that answers "is everything running?": **All 6 apps running**, **2 of 6 apps stopped**, or **4 of 6 apps running** when CashPilot can't see the rest. The ring beside it is green, amber or red to match.
-- **The server line.** **No server · everything stays on this phone** without a server. With one: **Last report 6 min ago · sent every 15 min**, **Paired with … · waiting for the first report** before the first, or **Can't reach … for 25 min** in amber when reports fail.
+- **The server line.** **No server · everything stays on this phone** without a server. With one: **Last report 6 min ago · sent every 15 min**, **Paired with … · waiting for the first report** before the first, **No report has reached … for 25 min** in amber when reports fail, or **Last report 2 h ago · reports are late** in amber when none has gone out for over an hour.
 - **What needs you.** When more than one thing is wrong, a numbered list in the order to fix them: stopped apps (by name), then the server, then a missing access, then battery optimisation. Each item has its button. A single stopped app needs no list: its row has an **Open** button.
 - **The apps.** One row per installed, watched app, problems first. Tap a row for its details.
 - **The earnings strip** (below), and **N other supported apps** for the ones not installed.

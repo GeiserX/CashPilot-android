@@ -60,11 +60,12 @@ object Heartbeat {
     enum class Outcome { SENT, NOT_CONFIGURED, URL_REFUSED, KEY_REFUSED, REJECTED, NOT_CASHPILOT, UNREACHABLE }
 
     /**
-     * Whether a 2xx answer came from a CashPilot server. Both the web server and
-     * Desktop's fleet server answer `{"status": "ok", "worker_id": ...}`; a login
-     * page, a proxy or another app on that address answers 200 with something else.
+     * Whether a 2xx answer came from a CashPilot server that registered this
+     * phone. Both the web server and Desktop's fleet server answer
+     * `{"status": "ok", "worker_id": ...}`; a login page, a proxy or another
+     * endpoint answers 200 with something else, even a bare `{"status": "ok"}`.
      */
-    fun acceptedBy(body: WorkerHeartbeatResponse?): Boolean = body?.status == "ok"
+    fun acceptedBy(body: WorkerHeartbeatResponse?): Boolean = body?.status == "ok" && body.workerId != null
 
     /** The outcome for an HTTP status that was not a success. */
     fun outcomeOf(status: Int): Outcome = if (status == 401 || status == 403) Outcome.KEY_REFUSED else Outcome.REJECTED
