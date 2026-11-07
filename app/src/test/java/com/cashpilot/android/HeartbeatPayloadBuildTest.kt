@@ -13,14 +13,14 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 /**
- * Tests the full heartbeat payload construction pattern as used by HeartbeatService.sendHeartbeat.
+ * Tests the full heartbeat payload construction pattern as used by Heartbeat.send.
  * This exercises the model classes with realistic data matching production usage.
  */
 class HeartbeatPayloadBuildTest {
 
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
-    /** Mirrors the container-building logic from HeartbeatService.sendHeartbeat */
+    /** Mirrors the container-building logic from Heartbeat.send */
     private fun buildContainers(apps: List<AppStatus>): List<AppContainer> =
         apps.map { app ->
             AppContainer(
@@ -34,7 +34,7 @@ class HeartbeatPayloadBuildTest {
             )
         }
 
-    /** Mirrors the heartbeat building logic from HeartbeatService.sendHeartbeat */
+    /** Mirrors the heartbeat building logic from Heartbeat.send */
     private fun buildHeartbeat(
         deviceName: String,
         apps: List<AppStatus>,
@@ -222,19 +222,5 @@ class HeartbeatPayloadBuildTest {
         val allSlugs = KnownApps.all.map { it.slug }.toSet()
         val filtered = KnownApps.all.filter { it.slug in allSlugs }
         assertEquals(KnownApps.all.size, filtered.size)
-    }
-
-    @Test
-    fun `running count matches HeartbeatService notification format`() {
-        val apps = listOf(
-            AppStatus(slug = "earnapp", running = true),
-            AppStatus(slug = "iproyal", running = true),
-            AppStatus(slug = "grass", running = false),
-            AppStatus(slug = "titan", running = true),
-            AppStatus(slug = "nodle", running = false),
-        )
-        val runningCount = apps.count { it.running == true }
-        val notificationText = "$runningCount/${apps.size} apps running"
-        assertEquals("3/5 apps running", notificationText)
     }
 }

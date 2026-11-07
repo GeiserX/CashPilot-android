@@ -14,11 +14,11 @@ Symptom, cause, fix. The texts in bold are what the app shows.
 
 **Fix:** pull the dashboard down to check again after a few minutes. If it stays Stopped while the app is earning, open an issue with the app's name and version.
 
-## Heartbeats stop when the screen is off
+## Heartbeats arrive late when the screen is off
 
-**Cause:** battery optimization. Android pauses or kills background services of optimized apps, and some makers add their own limits on top.
+**Cause:** first check that the phone has a connection: a report waits for a network, so a phone with no Wi-Fi or data sends nothing. If it is online, it is usually battery optimization. Android holds back scheduled work of optimized apps while the phone is idle, and some makers add their own limits on top. Reports are due every 15 minutes, but Android sets no upper bound on the delay; a phone Android rates as rarely used can wait hours.
 
-**Fix:** Settings, **Disable Battery Optimization**, until it reads **Battery optimization disabled**. On phones with an extra "auto-start" or "background activity" setting, allow CashPilot there too. The service starts again on its own after a restart of the phone.
+**Fix:** Settings, **Disable Battery Optimization**. It opens Android's list; choose All apps, then CashPilot, then Don't optimize, until the app reads **Battery optimization disabled**. On phones with an extra "auto-start" or "background activity" setting, allow CashPilot there too. The schedule survives a restart of the phone.
 
 ## Server rejected heartbeat (401)
 
@@ -32,9 +32,9 @@ Symptom, cause, fix. The texts in bold are what the app shows.
 
 **Fix:** enter the server's base URL only, for example `https://cashpilot.example.com`, without `/api/...`. The app adds `/api/workers/heartbeat` itself. Check the server's log for the 5xx.
 
-## Heartbeat failed — retrying...
+## Red dot next to Last report
 
-**Cause:** the phone cannot reach the server: wrong host or port, the phone is off your network, or a certificate the phone does not trust (the app trusts only the system certificate authorities, so a self-signed certificate, or one from an authority you installed on the phone yourself, fails). The app retries with a growing wait, up to 4 minutes apart with the default interval.
+**Cause:** the last report failed. If the server answered with an error, see the 401 and other-code entries above. Otherwise the phone cannot reach the server: wrong host or port, the phone is off your network, or a certificate the phone does not trust (the app trusts only the system certificate authorities, so a self-signed certificate, or one from an authority you installed on the phone yourself, fails). The app tries again at the next 15-minute report, or when you open it or change the server URL or key.
 
 **Fix:** open the server URL in the phone's browser. If the browser cannot load it, neither can the app. A server that is only on your home network needs the phone on that network or on a VPN to it.
 

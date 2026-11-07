@@ -64,7 +64,7 @@ where the fonts can be pinned deliberately.
 ```
 com.cashpilot.android/
 ├── model/           # Data classes (Heartbeat, AppStatus, MonitoredApp, Settings)
-├── service/         # Android services (HeartbeatService, AppNotificationListener, AppDetector)
+├── service/         # Background work (Heartbeat, HeartbeatWorker, AppNotificationListener, AppDetector)
 ├── ui/              # Compose UI (MainActivity, screens, theme, components)
 │   ├── screen/      # Full-screen composables (Dashboard, Settings)
 │   ├── theme/       # Material 3 theme
@@ -74,7 +74,7 @@ com.cashpilot.android/
 
 ### Key Components
 
-- **HeartbeatService**: Foreground service sending periodic HTTP POST to CashPilot server with app status. Uses Ktor client. Sticky service with boot receiver.
+- **HeartbeatWorker / Heartbeat**: WorkManager job every 15 minutes (plus one on app open and on server-detail changes) that POSTs app status to the CashPilot server with Ktor. `Heartbeat` keeps the last result on disk so the UI survives process death. No foreground service and no `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`: Google Play restricts both for this kind of app, and `BackgroundPolicyTest` guards it.
 - **AppNotificationListener**: NotificationListenerService that detects when monitored apps have active foreground notifications. Primary detection mechanism — instant callback.
 - **AppDetector**: Combines NotificationListener state with UsageStatsManager (last active time) and NetworkStatsManager (per-app bytes tx/rx) for complete app health picture.
 - **SettingsStore**: DataStore-backed persistence for server URL, fleet API key, heartbeat interval, and enabled app list.
@@ -99,7 +99,6 @@ POST to `{serverUrl}/api/workers/heartbeat` with bearer auth (fleet API key via 
 - Use `ensureActive()` after `withContext(Dispatchers.IO)` blocks to discard stale results
 - Use `AppOpsManager` to check usage access permission (not `UsageStatsManager.queryUsageStats` heuristic)
 - DataStore text field writes should be debounced (500ms per-field cancel-and-replace)
-- POST_NOTIFICATIONS runtime permission must be requested on Android 13+
 - License: GPL-3.0
 
 ## Known Apps

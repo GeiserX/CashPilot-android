@@ -7,7 +7,7 @@ Day to day you open the dashboard, look at what needs attention, and leave the a
 From top to bottom:
 
 - **The summary.** How many monitored apps are **Running**, **Stopped**, **unknown** and **N/A** (not installed), the upload and download traffic of all monitored apps over the last 24 hours, and, once a server is set, the phone's public IP.
-- **The server line.** **Not paired — running standalone** without a server (tap it to open Settings). With a server: a green dot and **Last heartbeat** with the time, a red dot when the last heartbeat failed, a grey one and **No heartbeat yet** before the first.
+- **The server line.** **Not paired — running standalone** without a server (tap it to open Settings). With a server: a green dot and **Last report** with its age and **sent every 15 min**, a red dot when the last report failed, a grey one and **No report sent yet** before the first.
 - **The earnings card** (below).
 - **One card per app**, the apps that need attention first: Stopped, then Can't tell, then Running, then Disabled, then Not installed.
 
@@ -40,18 +40,6 @@ With a server paired, each heartbeat's answer can carry what the server has reco
 - **May be out of date** and **Last updated** appear when the newest figure is more than an hour old. The app keeps the last figure while the phone is offline rather than blanking it.
 - **Shared across your devices** marks a platform whose provider reports one balance for your whole account, so the figure is not what this phone earned alone.
 - Without a server the card reads **Pair a CashPilot server to see earnings**.
-
-## The notification
-
-The service keeps one silent, low-priority notification titled **CashPilot**:
-
-| Text | When |
-|---|---|
-| Monitoring apps... | The service has started and has sent no heartbeat yet; without a server it stays this way. |
-| 3/4 apps running | After a heartbeat: running apps out of installed, switched-on apps. |
-| 3/4 apps running, 1 unknown | Same, with apps in Can't tell. |
-| Server rejected heartbeat (401) | The server answered with an error code. |
-| Heartbeat failed — retrying... | The server could not be reached. |
 
 ## Settings
 
