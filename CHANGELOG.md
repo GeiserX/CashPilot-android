@@ -27,12 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - **The public IP lookup.** Earlier versions asked `api.ipify.org` for the phone's public address. Nothing uses it now, so the app makes no request except to the server you set.
-- **Uprock is no longer watched on Android.** Google Play Protect removes Uprock's own app from phones, so a Play-listed CashPilot that sends people to install it would put the app's Play review at risk. The app now watches 10 apps. CashPilot web and Desktop keep Uprock.
+- **Uprock is no longer watched on Android.** Android's built-in app scanner removes Uprock's own app from phones, so CashPilot no longer sends people to install it. The app now watches 10 apps. CashPilot web and Desktop keep Uprock.
 
 ### Changed
 
 - **Heartbeats run every 15 minutes on WorkManager instead of every 30 seconds from a foreground service.** The always-on special-use foreground service and its permanent notification are gone, and so is the restart-on-boot receiver: WorkManager keeps the schedule across restarts. The app also reports once when it is opened and once when the server URL or key changes. The last report and the last earnings figure are kept on disk, so the dashboard still shows them after Android stops the app between runs, and it now says "Last report 6 min ago · sent every 15 min" instead of implying live monitoring.
-- **The battery button opens Android's battery-optimisation list instead of the direct exemption dialog**, and the app no longer requests `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`. Google Play allows that permission only for chat, VoIP, safety, automation and peripheral apps. The setup screen says which entries to pick in the list. `POST_NOTIFICATIONS` is no longer requested either, because nothing posts a notification any more.
+- **The battery button opens Android's battery-optimisation list instead of the direct exemption dialog**, and the app no longer requests `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`. That permission is meant only for chat, VoIP, safety, automation and peripheral apps. The setup screen says which entries to pick in the list. `POST_NOTIFICATIONS` is no longer requested either, because nothing posts a notification any more.
 
 ## [0.4.0] - 2026-11-06
 

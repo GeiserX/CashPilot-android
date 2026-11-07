@@ -21,7 +21,7 @@ CashPilot Android is the Android companion app for [CashPilot](https://github.co
 - **One line tells you if every app is running.** When something is wrong, the home screen says what and gives you the button to fix it, such as **Open** for a stopped app.
 - **Setup explains each permission first.** Three short steps, a plain screen before every Android prompt, and you can skip the permissions or the server.
 - **Test connection is a real test.** It sends one report and tells you whether the server answered and accepted your key.
-- **Reports every 15 minutes through WorkManager**, with no permanent notification and no battery exemption request, as Google Play's policy expects.
+- **Reports every 15 minutes through WorkManager**, with no permanent notification and no battery exemption request.
 - **Nothing leaves the phone except to your own server.** The public IP lookup is gone.
 - **Accessibility is tested**: 48 dp touch targets, TalkBack labels and order, text at 1.3x size, WCAG AA contrast in the Light and Classic night palettes.
 - **10 supported apps.**
