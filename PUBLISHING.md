@@ -148,7 +148,6 @@ must say so precisely.
 |---|---|
 | `PACKAGE_USAGE_STATS` | Special access, granted by the user in system settings. Detects whether a monitored earning app is actually running rather than merely installed. |
 | `BIND_NOTIFICATION_LISTENER_SERVICE` | Special access. Several earning apps report their state only through a persistent notification; reading it is how the app knows they are alive. |
-| `FOREGROUND_SERVICE_SPECIAL_USE` | The heartbeat that reports app status to the user's own server. Justification string already declared in the manifest. |
 | `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | **Not requested.** Play allows it only for chat, VoIP, safety, automation and peripheral apps. The app opens the battery settings list instead, which needs no permission; `BackgroundPolicyTest` fails if the permission or the direct dialog comes back. |
 | `RECEIVE_BOOT_COMPLETED` | Added by WorkManager, which uses it to restore the heartbeat schedule after a restart. |
 | `READ_NETWORK_USAGE_HISTORY` | **The app genuinely depends on this** — `NetworkStatsManager` is the third of `AppDetector`'s three detection signals (per-app bytes tx/rx, ~2h buckets), alongside usage stats and notifications. Do not drop it to dodge a question; the per-app byte counts are how a running-but-silent app is distinguished from an idle one. Note the effective grant comes from usage access, so expect the reviewer to treat the two together. |

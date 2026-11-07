@@ -13,7 +13,6 @@ The app is not in Google Play or F-Droid. The APK on GitHub is the only build, s
 
 1. Open the [latest release](https://github.com/GeiserX/CashPilot-android/releases/latest) on the phone and download `app-release.apk`. The `.aab` file next to it is for app stores; ignore it.
 2. Open the downloaded file. Android asks you to allow installs from the browser or file manager you used ("Install unknown apps"); allow it for that app, then install.
-3. On Android 13 and later, the first launch asks to show notifications. Allow it: the app keeps one quiet notification while it monitors, and without the permission you cannot see it.
 
 To update, install the newer APK over the old one. Settings are kept.
 
@@ -31,8 +30,7 @@ The main button unlocks once both accesses are granted. It reads **Continue to D
 ## What a working start looks like
 
 - The dashboard lists the 11 monitored apps. Installed ones show **Running**, **Stopped** or **Can't tell**; the others show **Not installed — tap to install**. The summary at the top counts them.
-- A notification titled **CashPilot** stays in the shade. Without a server it reads **Monitoring apps...**; with one it reads, for example, **3/4 apps running** after each heartbeat.
-- With a server, the dashboard's summary shows a green dot and **Last heartbeat** with a time, and the phone appears on the server's fleet page as its maker and model plus a short device id, for example `Google Pixel 8 (a1b2c3d4)`. The first heartbeat also enrolls the phone: the server issues it its own key ([Configuration](configuration.md#the-fleet-key-and-enrollment)).
+- With a server, the dashboard's summary shows a green dot and **Last report** with its age, for example **Last report 6 min ago · sent every 15 min**, and the phone appears on the server's fleet page as its maker and model plus a short device id, for example `Google Pixel 8 (a1b2c3d4)`. The first heartbeat also enrolls the phone: the server issues it its own key ([Configuration](configuration.md#the-fleet-key-and-enrollment)).
 - Without a server, the summary shows **Not paired — running standalone**. That is a supported mode, not an error.
 
 If a step does not look like this, see [Troubleshooting](troubleshooting.md).

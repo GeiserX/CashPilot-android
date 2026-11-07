@@ -13,7 +13,7 @@ Everything the app stores, where you set it, and what it does. There are no conf
 | Heartbeat interval | No control in the app | `heartbeat_interval` | 30 seconds | Stored but no longer used. Heartbeats run every 15 minutes, the shortest period Android's WorkManager allows. |
 | Setup completed | Finishing or skipping the setup screen | `setup_completed` | false | Whether the setup screen is shown at launch. An install that already had a URL and a key before this setting existed counts as set up. |
 
-Changes to the URL and the key are saved half a second after you stop typing. The heartbeat service reads the settings again before every heartbeat, so a change takes effect on the next one; no restart is needed.
+Changes to the URL and the key are saved half a second after you stop typing. The heartbeat reads the settings again every time it runs, so a change takes effect on the next one; no restart is needed.
 
 ## The server URL: use https
 
@@ -26,7 +26,7 @@ The app accepts an `http://` URL only for a server it can tell is private, becau
 
 A public host over `http://` is refused (`http://cashpilot.example.com`, `http://8.8.8.8`). Android itself lets an app allow plain http per host name or domain suffix, never per address range, so the app keeps cleartext on at the platform level and does the refusing itself, before any request is made.
 
-On the hosts above, the fleet key, the per-worker key and the app data travel unencrypted, and the URL field turns red with **Insecure: API key and app data will be sent unencrypted. Use https:// if possible.** Any other `http://` URL is refused: the field shows **CashPilot sends your API key over http:// only to a server on your own network: localhost, a LAN, link-local or Tailscale address, a name ending in .local, .lan, .home.arpa, .internal or .ts.net, or a bare name with no dot. Use https:// for anything else.**, the dashboard and the notification read **Not sending heartbeats: this server URL needs https://**, and no request leaves the phone. An `http://` URL saved by an older version is refused the same way.
+On the hosts above, the fleet key, the per-worker key and the app data travel unencrypted, and the URL field turns red with **Insecure: API key and app data will be sent unencrypted. Use https:// if possible.** Any other `http://` URL is refused: the field shows **CashPilot sends your API key over http:// only to a server on your own network: localhost, a LAN, link-local or Tailscale address, a name ending in .local, .lan, .home.arpa, .internal or .ts.net, or a bare name with no dot. Use https:// for anything else.**, the dashboard reads **Not sending heartbeats: this server URL needs https://**, and no request leaves the phone. An `http://` URL saved by an older version is refused the same way.
 
 ## The fleet key and enrollment
 
@@ -42,9 +42,9 @@ The server side of this is on CashPilot's [fleet page](https://geiserx.github.io
 ## Heartbeat timing
 
 - One heartbeat every 15 minutes while a server URL and a key are set, plus one when you open the app and one when you change the server URL or key. Android may delay a scheduled one while the phone is idle.
-- After a failed heartbeat the wait doubles, up to eight times the interval and never more than 5 minutes: 60, 120, 240, then 240 seconds again with the default interval. The first successful heartbeat resets it.
+- A failed heartbeat is not retried on its own: the next one is the next 15-minute run, or the next time you open the app or change the server URL or key.
 - Each request gives up after 15 seconds (10 seconds to connect).
-- The service starts when the app opens and again after the phone restarts.
+- Android's WorkManager keeps the schedule, including across a phone restart. The app runs no service and shows no notification.
 
 ## Monitored apps
 
