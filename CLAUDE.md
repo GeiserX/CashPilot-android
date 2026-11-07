@@ -60,7 +60,7 @@ unreachable at font scale 1.3; TalkBack order on the home screen). Contrast is
 - **Release workflow:** Push a `v*` tag -> GitHub Actions builds signed APK+AAB, creates GitHub Release
 - **CI workflow:** On push to main -> debug APK + lint + signed release APK. On PR -> debug + lint only (no keystore access)
 - **Signing keystore:** a JKS file kept outside the repository (alias: `cashpilot`). **The password is NOT recorded here — this repository is public.** It is kept with the maintainer's other credentials. The keystore is base64-encoded in the GitHub secret `KEYSTORE_BASE64`.
-- **F-Droid: NOT listed yet.** MR !35850 closed for inactivity on 2026-07-04, not rejected. Its open items are fixed: the dependency info block (off since v0.1.3) and the pipeline, whose cause was version drift (`gradle.properties` said 0.2.0/200 at tag v0.3.0). The recipe to resubmit is `fdroid/com.cashpilot.android.yml`, with NonFreeAdd declared; steps in `PUBLISHING.md`.
+- **F-Droid: submitted, not listed yet.** MR !56196 (fdroiddata) adds the app at 0.4.0. Its recipe uses `UpdateCheckMode: Tags` and `AutoUpdateMode: Version`, so after inclusion F-Droid's checkupdates adds each new `vX.Y.Z` tag by itself, reading the version from `gradle.properties` at that tag; the APK it builds must match our release APK byte for byte. The recipe is `fdroid/com.cashpilot.android.yml`, with NonFreeAdd declared; steps in `PUBLISHING.md`.
 
 ## Architecture
 

@@ -2,6 +2,8 @@ CashPilot shows which of your passive-income and DePIN apps are installed, runni
 
 It watches EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash and Wipter. For each one it shows whether the app is installed, whether it is running, and when it was last active.
 
+When you open it, one line says whether every app is running. If something needs you, it says what, in order, with the button that fixes it, such as Open for a stopped app.
+
 How it knows:
 - Notification access: most of these apps keep a notification up while they run, so CashPilot reads it to tell that the app is alive.
 - Usage access: when each app was last in use.
@@ -9,7 +11,9 @@ How it knows:
 
 All of this is read on the phone. Without a server, the app list is the whole app.
 
-With a self-hosted CashPilot server (https://github.com/GeiserX/CashPilot), the phone also joins your fleet. The app sends the apps' status to your server every 15 minutes, and the dashboard shows your earnings from the server. The phone sends app status, never notification content.
+With a self-hosted CashPilot server (https://github.com/GeiserX/CashPilot), the phone also joins your fleet. The app sends the apps' status to your server every 15 minutes, with no permanent notification, and shows your earnings from the server. Test connection sends one report and tells you whether the server answered and accepted your key. The phone sends app status, never notification content.
+
+Setup takes three steps and explains each permission before Android asks for it. You can skip the permissions or the server. Light and dark themes follow the system. Every control has a label TalkBack reads, and the screens still fit with larger text.
 
 Privacy: no account, no analytics, no ads. Data goes only to the server you set. The app makes no other request.
 

@@ -1,0 +1,7 @@
+- New home screen: one line says whether every app is running, with an Open button for a stopped one.
+- Three-step setup that explains each permission before Android asks.
+- Test connection tells you if the server answered and took your key.
+- Reports every 15 minutes with no permanent notification.
+- No request leaves the phone except to your own server.
+- Light and dark themes, TalkBack labels, room for larger text.
+- Watches 10 apps.

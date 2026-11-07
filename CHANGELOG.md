@@ -7,8 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-07
+
+1.0 is the first release we consider complete. The app answers one question when you open it, whether every app you run is running, and it does that without root, without an account and without sending anything to anyone but your own server. It ships alongside CashPilot web 2.0 and CashPilot Desktop 1.0.
+
+### Added
+
+- **A new home screen that leads with one line.** "All 6 apps running", or what is wrong and what to do about it. When more than one thing needs you, the home screen shows them as a short ordered list. A stopped app has an **Open** button. One line shows the server state: when the phone last reported, or "No server · everything stays on this phone". Earnings come from your server, labelled with how old they are, and a single footnote marks a balance the provider reports for the whole account rather than for this phone.
+- **A three-step setup** (welcome, permissions, server). Before each Android permission prompt, a screen says what CashPilot reads with that access and what it never reads. You can continue without the permissions or without a server; the home screen then says calmly what it cannot see.
+- **A real connection test.** "Test connection" sends one report to your server and says what happened: connected, the server refused the key, the address needs `https://`, or no answer. Each case says what to check next.
+- **Grouped settings** with the API key masked, a **Classic night** and a **Light** palette that follow the system theme, a demo mode with sample data and a banner saying so, a screen for when no supported app is installed, and a list of supported apps where links that carry CashPilot's referral code are labelled **Referral**.
+- **Accessibility checked by tests.** Every tappable control is at least 48 dp and has a name TalkBack reads; every screen has a heading; the home screen reads in visual order; nothing is cut off or unreachable at font scale 1.3; text in both palettes meets WCAG AA contrast. Screenshot goldens of every screen, dark and light, in four situations (all running, problems, no server, no permissions) fail CI on any unintended visual change.
+
 ### Removed
 
+- **The public IP lookup.** Earlier versions asked `api.ipify.org` for the phone's public address. Nothing uses it now, so the app makes no request except to the server you set.
 - **Uprock is no longer watched on Android.** Google Play Protect removes Uprock's own app from phones, so a Play-listed CashPilot that sends people to install it would put the app's Play review at risk. The app now watches 10 apps. CashPilot web and Desktop keep Uprock.
 
 ### Changed
