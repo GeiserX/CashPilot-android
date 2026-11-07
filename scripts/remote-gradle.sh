@@ -32,7 +32,7 @@
 # scripts/remote-gradle.env, which is git-ignored and read if present:
 #
 #   CASHPILOT_BUILD_HOST=user@build-host   # ssh target with Docker and rsync
-#   CASHPILOT_BUILD_ROOT=/path/on/host     # holds sdk/, src/ and gradle/
+#   CASHPILOT_BUILD_ROOT=/path/on/host     # holds sdk/, src/, gradle/ and m2/
 #
 # The environment wins over the file.
 set -euo pipefail
@@ -63,11 +63,15 @@ rsync -a --delete \
   --exclude '.git' --exclude '.beads' --exclude 'build/' --exclude '.gradle' \
   "$HERE/" "$HOST:$REMOTE_ROOT/src/"
 
+# m2/ keeps Robolectric's android-all jar (about 150 MB) between runs. The
+# container is thrown away each time, so without it every test run downloads
+# the jar again, and Maven Central answers repeat downloads with HTTP 429.
 echo "==> gradle $TASK"
 ssh "$HOST" "docker run --rm \
   -v $REMOTE_ROOT/sdk:/sdk \
   -v $REMOTE_ROOT/src:/src \
   -v $REMOTE_ROOT/gradle:/root/.gradle \
+  -v $REMOTE_ROOT/m2:/root/.m2 \
   -w /src -e ANDROID_HOME=/sdk -e ANDROID_SDK_ROOT=/sdk \
   eclipse-temurin:17-jdk bash -lc './gradlew --no-daemon $TASK'"
 
