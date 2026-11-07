@@ -30,6 +30,9 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /**
  * One heartbeat to the CashPilot server, and what the last one said.
@@ -53,6 +56,17 @@ object Heartbeat {
     private const val K_FAILED = "last_heartbeat_failed"
     private const val K_EARNINGS = "earnings_json"
     private const val K_EARNINGS_AS_OF = "earnings_as_of"
+    private const val K_SERVER = "server_url"
+
+    /**
+     * The periodic job and the "now" job can run at the same time. One at a
+     * time, so an older run can never persist its result last or undo a key
+     * the newer run just stored.
+     */
+    private val sendLock = Mutex()
+
+    /** The server URL the state below belongs to. Results for any other server are not shown. */
+    @Volatile private var reportedServer = ""
 
     /** Timestamp of last successful heartbeat (0 = never). */
     private val _lastHeartbeat = MutableStateFlow(0L)
@@ -102,6 +116,27 @@ object Heartbeat {
     fun settingsAfterHeartbeat(settings: Settings, body: WorkerHeartbeatResponse): Settings? =
         keyToPersist(settings.workerKey, body.workerKey)?.let { newKey -> settings.copy(workerKey = newKey) }
 
+    /**
+     * What to store after the server accepted a report sent with [used]: the
+     * issued key, applied to the [current] settings, and only if the server URL
+     * and the key in use are still the ones the request carried. Otherwise the
+     * user changed them while the request was out, and [current] wins.
+     */
+    fun settingsAfterAccepted(current: Settings, used: Settings, body: WorkerHeartbeatResponse): Settings =
+        if (current.serverUrl != used.serverUrl || current.activeKey != used.activeKey) {
+            current
+        } else {
+            settingsAfterHeartbeat(current, body) ?: current
+        }
+
+    /**
+     * What to store after a 401 to a report sent with [used]: the per-worker key
+     * is cleared only if it is still the one that was refused. A key stored since
+     * then came from a newer, accepted report.
+     */
+    fun settingsAfterRejected(current: Settings, used: Settings): Settings =
+        if (current.workerKey == used.workerKey) current.copy(workerKey = "") else current
+
     /** Record the earnings a heartbeat carried, keeping the previous ones if it carried none. */
     fun recordEarnings(body: WorkerHeartbeatResponse, now: Long) {
         val kept = earningsToKeep(_earnings.value, body.earnings)
@@ -119,6 +154,24 @@ object Heartbeat {
             runCatching { HeartbeatJson.decodeFromString(Earnings.serializer(), it) }.getOrNull()
         }
         _earningsAsOf.value = p.getLong(K_EARNINGS_AS_OF, 0L)
+        reportedServer = p.getString(K_SERVER, "") ?: ""
+    }
+
+    /**
+     * Forget what the last report said when the server URL changes or is
+     * cleared, so the dashboard never shows one server's report time or
+     * earnings under another server, or with no server at all. Called as soon
+     * as the URL is saved, because the next report may wait for a network.
+     */
+    @Synchronized
+    fun matchServer(context: Context, serverUrl: String) {
+        if (serverUrl == reportedServer) return
+        reportedServer = serverUrl
+        _lastHeartbeat.value = 0L
+        _lastHeartbeatFailed.value = false
+        _earnings.value = null
+        _earningsAsOf.value = 0L
+        persist(context)
     }
 
     internal fun persist(context: Context) {
@@ -127,6 +180,7 @@ object Heartbeat {
             .putBoolean(K_FAILED, _lastHeartbeatFailed.value)
             .putString(K_EARNINGS, _earnings.value?.let { HeartbeatJson.encodeToString(Earnings.serializer(), it) })
             .putLong(K_EARNINGS_AS_OF, _earningsAsOf.value)
+            .putString(K_SERVER, reportedServer)
             .apply()
     }
 
@@ -139,9 +193,15 @@ object Heartbeat {
         }
     }
 
-    /** Send one heartbeat if a server is configured, and record the outcome. */
-    suspend fun sendOnce(context: Context, settings: Settings) {
-        if (settings.serverUrl.isBlank() || settings.activeKey.isBlank()) return
+    /**
+     * Send one heartbeat if a server is configured, and record the outcome.
+     * Settings are read inside the lock, so each run uses what is stored when it
+     * starts, not what was stored when it was queued.
+     */
+    suspend fun sendOnce(context: Context) = sendLock.withLock {
+        val settings = SettingsStore.settings(context).first()
+        matchServer(context, settings.serverUrl)
+        if (settings.serverUrl.isBlank() || settings.activeKey.isBlank()) return@withLock
         try {
             send(context, settings)
         } finally {
@@ -149,11 +209,16 @@ object Heartbeat {
         }
     }
 
-    private suspend fun send(context: Context, settings: Settings) {
+    /** Record the outcome only if the server did not change while the request was out. */
+    private inline fun ifStillServer(settings: Settings, block: () -> Unit) {
+        synchronized(this) { if (reportedServer == settings.serverUrl) block() }
+    }
+
+    private suspend fun send(context: Context, settings: Settings, retried: Boolean = false) {
         val url = settings.serverUrl.trimEnd('/') + "/api/workers/heartbeat"
         // http to a public host would hand the fleet key to every network on the way.
         if (!ServerUrlPolicy.allowsToken(url)) {
-            _lastHeartbeatFailed.value = true
+            ifStillServer(settings) { _lastHeartbeatFailed.value = true }
             Log.w(TAG, "Heartbeat not sent: server URL is not https and not a private address")
             return
         }
@@ -199,30 +264,41 @@ object Heartbeat {
             }
 
             if (response.status.isSuccess()) {
-                _lastHeartbeat.value = System.currentTimeMillis()
-                _lastHeartbeatFailed.value = false
-                // Enrollment: on first contact (and re-delivered until we confirm it
-                // by using it) the server returns this device's own fleet key. Persist
-                // and adopt it, so subsequent heartbeats authenticate with our own key.
                 val body = runCatching { response.body<WorkerHeartbeatResponse>() }.getOrNull()
+                ifStillServer(settings) {
+                    _lastHeartbeat.value = System.currentTimeMillis()
+                    _lastHeartbeatFailed.value = false
+                    if (body != null) recordEarnings(body, System.currentTimeMillis())
+                }
+                // Enrollment: on first contact (and re-delivered until we confirm it
+                // by using it) the server returns this device's own fleet key. Store
+                // it only if the server details are still the ones this request used,
+                // and apply it to what is stored NOW, so a change made while the
+                // request was out is never rolled back. A failed write is logged, not
+                // shown as a failed report: the server did accept this one, and it
+                // re-sends the key until the phone uses it.
                 if (body != null) {
-                    settingsAfterHeartbeat(settings, body)?.let { updated ->
-                        SettingsStore.update(context) { updated }
-                        Log.i(TAG, "Enrolled: received and persisted this device's own fleet key")
-                    }
-                    recordEarnings(body, System.currentTimeMillis())
+                    runCatching {
+                        SettingsStore.update(context) { current -> settingsAfterAccepted(current, settings, body) }
+                    }.onFailure { Log.w(TAG, "Could not store this device's own fleet key: ${it.message}") }
                 }
             } else {
-                _lastHeartbeatFailed.value = true
+                ifStillServer(settings) { _lastHeartbeatFailed.value = true }
                 Log.w(TAG, "Heartbeat rejected: HTTP ${response.status.value}")
                 if (response.status.value == 401 && settings.workerKey.isNotBlank()) {
-                    SettingsStore.update(context) { it.copy(workerKey = "") }
-                    Log.i(TAG, "Auth rejected (401) — clearing per-worker key to re-enroll")
+                    // Only the key this request used: a key stored since then is newer.
+                    SettingsStore.update(context) { current -> settingsAfterRejected(current, settings) }
+                    Log.i(TAG, "Auth rejected (401): cleared the per-worker key to re-enroll")
+                    // Enroll now with the fleet key rather than in 15 minutes, for
+                    // example after the phone moved to another server.
+                    if (!retried && settings.apiKey.isNotBlank()) {
+                        return send(context, settings.copy(workerKey = ""), retried = true)
+                    }
                 }
             }
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
-            _lastHeartbeatFailed.value = true
+            ifStillServer(settings) { _lastHeartbeatFailed.value = true }
             Log.w(TAG, "Heartbeat failed: ${e.message}")
         } finally {
             client.close()

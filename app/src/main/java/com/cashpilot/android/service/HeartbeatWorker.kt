@@ -10,8 +10,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.cashpilot.android.util.SettingsStore
-import kotlinx.coroutines.flow.first
 import java.util.concurrent.TimeUnit
 
 /**
@@ -25,8 +23,7 @@ import java.util.concurrent.TimeUnit
 class HeartbeatWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        val settings = SettingsStore.settings(applicationContext).first()
-        Heartbeat.sendOnce(applicationContext, settings)
+        Heartbeat.sendOnce(applicationContext)
         return Result.success()
     }
 

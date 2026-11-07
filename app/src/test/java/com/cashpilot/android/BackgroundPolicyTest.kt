@@ -147,4 +147,22 @@ class BackgroundPolicyTest {
         Heartbeat.restore(context)
         assertNull(Heartbeat.earnings.value)
     }
+
+    @Test
+    fun `a new server URL forgets the old server's report and earnings`() {
+        Heartbeat.matchServer(context, "https://a.example")
+        Heartbeat.recordEarnings(WorkerHeartbeatResponse(status = "ok", earnings = Earnings(totalUsd = 3.0)), now = 5_000L)
+        assertEquals(3.0, Heartbeat.earnings.value?.totalUsd)
+
+        Heartbeat.matchServer(context, "https://a.example") // same server: kept
+        assertEquals(3.0, Heartbeat.earnings.value?.totalUsd)
+
+        Heartbeat.matchServer(context, "https://b.example")
+        assertNull(Heartbeat.earnings.value)
+        assertEquals(0L, Heartbeat.lastHeartbeat.value)
+
+        // And it stays forgotten across a restart.
+        Heartbeat.restore(context)
+        assertNull(Heartbeat.earnings.value)
+    }
 }

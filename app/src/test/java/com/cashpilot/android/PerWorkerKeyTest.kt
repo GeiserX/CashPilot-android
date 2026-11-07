@@ -86,4 +86,36 @@ class PerWorkerKeyTest {
         assertNull(r.workerKey)
         assertEquals(2L, r.workerId)
     }
+
+    // --- Heartbeat.settingsAfterAccepted / settingsAfterRejected ------------
+
+    @Test
+    fun `an issued key is stored when the settings did not change`() {
+        val used = Settings(serverUrl = "https://a", apiKey = "shared")
+        val body = WorkerHeartbeatResponse(status = "ok", workerKey = "issued")
+        assertEquals("issued", Heartbeat.settingsAfterAccepted(used, used, body).workerKey)
+    }
+
+    @Test
+    fun `an answer from the old server never rolls back a server or key change`() {
+        val used = Settings(serverUrl = "https://a", apiKey = "shared")
+        val body = WorkerHeartbeatResponse(status = "ok", workerKey = "from-a")
+        val movedServer = used.copy(serverUrl = "https://b")
+        assertEquals(movedServer, Heartbeat.settingsAfterAccepted(movedServer, used, body))
+        val newKey = used.copy(apiKey = "rotated")
+        assertEquals(newKey, Heartbeat.settingsAfterAccepted(newKey, used, body))
+    }
+
+    @Test
+    fun `a 401 clears the key it refused`() {
+        val used = Settings(serverUrl = "https://a", apiKey = "shared", workerKey = "old")
+        assertEquals("", Heartbeat.settingsAfterRejected(used, used).workerKey)
+    }
+
+    @Test
+    fun `a late 401 keeps a key a newer report stored`() {
+        val used = Settings(serverUrl = "https://a", apiKey = "shared", workerKey = "old")
+        val current = used.copy(workerKey = "newer")
+        assertEquals("newer", Heartbeat.settingsAfterRejected(current, used).workerKey)
+    }
 }

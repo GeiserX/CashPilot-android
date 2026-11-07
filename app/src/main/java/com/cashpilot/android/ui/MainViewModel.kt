@@ -221,6 +221,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         serverUrlJob = viewModelScope.launch {
             delay(500)
             SettingsStore.update(getApplication()) { it.copy(serverUrl = url) }
+            Heartbeat.matchServer(getApplication(), url)
             // Try the new address now, not on the next 15-minute period.
             HeartbeatWorker.runNow(getApplication())
         }

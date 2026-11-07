@@ -53,7 +53,7 @@ hide:
 - Shows every monitored app as **Running**, **Stopped**, **Can't tell**, **Disabled** or **Not installed**, the ones that need attention first.
 - Sees a running app the moment its ongoing notification appears, and confirms quiet ones from their recent foreground use and network traffic.
 - Says **Can't tell** when a missing permission hides an app, instead of calling it stopped, so you fix the permission rather than restart an app that was fine.
-- Sends a heartbeat to your CashPilot server every 15 minutes, and when you open the app, so the fleet page lists the phone and its apps next to your servers.
+- Sends a heartbeat to your CashPilot server every 15 minutes, and when you open or return to the app, so the fleet page lists the phone and its apps next to your servers.
 - Shows the earnings the server recorded for the platforms on the phone, marks figures older than an hour, and never shows a missing figure as zero.
 - Works without a server as a monitor for the phone alone.
 

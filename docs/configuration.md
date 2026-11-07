@@ -41,10 +41,10 @@ The server side of this is on CashPilot's [fleet page](https://geiserx.github.io
 
 ## Heartbeat timing
 
-- One heartbeat every 15 minutes while a server URL and a key are set, plus one when you open the app and one when you change the server URL or key. Android may delay a scheduled one while the phone is idle.
+- One heartbeat every 15 minutes while a server URL and a key are set, plus one when you open or return to the app and one when you change the server URL or key. A report waits for a network connection, and Android may delay a scheduled one while the phone is idle; it promises no upper bound.
 - A failed heartbeat is not retried on its own: the next one is the next 15-minute run, or the next time you open the app or change the server URL or key.
 - Each request gives up after 15 seconds (10 seconds to connect).
-- Android's WorkManager keeps the schedule, including across a phone restart. The app runs no service and shows no notification.
+- Android's WorkManager keeps the schedule, including across a phone restart. Reporting needs no service of its own and shows no notification. The notification listener, which detects running apps, is still a service that Android binds.
 
 ## Monitored apps
 
