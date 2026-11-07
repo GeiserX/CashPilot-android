@@ -9,6 +9,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,6 +35,7 @@ val deviceName: String get() = "${Build.MANUFACTURER.replaceFirstChar { it.upper
  * leads to. Navigation is a small saved stack of route strings; four screens
  * and one level of depth need nothing more.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BoardApp(vm: MainViewModel) {
     val context = LocalContext.current
@@ -46,6 +49,7 @@ fun BoardApp(vm: MainViewModel) {
     val earnings by vm.earnings.collectAsState()
     val earningsAsOf by vm.earningsAsOf.collectAsState()
     val pair by vm.pairResult.collectAsState()
+    val refreshing by vm.isRefreshing.collectAsState()
 
     val stack = rememberSaveable(saver = listSaver<SnapshotStateList<String>, String>({ it.toList() }, { it.toMutableStateList() })) {
         mutableStateListOf(HOME)
@@ -146,7 +150,9 @@ fun BoardApp(vm: MainViewModel) {
                     val row = board.apps.firstOrNull { it.slug == route.removePrefix(APP) }
                     if (row == null) LaunchedEffect(route) { pop() } else AppDetailScreen(row, board, actions, ::pop)
                 }
-                else -> HomeScreen(board, actions)
+                // Pull down to check every app again; it also checks on every return to the app.
+                demo -> HomeScreen(board, actions)
+                else -> PullToRefreshBox(isRefreshing = refreshing, onRefresh = vm::refreshStatuses) { HomeScreen(board, actions) }
             }
         }
         if (demo) DemoFrame(onExit = { demo = false; stack.clear(); stack.add(HOME) }) { screen() } else screen()

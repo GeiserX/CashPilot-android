@@ -14,11 +14,14 @@ It is easy to assume a store user installs this, has no CashPilot server, and
 gets nothing. That is not what happens, and it changes what the listing should
 promise.
 
-- The **app grid** — which monitored apps are installed, which are running,
-  when each was last active — is gated on **permissions**, not on a server.
-  `AppDetector` uses three Android APIs and makes no network call.
-- The **server** gates exactly one thing: the earnings card. Without one it
-  renders *"Pair a CashPilot server to see earnings"*.
+- The **status board** — which supported apps are installed, which are
+  running, when each was last seen — is gated on **permissions**, not on a
+  server. `AppDetector` uses three Android APIs and makes no network call.
+- The **server** gates exactly one thing: the earnings strip. Without one it
+  reads *"Add a server to see figures"*.
+- A reviewer with none of the supported apps sees *"No supported app on this
+  phone yet"* and can open **Show a demo with sample data**, labelled as
+  sample data on every screen.
 
 So a store user who grants the two access permissions gets a working
 app-state monitor. Whether that is a listing worth shipping — and whether it

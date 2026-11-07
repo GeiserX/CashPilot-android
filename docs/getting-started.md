@@ -18,19 +18,16 @@ To update, install the newer APK over the old one. Settings are kept.
 
 ## First run
 
-The first launch opens **Welcome to CashPilot**, four steps on one screen.
+The first launch walks through three short steps.
 
-1. **Server Connection** (optional). Enter the **CashPilot Server URL**, for example `https://cashpilot.example.com`, and the **Fleet API Key**: the server's `CASHPILOT_API_KEY`, which the owner can copy from the fleet page with **Reveal API Key** ([how the server's keys work](https://geiserx.github.io/CashPilot/fleet/#authentication)). Leave both empty to run without a server; you can pair later from Settings.
-2. **Notification Access**. **Open Settings** takes you to Android's list; switch CashPilot on. The app only checks whether a monitored app has an ongoing notification; it does not read notification content.
-3. **Usage Access**. **Open Settings**, then switch CashPilot on. This gives the app each monitored app's last foreground time and its network traffic.
-4. **Battery Optimization**. Optional. **Open Settings** opens Android's list of battery-optimised apps; choose All apps, then CashPilot, then Don't optimize. Without it, reports can arrive late while the screen is off.
-
-The main button unlocks once both accesses are granted. It reads **Continue to Dashboard** when a server URL and key are filled in, and **Continue without a server** when they are not. **Skip for now** leaves the setup screen without the permissions; the dashboard then asks for them.
+1. **Know when an earning app stops.** What the app does, in four lines. **Get started**.
+2. **Let CashPilot see your apps.** **Allow** on **Notification access** and **Usage access** first shows what CashPilot reads and what it never reads, then **Continue to Android settings** opens the right list; switch CashPilot on and come back. **Battery optimisation** is optional: **Open settings** opens Android's list of battery-optimised apps; choose All apps, then CashPilot, then Don't optimize. Without it, reports can arrive late while the screen is off. **Continue without them** is there too; the home screen then asks for the two accesses.
+3. **Connect your server** (optional). Enter the **Server address**, for example `https://cashpilot.example.com`, and the **API key**: the server's `CASHPILOT_API_KEY`, which the owner can copy from the fleet page with **Reveal API Key** ([how the server's keys work](https://geiserx.github.io/CashPilot/fleet/#authentication)). **Test connection** sends one report and shows **Connected**, **The server refused this API key**, **No answer from …** or **This address needs https://**. After **Connected**, **Finish**. **Use without a server** finishes without one; you can pair later from Settings.
 
 ## What a working start looks like
 
-- The dashboard lists the 11 monitored apps. Installed ones show **Running**, **Stopped** or **Can't tell**; the others show **Not installed — tap to install**. The summary at the top counts them.
-- With a server, the dashboard's summary shows a green dot and **Last report** with its age, for example **Last report 6 min ago · sent every 15 min**, and the phone appears on the server's fleet page as its maker and model plus a short device id, for example `Google Pixel 8 (a1b2c3d4)`. The first heartbeat also enrolls the phone: the server issues it its own key ([Configuration](configuration.md#the-fleet-key-and-enrollment)).
-- Without a server, the summary shows **Not paired — running standalone**. That is a supported mode, not an error.
+- The home screen leads with one line, for example **All 3 apps running**, and lists the installed supported apps. **N other supported apps** leads to the rest.
+- With a server, the line under it reads **Last report 6 min ago · sent every 15 min**, and the phone appears on the server's fleet page as its maker and model plus a short device id, for example `Google Pixel 8 (a1b2c3d4)`. The first report also enrolls the phone: the server issues it its own key ([Configuration](configuration.md#the-fleet-key-and-enrollment)).
+- Without a server, the line reads **No server · everything stays on this phone**. That is a supported mode, not an error.
 
 If a step does not look like this, see [Troubleshooting](troubleshooting.md).

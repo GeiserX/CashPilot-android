@@ -19,7 +19,7 @@ CashPilot Android
 ├── HeartbeatWorker (WorkManager, POST every 15 min)
 ├── AppNotificationListener (instant app detection)
 ├── AppDetector (UsageStats + NetworkStats)
-└── Jetpack Compose UI (dashboard + settings)
+└── Jetpack Compose UI (status board, onboarding, settings)
 ```
 
 ## Running, stopped or can't tell
@@ -41,7 +41,7 @@ Usage Access covers two of the three signals (foreground time and traffic), so w
 - The same apps again as `containers`, the shape older CashPilot servers read, so they still list the phone.
 - `system_info`: `Android`, the Android version and API level, the CPU architecture, `device_type: android` and this app's version, which lets the fleet page flag phones on an old build.
 
-The server's answer can carry this phone's own key (see [Configuration](configuration.md#the-fleet-key-and-enrollment)) and the earnings figures the dashboard shows.
+The server's answer can carry this phone's own key (see [Configuration](configuration.md#the-fleet-key-and-enrollment)) and the earnings figures the home screen shows.
 
 ## Privacy
 
