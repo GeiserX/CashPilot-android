@@ -9,7 +9,7 @@ Android monitoring agent for CashPilot that tracks passive income apps (EarnApp,
 - Ktor HTTP client
 - Kotlinx Serialization
 - DataStore Preferences
-- Android SDK 26+ (minSdk), compileSdk 36, targetSdk 35
+- Android SDK 26+ (minSdk), compileSdk 37, targetSdk 36
 - Gradle with version catalogs (`libs.versions.toml`)
 - ProGuard (release builds: `isMinifyEnabled = true`, `isShrinkResources = true`)
 
