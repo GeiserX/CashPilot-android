@@ -1,8 +1,8 @@
 package com.cashpilot.android
 
 import android.content.Context
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.cashpilot.android.util.SettingsStore
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -19,7 +19,7 @@ import org.xmlpull.v1.XmlPullParser
  * allowBackup="false" stops cloud backup, but Android 12 and later ignore it for
  * device-to-device transfer. Only the dataExtractionRules file can keep the
  * DataStore off a new phone, so this checks the manifest points at it and that
- * every file SettingsStore really writes is excluded in both sections.
+ * the DataStore file is excluded in both sections.
  */
 // Same SDK as IconGoldenTest: Robolectric 4.17 cannot run this module's targetSdk.
 @RunWith(RobolectricTestRunner::class)
@@ -64,26 +64,30 @@ class DataBackupRulesTest {
         assertEquals("@xml/data_extraction_rules", app.getAttributeNS(android, "dataExtractionRules"))
     }
 
-    @Test
-    fun `every settings file is kept out of cloud backup and device transfer`() {
-        runBlocking {
-            SettingsStore.update(context) { it.copy(apiKey = "fleet-key", workerKey = "worker-key") }
-        }
-        val filesDir = context.filesDir
-        val written = filesDir.walkTopDown().filter { it.isFile }
-            .map { it.relativeTo(filesDir).path }.toList()
-        assertTrue("SettingsStore wrote no file under filesDir", written.isNotEmpty())
+    /**
+     * The path of the settings DataStore, relative to filesDir, from the same
+     * function the preferencesDataStore delegate uses. Nothing is written: the
+     * delegate is one store per process, bound to whichever test touched it
+     * first, so a file written from here can land in another test's filesDir.
+     */
+    private fun settingsFile(): String =
+        context.preferencesDataStoreFile(SettingsStore.FILE_NAME).relativeTo(context.filesDir).path
 
+    private fun assertExcluded(domain: String, file: String) {
         val rules = excludes()
         for (section in listOf("cloud-backup", "device-transfer")) {
             val paths = rules[section].orEmpty()
-                .filter { it.first == "file" }.map { it.second.trimEnd('/') }
-            for (file in written) {
-                assertTrue(
-                    "$section does not exclude $file",
-                    paths.any { file == it || file.startsWith("$it/") },
-                )
-            }
+                .filter { it.first == domain }.map { it.second.trimEnd('/') }
+            assertTrue(
+                "$section does not exclude $domain:$file",
+                paths.any { it == "." || file == it || file.startsWith("$it/") },
+            )
         }
+    }
+
+    @Test
+    fun `the settings DataStore is kept out of cloud backup and device transfer`() {
+        assertEquals("datastore/cashpilot_settings.preferences_pb", settingsFile())
+        assertExcluded("file", settingsFile())
     }
 }

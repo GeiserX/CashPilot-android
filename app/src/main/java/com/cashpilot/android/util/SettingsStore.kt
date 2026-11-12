@@ -14,9 +14,12 @@ import com.cashpilot.android.model.Settings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "cashpilot_settings")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = SettingsStore.FILE_NAME)
 
 object SettingsStore {
+    /** The DataStore name. res/xml/data_extraction_rules.xml keeps its file on this device. */
+    internal const val FILE_NAME = "cashpilot_settings"
+
     private val SERVER_URL = stringPreferencesKey("server_url")
     private val API_KEY = stringPreferencesKey("api_key")
     private val WORKER_KEY = stringPreferencesKey("worker_key")

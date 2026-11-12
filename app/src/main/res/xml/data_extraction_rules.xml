@@ -3,8 +3,8 @@
      transfer, so without these rules the settings DataStore, which holds the
      fleet key and this phone's worker key, is copied to a new phone. Keep it on
      this device in both cases: a new phone sets up again and gets its own
-     worker key. DataBackupRulesTest checks every file SettingsStore writes is
-     excluded here. -->
+     worker key. DataBackupRulesTest checks the DataStore file is excluded
+     here. -->
 <data-extraction-rules>
     <cloud-backup>
         <exclude domain="file" path="datastore" />
