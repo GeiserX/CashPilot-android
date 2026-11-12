@@ -2,6 +2,7 @@ package com.cashpilot.android
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.cashpilot.android.service.Heartbeat
 import com.cashpilot.android.util.SettingsStore
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -19,7 +20,7 @@ import org.xmlpull.v1.XmlPullParser
  * allowBackup="false" stops cloud backup, but Android 12 and later ignore it for
  * device-to-device transfer. Only the dataExtractionRules file can keep the
  * DataStore off a new phone, so this checks the manifest points at it and that
- * the DataStore file is excluded in both sections.
+ * the DataStore file and the heartbeat state are excluded in both sections.
  */
 // Same SDK as IconGoldenTest: Robolectric 4.17 cannot run this module's targetSdk.
 @RunWith(RobolectricTestRunner::class)
@@ -89,5 +90,12 @@ class DataBackupRulesTest {
     fun `the settings DataStore is kept out of cloud backup and device transfer`() {
         assertEquals("datastore/cashpilot_settings.preferences_pb", settingsFile())
         assertExcluded("file", settingsFile())
+    }
+
+    @Test
+    fun `the heartbeat state is kept out of cloud backup and device transfer`() {
+        // Last server URL and earnings snapshot: no key, but a phone set up
+        // again starts clean, as allowBackup="false" intends.
+        assertExcluded("sharedpref", "${Heartbeat.PREFS}.xml")
     }
 }

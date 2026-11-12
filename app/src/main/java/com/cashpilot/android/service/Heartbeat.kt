@@ -71,7 +71,8 @@ object Heartbeat {
     fun outcomeOf(status: Int): Outcome = if (status == 401 || status == 403) Outcome.KEY_REFUSED else Outcome.REJECTED
 
     private const val TAG = "Heartbeat"
-    private const val PREFS = "heartbeat_state"
+    /** SharedPreferences name. res/xml/data_extraction_rules.xml keeps it on this device. */
+    internal const val PREFS = "heartbeat_state"
     private const val K_LAST = "last_heartbeat"
     private const val K_FAILED = "last_heartbeat_failed"
     private const val K_EARNINGS = "earnings_json"
