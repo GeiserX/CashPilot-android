@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-12
+
+### Security
+
+- **The keys that link the phone to your server stay on the phone.** On Android 12 and later, the app's backup switch does not stop a phone-to-phone transfer, so the fleet key and this phone's own key could travel to a new device. The app now leaves its settings and its report state out of the transfer, and out of cloud backup by an explicit rule.
+- **The release is built with actions pinned to exact commits.** A moved tag on a third-party build action can no longer run new code in the job that holds the signing key.
+
 ## [1.0.0] - 2026-11-07
 
 1.0 is the first release we consider complete. The app answers one question when you open it, whether every app you run is running, and it does that without root, without an account and without sending anything to anyone but your own server. It ships alongside CashPilot web 2.0 and CashPilot Desktop 1.0.
