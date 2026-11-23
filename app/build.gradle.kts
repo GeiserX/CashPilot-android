@@ -8,7 +8,13 @@ plugins {
 
 android {
     namespace = "com.cashpilot.android"
-    compileSdk = 37
+    // Android 17 minor release 37.1. Compose 1.13 (BOM 2026.11.01) refuses to
+    // build against 37.0 (checkDebugAarMetadata). AGP 9 syntax for minor levels.
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         applicationId = "com.cashpilot.android"
