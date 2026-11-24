@@ -112,6 +112,7 @@ When adding new apps:
 2. Add to the `all` list in `KnownApps`
 3. Add the package to `<queries>` in `AndroidManifest.xml` (Android 11+ package visibility)
 4. Update the README app count
+5. Add its web catalog folder to `catalogCategory` in `KnownAppsTest`: the test reads the app's catalog entry over the network and fails when its referral link differs. It runs only with `CATALOG_DRIFT=1`, which the Catalog drift workflow sets weekly and on each push to main, never on a PR. Run it locally with `CATALOG_DRIFT=1 ./gradlew testDebugUnitTest --tests '*KnownAppsTest*'`
 
 Apps removed (APK-only, not on Play Store): Honeygain, PacketStream, Peer2Profit, GagaNode, PassiveApp, Repocket.
 

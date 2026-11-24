@@ -35,7 +35,8 @@ object KnownApps {
         MonitoredApp("titan", "com.titan_network_vip.titan_app", "Titan Network",
             referralUrl = "https://edge.titannet.info/signup?inviteCode=2GKKJ495"),
         MonitoredApp("nodle", "io.nodle.cash", "Nodle Cash"),
-        MonitoredApp("wipter", "com.wipter.app", "Wipter"),
+        MonitoredApp("wipter", "com.wipter.app", "Wipter",
+            referralUrl = "https://wipter.com/register?via=FB1373FBDA"),
     )
 
     val byPackage = all.associateBy { it.packageName }

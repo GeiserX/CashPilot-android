@@ -1,0 +1,99 @@
+name: Catalog drift
+
+# KnownApps copies its referral links by hand from the CashPilot web catalog.
+# The test "every referral url matches the web catalog" (KnownAppsTest) reads
+# each app's catalog entry and fails when the phone's link differs.
+#
+# It deliberately does NOT run on pull_request, the same as Desktop's
+# catalog-drift.yml. A referral change in the web repository is not a reason to
+# block an unrelated Android PR, and a gate that fails for something the author
+# did not touch gets ignored. It runs weekly, on each push to main, and on
+# demand. The test runs only when CATALOG_DRIFT=1, which only this job sets.
+#
+# A red run is easy to miss, so a run keeps one standing issue in step with the
+# result: opened or commented on when the check fails, closed when it passes.
+
+on:
+  schedule:
+    # Mondays, 06:15 UTC.
+    - cron: '15 6 * * 1'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: catalog-drift
+  cancel-in-progress: false
+
+jobs:
+  drift:
+    name: KnownApps referral links vs GeiserX/CashPilot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+      - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
+
+      - name: Compare the referral links with the web catalog
+        id: compare
+        env:
+          CATALOG_DRIFT: '1'
+        run: |
+          set +e
+          ./gradlew testDebugUnitTest --tests 'com.cashpilot.android.KnownAppsTest' 2>&1 | tee "$RUNNER_TEMP/drift.log"
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          exit "$code"
+
+      # Found by its exact title among open issues, so a second failure comments
+      # on the first issue instead of opening another one. A cancelled run says
+      # nothing about the catalog, so it leaves the issue alone.
+      - name: Keep the standing drift issue in step
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          CODE: ${{ steps.compare.outputs.code }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title='Catalog drift: a referral link no longer matches the CashPilot web catalog'
+          number=$(gh issue list --state open --limit 200 --json number,title \
+            | jq -r --arg t "$title" '[.[] | select(.title == $t)][0].number // empty')
+
+          if [ "$CODE" = "0" ]; then
+            if [ -n "$number" ]; then
+              gh issue close "$number" --comment "The referral links match the web catalog again: $RUN_URL"
+            fi
+            exit 0
+          fi
+
+          {
+            echo "The referral check failed (exit ${CODE:-none}). The test output names each app whose link differs, or says that the catalog could not be read, which is a fetch failure and not drift."
+            echo
+            echo "Copy each changed link from the web catalog into MonitoredApp.kt and open a PR."
+            echo
+            echo "Run: $RUN_URL"
+            if [ -s "$RUNNER_TEMP/drift.log" ]; then
+              echo
+              echo '```'
+              grep -E 'differ|the phone opens|Could not read|FAILED|BUILD' "$RUNNER_TEMP/drift.log" | tail -n 40
+              echo '```'
+            fi
+          } > "$RUNNER_TEMP/issue.md"
+
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body-file "$RUNNER_TEMP/issue.md"
+          else
+            gh issue create --title "$title" --body-file "$RUNNER_TEMP/issue.md"
+          fi
