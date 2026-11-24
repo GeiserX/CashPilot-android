@@ -4,6 +4,7 @@ import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.MonitoredApp
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
 import java.io.IOException
 import java.net.URI
 import java.net.http.HttpClient
@@ -101,8 +102,14 @@ class KnownAppsTest {
      * It needs the network, as Robolectric's first jar download does. A failed
      * fetch fails the test and says it is a fetch failure, not drift: a drift
      * check that passes when it cannot read the catalog checks nothing.
+     *
+     * It runs only with CATALOG_DRIFT=1, which .github/workflows/catalog-drift.yml
+     * sets on a schedule and on each push to main, never on a pull request. A
+     * referral change on the web side must not turn an unrelated PR here red,
+     * as Desktop's catalog-drift.yml never runs on PRs either.
      */
     @Test
+    @EnabledIfEnvironmentVariable(named = "CATALOG_DRIFT", matches = "1")
     fun `every referral url matches the web catalog`() {
         val http = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(20))
