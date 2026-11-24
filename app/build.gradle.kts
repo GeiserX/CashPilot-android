@@ -175,6 +175,18 @@ tasks.withType<Test> {
     inputs.dir(layout.projectDirectory.dir("src/test/screenshots"))
         .withPropertyName("roborazziGoldens")
         .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    // CATALOG_DRIFT=1 turns on KnownAppsTest's catalog check, which reads the web
+    // catalog over the network. Gradle does not see an environment variable, so
+    // an earlier run without it would leave the task UP-TO-DATE and the check
+    // would never run. With it on, the task always runs and is never taken from
+    // the build cache, because the catalog can change between two runs.
+    val catalogDrift = System.getenv("CATALOG_DRIFT") == "1"
+    inputs.property("catalogDrift", catalogDrift)
+    if (catalogDrift) {
+        outputs.upToDateWhen { false }
+        outputs.cacheIf { false }
+    }
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {
