@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Wipter's Get button opens Wipter's sign-up page with CashPilot's referral code**, not the bare Play listing. A test now compares every app's referral link with the CashPilot web catalog, so a code that changes there and not here fails CI.
+
 ## [1.0.1] - 2026-11-12
 
 ### Security
