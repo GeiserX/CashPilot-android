@@ -112,14 +112,7 @@ class KnownAppsTest {
             val category = catalogCategory[app.slug]
                 ?: return@mapNotNull "${app.slug}: add its catalog folder (services/<folder>/${app.slug}.yml) to catalogCategory"
             val url = "$CATALOG/$category/${app.slug}.yml"
-            val response = try {
-                http.send(
-                    HttpRequest.newBuilder(URI(url)).timeout(Duration.ofSeconds(30)).build(),
-                    HttpResponse.BodyHandlers.ofString(),
-                )
-            } catch (e: IOException) {
-                throw AssertionError("Could not read $url. This is a fetch failure, not drift.", e)
-            }
+            val response = fetch(http, url)
             assertEquals(200, response.statusCode(), "Could not read $url. A fetch failure or a moved file, not drift.")
             val block = response.body().lines()
                 .dropWhile { !it.startsWith("referral:") }
@@ -134,6 +127,29 @@ class KnownAppsTest {
             if (app.referralUrl == expected) null else "${app.slug}: the phone opens ${app.referralUrl}, the catalog says $expected"
         }
         assertTrue(drift.isEmpty(), "Referral links differ from the web catalog. Update MonitoredApp.kt:\n" + drift.joinToString("\n"))
+    }
+
+    /**
+     * Reads [url] and tries again, up to [FETCH_TRIES] times, after a dropped
+     * connection, a rate limit (429) or a server error (5xx), so one network
+     * blip does not turn a PR red. Any other answer, a 404 included, comes back
+     * at once. The last failure still fails the test.
+     */
+    private fun fetch(http: HttpClient, url: String): HttpResponse<String> {
+        val request = HttpRequest.newBuilder(URI(url)).timeout(Duration.ofSeconds(30)).build()
+        for (attempt in 1..FETCH_TRIES) {
+            try {
+                val response = http.send(request, HttpResponse.BodyHandlers.ofString())
+                val transient = response.statusCode() == 429 || response.statusCode() >= 500
+                if (!transient || attempt == FETCH_TRIES) return response
+            } catch (e: IOException) {
+                if (attempt == FETCH_TRIES) {
+                    throw AssertionError("Could not read $url after $FETCH_TRIES tries. This is a fetch failure, not drift.", e)
+                }
+            }
+            Thread.sleep(attempt * 3_000L)
+        }
+        error("unreachable")
     }
 
     @Test
@@ -152,6 +168,7 @@ class KnownAppsTest {
 
     private companion object {
         const val CATALOG = "https://raw.githubusercontent.com/GeiserX/CashPilot/main/services"
+        const val FETCH_TRIES = 3
 
         /** The folder of each app's file in the web catalog's services/. */
         val catalogCategory = mapOf(
