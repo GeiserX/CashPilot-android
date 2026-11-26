@@ -1,0 +1,2 @@
+- Wipter's Get button now opens Wipter's sign-up page with CashPilot's referral code.
+- Dependency updates.
