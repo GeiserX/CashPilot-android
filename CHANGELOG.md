@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.2] - 2026-11-26
+
+### Changed
+
+- **Dependency updates:** Jetpack Compose BOM 2026.11.01, kotlinx-serialization 1.13.0, Android Gradle plugin 9.5.2 and Gradle 9.9.2.
 
 ### Fixed
 
