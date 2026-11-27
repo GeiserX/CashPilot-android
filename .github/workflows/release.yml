@@ -20,6 +20,11 @@ jobs:
       - name: Check gradle.properties matches the tag
         run: ./scripts/check-release-version.sh "${GITHUB_REF#refs/tags/}"
 
+      # The release notes are the tag's CHANGELOG.md entry. Written before the
+      # build, so a tag without an entry fails before anything is published.
+      - name: Write the release notes from the changelog
+        run: ./scripts/release-notes.sh "${GITHUB_REF#refs/tags/}" > "$RUNNER_TEMP/notes.md"
+
       - name: Compute version from tag
         id: version
         run: |
@@ -72,7 +77,7 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: ${{ steps.version.outputs.tag }}
-          generate_release_notes: true
+          body_path: ${{ runner.temp }}/notes.md
           files: |
             app/build/outputs/bundle/release/app-release.aab
             app/build/outputs/apk/release/app-release.apk

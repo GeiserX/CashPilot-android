@@ -1,0 +1,1 @@
+- Nodle's Get button now opens CashPilot's Nodle invite, so the sign-up counts as a referral.
