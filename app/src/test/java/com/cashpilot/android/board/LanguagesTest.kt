@@ -2,6 +2,7 @@ package com.cashpilot.android.board
 
 import com.cashpilot.android.ui.board.Languages
 import java.io.File
+import java.util.Locale
 import javax.xml.parsers.DocumentBuilderFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -34,5 +35,15 @@ class LanguagesTest {
         assertEquals("es", Languages.find("es-MX,en")?.tag)
         assertNull(Languages.find(""))
         assertNull(Languages.find("sw"))
+    }
+
+    @Test
+    fun `capitals follow the language on screen, English when the app lacks the phone's`() {
+        val turkish = Locale.forLanguageTag("tr-TR")
+        assertEquals(turkish, Languages.spoken(turkish))
+        assertEquals("İ", "i".uppercase(Languages.spoken(turkish)))
+        // Azerbaijani also dots its capital I, but the app shows English there.
+        assertEquals(Locale.ENGLISH, Languages.spoken(Locale.forLanguageTag("az")))
+        assertEquals("THIS PHONE", "This phone".uppercase(Languages.spoken(Locale.forLanguageTag("az"))))
     }
 }

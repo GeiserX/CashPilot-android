@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -305,7 +304,7 @@ fun DisclosureScreen(kind: Access, onContinue: () -> Unit, onNotNow: () -> Unit)
             never = stringResource(R.string.disclose_usage_never)
         }
     }
-    val locale = LocalConfiguration.current.locales[0]
+    val locale = textLocale()
     OnboardFrame(
         -1,
         title,
