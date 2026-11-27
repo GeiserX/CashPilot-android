@@ -76,10 +76,8 @@ class KnownAppsTest {
     }
 
     @Test
-    fun `nodle has no referral url`() {
-        val app = KnownApps.bySlug["nodle"]
-        assertNotNull(app)
-        assertNull(app!!.referralUrl)
+    fun `nodle has referral url`() {
+        assertEquals("https://join.nodle.com/p/YDFoLA4iO08LI7igSskPjw", KnownApps.bySlug["nodle"]!!.referralUrl)
     }
 
     @Test
