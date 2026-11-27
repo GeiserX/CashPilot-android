@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -44,8 +46,9 @@ import com.cashpilot.android.util.ServerUrlPolicy
 @Composable
 private fun StepDots(at: Int) {
     val c = LocalPalette.current
+    val step = stringResource(R.string.onboard_step, at + 1, 3)
     Row(
-        Modifier.semantics(mergeDescendants = true) { contentDescription = "Step ${at + 1} of 3" },
+        Modifier.semantics(mergeDescendants = true) { contentDescription = step },
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         repeat(3) { i ->
@@ -94,20 +97,22 @@ private fun Fact(@DrawableRes icon: Int, title: String, body: String) {
 @Composable
 fun OnboardWelcome(onNext: () -> Unit) = OnboardFrame(
     0,
-    "Know when an earning app stops",
-    "CashPilot checks the passive-income apps on this phone and shows you which ones stopped, and how to start them again.",
-    bottom = { Primary("Get started", onNext, Modifier.fillMaxWidth()) },
+    stringResource(R.string.welcome_title),
+    stringResource(R.string.welcome_lead),
+    bottom = { Primary(stringResource(R.string.welcome_start), onNext, Modifier.fillMaxWidth()) },
 ) {
-    Fact(R.drawable.ic_check_circle, "Which apps are running", "${Words.supportedSample()}, checked whenever you open CashPilot.")
-    Fact(R.drawable.ic_warning, "What to do when one stops", "One tap opens the app so you can start it again.")
-    Fact(R.drawable.ic_cloud, "Figures from your server, if you have one", "A CashPilot server reports what each app's account shows. Optional; reports go every 15 minutes.")
-    Fact(R.drawable.ic_visibility_off, "Nothing leaves this phone", "Except to your own server, if you add one. No ads, no tracking.")
+    Fact(R.drawable.ic_check_circle, stringResource(R.string.welcome_fact_running_title), stringResource(R.string.welcome_fact_running_body, Words.supportedSample(strings())))
+    Fact(R.drawable.ic_warning, stringResource(R.string.welcome_fact_stops_title), stringResource(R.string.welcome_fact_stops_body))
+    Fact(R.drawable.ic_cloud, stringResource(R.string.welcome_fact_server_title), stringResource(R.string.welcome_fact_server_body))
+    Fact(R.drawable.ic_visibility_off, stringResource(R.string.welcome_fact_private_title), stringResource(R.string.welcome_fact_private_body))
 }
 
 @Composable
 private fun PermissionCard(
     @DrawableRes icon: Int,
     title: String,
+    /** What TalkBack says for the Allow button: "Allow notification access". */
+    allowDescription: String,
     why: String,
     notRead: String,
     granted: Boolean,
@@ -121,11 +126,11 @@ private fun PermissionCard(
             Spacer(Modifier.width(12.dp))
             Text(title, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             when {
-                granted -> Pill(if (required) "Allowed" else "Done", Tone.OK)
-                required -> SmallAction("Allow", onAllow, filled = true, modifier = Modifier.semantics { contentDescription = "Allow ${title.lowercase()}" })
+                granted -> Pill(stringResource(if (required) R.string.allowed else R.string.done), Tone.OK)
+                required -> SmallAction(stringResource(R.string.action_allow), onAllow, filled = true, modifier = Modifier.semantics { contentDescription = allowDescription })
                 // Optional, and not a permission: it only opens Android's
                 // battery list. No exemption dialog, so it never says "Allow".
-                else -> SmallAction("Open settings", onAllow, color = c.text, modifier = Modifier.semantics { contentDescription = "Open battery settings" })
+                else -> SmallAction(stringResource(R.string.action_open_settings), onAllow, color = c.text, modifier = Modifier.semantics { contentDescription = allowDescription })
             }
         }
         Gap(8)
@@ -146,38 +151,38 @@ fun OnboardPermissions(
     onNext: () -> Unit,
 ) = OnboardFrame(
     1,
-    "Let CashPilot see your apps",
-    "Android hides other apps' state. Two switches in system settings fix that; you come straight back here.",
+    stringResource(R.string.permissions_title),
+    stringResource(R.string.permissions_lead),
     bottom = {
         val c = LocalPalette.current
         if (!(notif && usage)) {
             Text(
-                "Without both, CashPilot can't tell running from stopped. You can allow them later from Settings.",
+                stringResource(R.string.permissions_without),
                 style = MaterialTheme.typography.bodySmall,
                 color = c.muted,
                 modifier = Modifier.padding(bottom = 10.dp),
             )
         }
-        Primary(if (notif && usage) "Continue" else "Continue without them", onNext, Modifier.fillMaxWidth())
+        Primary(stringResource(if (notif && usage) R.string.permissions_continue else R.string.permissions_continue_without), onNext, Modifier.fillMaxWidth())
     },
 ) {
     val n = KnownApps.all.size
     PermissionCard(
-        R.drawable.ic_notifications, "Notification access",
-        "These apps keep a notification up while they run. CashPilot checks whether it is there, for the $n supported apps only.",
-        "Never reads notification text. You'll see exactly what it reads before Android asks.",
+        R.drawable.ic_notifications, stringResource(R.string.notification_access), stringResource(R.string.allow_notification_access),
+        stringResource(R.string.permissions_notif_why, n),
+        stringResource(R.string.permissions_notif_not_read),
         notif, required = true, onAllow = onAllowNotifications,
     )
     PermissionCard(
-        R.drawable.ic_query_stats, "Usage access",
-        "Shows when each supported app last ran and how much data it moved in the last 24 hours, which shows it is working.",
-        "Never looks at other apps or websites. You'll see exactly what it reads first.",
+        R.drawable.ic_query_stats, stringResource(R.string.usage_access), stringResource(R.string.allow_usage_access),
+        stringResource(R.string.permissions_usage_why),
+        stringResource(R.string.permissions_usage_not_read),
         usage, required = true, onAllow = onAllowUsage,
     )
     PermissionCard(
-        R.drawable.ic_battery_alert, "Battery optimisation",
-        "CashPilot reports every 15 minutes. With battery optimisation on, Android can hold those reports back while the screen is off.",
-        "Optional. Opens Android's battery list: choose All apps, then CashPilot, then Don't optimize.",
+        R.drawable.ic_battery_alert, stringResource(R.string.battery_optimisation), stringResource(R.string.action_open_battery),
+        stringResource(R.string.permissions_battery_why),
+        stringResource(R.string.permissions_battery_not_read),
         battery, required = false, onAllow = onOpenBattery,
     )
 }
@@ -191,14 +196,14 @@ fun ServerFields(url: String, key: String, onUrl: (String) -> Unit, onKey: (Stri
     OutlinedTextField(
         value = url,
         onValueChange = onUrl,
-        label = { Text("Server address") },
+        label = { Text(stringResource(R.string.server_address)) },
         placeholder = { Text("https://cashpilot.example.com") },
         singleLine = true,
         isError = refused,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
         supportingText = when {
-            refused -> { { Text("This address is on the public internet, so it needs https://. CashPilot never sends the key over plain http:// there.") } }
-            cleartext -> { { Text("Plain http:// on your own network: the key and app list travel unencrypted on it.") } }
+            refused -> { { Text(stringResource(R.string.server_address_refused)) } }
+            cleartext -> { { Text(stringResource(R.string.server_address_cleartext)) } }
             else -> null
         },
         modifier = Modifier.fillMaxWidth(),
@@ -207,16 +212,16 @@ fun ServerFields(url: String, key: String, onUrl: (String) -> Unit, onKey: (Stri
     OutlinedTextField(
         value = key,
         onValueChange = onKey,
-        label = { Text("API key") },
+        label = { Text(stringResource(R.string.api_key)) },
         singleLine = true,
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        supportingText = { Text("On your server: Fleet → Reveal API Key. Stored only on this phone.") },
+        supportingText = { Text(stringResource(R.string.api_key_where)) },
         modifier = Modifier.fillMaxWidth(),
     )
     Gap(4)
     Text(
-        "Use https://. Plain http:// works only for an address on your own network, such as 192.168.x.x or a .local or Tailscale name.",
+        stringResource(R.string.server_address_hint),
         style = MaterialTheme.typography.bodySmall,
         color = c.muted,
     )
@@ -224,7 +229,7 @@ fun ServerFields(url: String, key: String, onUrl: (String) -> Unit, onKey: (Stri
 
 @Composable
 fun PairNotice(result: PairResult, host: String, deviceName: String) {
-    val m = pairMessage(result, host, deviceName) ?: return
+    val m = pairMessage(strings(), result, host, deviceName) ?: return
     Notice(
         m.tone, m.title, m.body,
         when (m.tone) {
@@ -248,21 +253,21 @@ fun OnboardServer(
     onSkip: () -> Unit,
 ) = OnboardFrame(
     2,
-    "Connect your server",
-    "Optional. Without one you still see which apps run and which stopped. A server adds the figures its provider accounts show, and lists this phone in your fleet.",
+    stringResource(R.string.server_title),
+    stringResource(R.string.server_lead),
     bottom = {
         if (result == PairResult.OK) {
-            Primary("Finish", onFinish, Modifier.fillMaxWidth())
+            Primary(stringResource(R.string.server_finish), onFinish, Modifier.fillMaxWidth())
         } else {
             Primary(
-                if (result == PairResult.TESTING) "Testing…" else "Test connection",
+                stringResource(if (result == PairResult.TESTING) R.string.testing else R.string.action_test_connection),
                 onTest,
                 Modifier.fillMaxWidth(),
                 enabled = url.isNotBlank() && key.isNotBlank() && result != PairResult.TESTING,
             )
         }
         Gap(8)
-        Secondary("Use without a server", onSkip, Modifier.fillMaxWidth())
+        Secondary(stringResource(R.string.server_skip), onSkip, Modifier.fillMaxWidth())
     },
 ) {
     ServerFields(url, key, onUrl, onKey)
@@ -288,25 +293,26 @@ fun DisclosureScreen(kind: Access, onContinue: () -> Unit, onNotNow: () -> Unit)
     when (kind) {
         Access.NOTIFICATIONS -> {
             icon = R.drawable.ic_notifications
-            title = "notification access"
-            reads = "Only whether one of the $n apps below is showing an ongoing notification right now. That notification is how those apps show they are running."
-            never = "The text of any notification, and anything from any other app. Only two things go out, and only to your own server if you add one: whether each of these apps has that notification up, and whether it is running."
+            title = stringResource(R.string.disclose_title_notifications)
+            reads = stringResource(R.string.disclose_notif_reads, n)
+            never = stringResource(R.string.disclose_notif_never)
         }
         Access.USAGE -> {
             icon = R.drawable.ic_query_stats
-            title = "usage access"
-            reads = "For the $n apps below only: when each one was last in use, and how much data it sent and received in the last 24 hours."
-            never = "Which other apps you use, which websites you visit, or what any app does. The results stay on this phone, unless you add your own server."
+            title = stringResource(R.string.disclose_title_usage)
+            reads = stringResource(R.string.disclose_usage_reads, n)
+            never = stringResource(R.string.disclose_usage_never)
         }
     }
+    val locale = LocalConfiguration.current.locales[0]
     OnboardFrame(
         -1,
-        "Before you turn on $title",
-        "Android will open its settings next. This is what CashPilot does with it.",
+        title,
+        stringResource(R.string.disclose_lead),
         bottom = {
-            Primary("Continue to Android settings", onContinue, Modifier.fillMaxWidth())
+            Primary(stringResource(R.string.disclose_continue), onContinue, Modifier.fillMaxWidth())
             Gap(8)
-            Secondary("Not now", onNotNow, Modifier.fillMaxWidth())
+            Secondary(stringResource(R.string.disclose_not_now), onNotNow, Modifier.fillMaxWidth())
         },
     ) {
         Box(
@@ -315,15 +321,15 @@ fun DisclosureScreen(kind: Access, onContinue: () -> Unit, onNotNow: () -> Unit)
         ) { Ic(icon, tint = c.accent, size = 26) }
         Gap(16)
         Panel {
-            Text("CASHPILOT READS", style = MaterialTheme.typography.labelMedium, color = c.ok, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.disclose_reads).uppercase(locale), style = MaterialTheme.typography.labelMedium, color = c.ok, fontWeight = FontWeight.SemiBold)
             Gap(4)
             Text(reads, style = MaterialTheme.typography.bodyMedium)
             Gap(14)
-            Text("IT NEVER READS", style = MaterialTheme.typography.labelMedium, color = c.bad, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.disclose_never).uppercase(locale), style = MaterialTheme.typography.labelMedium, color = c.bad, fontWeight = FontWeight.SemiBold)
             Gap(4)
             Text(never, style = MaterialTheme.typography.bodyMedium)
         }
         Gap(14)
-        Text(supportedNames(), style = MaterialTheme.typography.bodySmall, color = c.muted)
+        Text(Words.supportedNames(strings()), style = MaterialTheme.typography.bodySmall, color = c.muted)
     }
 }

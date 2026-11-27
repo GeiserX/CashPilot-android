@@ -9,10 +9,7 @@ import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.EarningsPresentation
 import com.cashpilot.android.ui.board.Board
 import com.cashpilot.android.ui.board.Demo
-import com.cashpilot.android.ui.board.NOT_MEASURED
-import com.cashpilot.android.ui.board.NO_READING_NOTE
 import com.cashpilot.android.ui.board.PairResult
-import com.cashpilot.android.ui.board.SHARED_FOOTNOTE
 import com.cashpilot.android.ui.board.ServerState
 import com.cashpilot.android.ui.board.TaskKind
 import com.cashpilot.android.ui.board.Tone
@@ -46,7 +43,7 @@ class BoardTest {
 
     @Test
     fun `no server is a calm, muted line, never an error`() {
-        val line = Situations.standalone.serverLine()
+        val line = Situations.standalone.serverLine(English)
         assertEquals(Tone.MUTED, line.tone)
         assertEquals("No server · everything stays on this phone", line.text)
     }
@@ -59,21 +56,21 @@ class BoardTest {
 
     @Test
     fun `a working server says how old the last report is and how often they go`() {
-        assertEquals("Last report 6 min ago · sent every 15 min", Situations.healthy.serverLine().text)
-        assertEquals(Tone.OK, Situations.healthy.serverLine().tone)
+        assertEquals("Last report 6 min ago · sent every 15 min", Situations.healthy.serverLine(English).text)
+        assertEquals(Tone.OK, Situations.healthy.serverLine(English).tone)
     }
 
     @Test
     fun `paired with no report yet is waiting, not failing`() {
         val b = Situations.board(Situations.apps(emptyMap(), emptySet()), lastHeartbeat = 0)
-        assertEquals("Paired with cashpilot.home.example · waiting for the first report", b.serverLine().text)
-        assertEquals(Tone.MUTED, b.serverLine().tone)
+        assertEquals("Paired with cashpilot.home.example · waiting for the first report", b.serverLine(English).text)
+        assertEquals(Tone.MUTED, b.serverLine(English).tone)
     }
 
     @Test
     fun `a failing server says for how long`() {
-        assertEquals("No report has reached cashpilot.home.example for 25 min", Situations.problems.serverLine().text)
-        assertEquals(Tone.WARN, Situations.problems.serverLine().tone)
+        assertEquals("No report has reached cashpilot.home.example for 25 min", Situations.problems.serverLine(English).text)
+        assertEquals(Tone.WARN, Situations.problems.serverLine(English).tone)
     }
 
     @Test
@@ -84,8 +81,8 @@ class BoardTest {
             failed = true,
         )
         assertEquals(ServerState.NEEDS_HTTPS, b.server)
-        assertTrue(b.serverLine().text.contains("https://"))
-        assertEquals(TaskKind.SERVER, b.tasks().single().kind)
+        assertTrue(b.serverLine(English).text.contains("https://"))
+        assertEquals(TaskKind.SERVER, b.tasks(English).single().kind)
     }
 
     @Test
@@ -102,7 +99,7 @@ class BoardTest {
 
     @Test
     fun `stopped apps lead the verdict, in red, with their count`() {
-        val v = Situations.problems.verdict()
+        val v = Situations.problems.verdict(English)
         assertEquals(Tone.BAD, v.tone)
         assertEquals(2, v.count)
         assertEquals("2 of 6 apps stopped", v.title)
@@ -110,7 +107,7 @@ class BoardTest {
 
     @Test
     fun `a healthy phone is a calm verdict`() {
-        val v = Situations.healthy.verdict()
+        val v = Situations.healthy.verdict(English)
         assertEquals(Tone.OK, v.tone)
         assertEquals("All 6 apps running", v.title)
         assertEquals("Nothing needs you right now.", v.sub)
@@ -123,7 +120,7 @@ class BoardTest {
             mapOf("earnapp" to Situations.running("earnapp", 1, 1), "grass" to null),
             setOf("earnapp", "grass"),
         )
-        val v = Situations.board(apps, usage = false).verdict()
+        val v = Situations.board(apps, usage = false).verdict(English)
         assertEquals("1 of 2 apps running", v.title)
         assertEquals(Tone.WARN, v.tone)
     }
@@ -131,7 +128,7 @@ class BoardTest {
     @Test
     fun `everything running but the server failing is not a green verdict`() {
         val b = Situations.board(Situations.apps(mapOf("earnapp" to Situations.running("earnapp", 1, 1)), setOf("earnapp")), failed = true)
-        val v = b.verdict()
+        val v = b.verdict(English)
         assertEquals(Tone.WARN, v.tone)
         assertEquals("Your app is running", v.title)
     }
@@ -140,7 +137,7 @@ class BoardTest {
 
     @Test
     fun `tasks come in order - stopped apps by name, then server, then battery`() {
-        val t = Situations.problems.tasks()
+        val t = Situations.problems.tasks(English)
         assertEquals(
             listOf(TaskKind.STOPPED_APP, TaskKind.STOPPED_APP, TaskKind.SERVER, TaskKind.BATTERY),
             t.map { it.kind },
@@ -157,43 +154,43 @@ class BoardTest {
         val installed = setOf("earnapp", "grass")
         val b = Situations.board(Situations.apps(emptyMap(), installed, disabled = installed))
         assertTrue(b.watched.isEmpty())
-        val v = b.verdict()
+        val v = b.verdict(English)
         assertEquals("No apps watched", v.title)
         assertEquals(Tone.MUTED, v.tone)
     }
 
     @Test
     fun `two or more problems show the list`() {
-        assertEquals(4, Situations.problems.tasksToShow().size)
+        assertEquals(4, Situations.problems.tasksToShow(English).size)
     }
 
     @Test
     fun `a single stopped app shows no list, its row carries the Open button`() {
-        assertEquals(1, Situations.standalone.tasks().size)
-        assertTrue(Situations.standalone.tasksToShow().isEmpty())
+        assertEquals(1, Situations.standalone.tasks(English).size)
+        assertTrue(Situations.standalone.tasksToShow(English).isEmpty())
     }
 
     @Test
     fun `a single non-app problem is shown on its own`() {
         val b = Situations.board(Situations.apps(mapOf("earnapp" to Situations.running("earnapp", 1, 1)), setOf("earnapp")), battery = false)
-        assertEquals(listOf(TaskKind.BATTERY), b.tasksToShow().map { it.kind })
+        assertEquals(listOf(TaskKind.BATTERY), b.tasksToShow(English).map { it.kind })
     }
 
     @Test
     fun `both accesses missing is the blind screen, not two tasks`() {
         assertTrue(Situations.blind.blind)
-        assertTrue(Situations.blind.tasks().none { it.kind == TaskKind.NOTIFICATIONS || it.kind == TaskKind.USAGE })
+        assertTrue(Situations.blind.tasks(English).none { it.kind == TaskKind.NOTIFICATIONS || it.kind == TaskKind.USAGE })
     }
 
     @Test
     fun `one access missing is a task`() {
         val b = Situations.board(Situations.apps(emptyMap(), setOf("earnapp")), notif = false)
-        assertEquals(listOf(TaskKind.NOTIFICATIONS), b.tasks().map { it.kind })
+        assertEquals(listOf(TaskKind.NOTIFICATIONS), b.tasks(English).map { it.kind })
     }
 
     @Test
     fun `a healthy phone has nothing to do`() {
-        assertTrue(Situations.healthy.tasks().isEmpty())
+        assertTrue(Situations.healthy.tasks(English).isEmpty())
     }
 
     // ---- Rows -----------------------------------------------------------------
@@ -209,13 +206,13 @@ class BoardTest {
     @Test
     fun `data use is labelled as the last 24 hours, not today`() {
         val earnapp = Situations.healthy.watched.first { it.slug == "earnapp" }
-        assertEquals("Running · 450.0 MB in 24 h", earnapp.rowLine(NOW))
+        assertEquals("Running · 450.0 MB in 24 h", earnapp.rowLine(English, NOW))
     }
 
     @Test
     fun `a stopped row says when it was last opened`() {
         val grass = Situations.problems.watched.first { it.slug == "grass" }
-        assertEquals("Stopped · last opened 3 h ago", grass.rowLine(NOW))
+        assertEquals("Stopped · last opened 3 h ago", grass.rowLine(English, NOW))
     }
 
     @Test
@@ -232,7 +229,7 @@ class BoardTest {
 
     @Test
     fun `no server asks for one instead of showing a number`() {
-        val e = Situations.standalone.earningsLine()
+        val e = Situations.standalone.earningsLine(English)
         assertFalse(e.isFigure)
         assertEquals("Add a server to see figures", e.value)
     }
@@ -241,12 +238,12 @@ class BoardTest {
     fun `paired but never read is not zero`() {
         val b = Situations.board(Situations.apps(emptyMap(), setOf("earnapp")), earnings = null)
         assertEquals(EarningsPresentation.Mode.NOTHING_READ, b.earningsMode)
-        assertEquals("Nothing read yet", b.earningsLine().value)
+        assertEquals("Nothing read yet", b.earningsLine(English).value)
     }
 
     @Test
     fun `a fresh figure is shown plainly`() {
-        val e = Situations.healthy.earningsLine()
+        val e = Situations.healthy.earningsLine(English)
         assertTrue(e.isFigure)
         assertEquals("$15.38", e.value)
         assertNull(e.staleNote)
@@ -254,41 +251,41 @@ class BoardTest {
 
     @Test
     fun `an old figure says how old`() {
-        assertEquals("From 7 h ago", Situations.problems.earningsLine().staleNote)
+        assertEquals("From 7 h ago", Situations.problems.earningsLine(English).staleNote)
     }
 
     @Test
     fun `one footnote for whole-account balances, and one for missing readings`() {
-        assertEquals(listOf(SHARED_FOOTNOTE, NO_READING_NOTE), Situations.healthy.footnotes())
-        assertTrue(Situations.standalone.footnotes().isEmpty())
+        assertEquals(listOf(English.strings["shared_footnote"], English.strings["no_reading_note"]), Situations.healthy.footnotes(English))
+        assertTrue(Situations.standalone.footnotes(English).isEmpty())
     }
 
     @Test
     fun `a whole-account figure is starred in the detail`() {
         val b = Situations.healthy
-        assertEquals("$6.40 *", b.appEarnings(b.apps.first { it.slug == "mysterium" }))
-        assertEquals("$4.12", b.appEarnings(b.apps.first { it.slug == "earnapp" }))
-        assertEquals("Nothing read yet", b.appEarnings(b.apps.first { it.slug == "grass" }))
+        assertEquals("$6.40 *", b.appEarnings(English, b.apps.first { it.slug == "mysterium" }))
+        assertEquals("$4.12", b.appEarnings(English, b.apps.first { it.slug == "earnapp" }))
+        assertEquals("Nothing read yet", b.appEarnings(English, b.apps.first { it.slug == "grass" }))
     }
 
     @Test
     fun `an app that is not installed shows no figure`() {
         val b = Situations.healthy
-        assertEquals("—", b.appEarnings(b.apps.first { it.state == AppState.NOT_INSTALLED }))
+        assertEquals("—", b.appEarnings(English, b.apps.first { it.state == AppState.NOT_INSTALLED }))
     }
 
     // ---- Settings and pairing -------------------------------------------------
 
     @Test
     fun `the API key is masked to its last four characters`() {
-        assertEquals("•••• •••• 9a7b", Words.maskKey("example-key-9a7b"))
-        assertEquals("••••", Words.maskKey("short"))
-        assertEquals("Not set", Words.maskKey(""))
+        assertEquals("•••• •••• 9a7b", Words.maskKey(English, "example-key-9a7b"))
+        assertEquals("••••", Words.maskKey(English, "short"))
+        assertEquals("Not set", Words.maskKey(English, ""))
     }
 
     @Test
     fun `the settings server row uses the 15-minute wording`() {
-        assertEquals("Reports every 15 min · last report 6 min ago", Situations.healthy.serverSetting().text)
+        assertEquals("Reports every 15 min · last report 6 min ago", Situations.healthy.serverSetting(English).text)
     }
 
     @Test
@@ -299,7 +296,7 @@ class BoardTest {
         assertEquals(PairResult.URL_REFUSED, pairResultOf(Heartbeat.Outcome.URL_REFUSED))
         assertEquals(PairResult.REJECTED, pairResultOf(Heartbeat.Outcome.REJECTED))
         assertEquals(PairResult.NOT_CASHPILOT, pairResultOf(Heartbeat.Outcome.NOT_CASHPILOT))
-        val titles = PairResult.entries.mapNotNull { pairMessage(it, "h", "Phone")?.title }
+        val titles = PairResult.entries.mapNotNull { pairMessage(English, it, "h", "Phone")?.title }
         assertEquals(titles.size, titles.toSet().size, "two results share a message: $titles")
     }
 
@@ -324,9 +321,9 @@ class BoardTest {
     fun `a report overdue by more than an hour is late, not fine`() {
         val late = Situations.board(Situations.apps(emptyMap(), setOf("earnapp")), lastHeartbeat = NOW - 2 * 60 * 60 * 1000L)
         assertEquals(ServerState.LATE, late.server)
-        assertEquals(Tone.WARN, late.serverLine().tone)
-        assertEquals("Last report 2 h ago · reports are late", late.serverLine().text)
-        assertTrue(late.tasks().any { it.kind == TaskKind.SERVER && it.title == "Reports are late" })
+        assertEquals(Tone.WARN, late.serverLine(English).tone)
+        assertEquals("Last report 2 h ago · reports are late", late.serverLine(English).text)
+        assertTrue(late.tasks(English).any { it.kind == TaskKind.SERVER && it.title == "Reports are late" })
         val onTime = Situations.board(Situations.apps(emptyMap(), setOf("earnapp")), lastHeartbeat = NOW - 50 * 60 * 1000L)
         assertEquals(ServerState.OK, onTime.server)
     }
@@ -335,11 +332,11 @@ class BoardTest {
     fun `no reading shows as not measured, never 0 B or never`() {
         val b = Situations.board(Situations.apps(emptyMap(), setOf("earnapp", "grass"), disabled = setOf("grass")))
         val grass = b.apps.first { it.slug == "grass" }
-        assertEquals(NOT_MEASURED to NOT_MEASURED, b.measuredUse(grass))
+        assertEquals("Not measured" to "Not measured", b.measuredUse(English, grass))
         val blindUsage = Situations.board(Situations.apps(mapOf("earnapp" to Situations.running("earnapp", 1, 1)), setOf("earnapp")), usage = false)
-        assertEquals(NOT_MEASURED to NOT_MEASURED, blindUsage.measuredUse(blindUsage.apps.first { it.slug == "earnapp" }))
+        assertEquals("Not measured" to "Not measured", blindUsage.measuredUse(English, blindUsage.apps.first { it.slug == "earnapp" }))
         val earnapp = Situations.healthy.apps.first { it.slug == "earnapp" }
-        assertEquals("450.0 MB", Situations.healthy.measuredUse(earnapp).first)
+        assertEquals("450.0 MB", Situations.healthy.measuredUse(English, earnapp).first)
     }
 
     @Test
@@ -363,18 +360,18 @@ class BoardTest {
 
     @Test
     fun `ages read in plain words`() {
-        assertEquals("never", Words.ago(0, NOW))
-        assertEquals("just now", Words.ago(NOW - 30_000, NOW))
-        assertEquals("25 min ago", Words.ago(NOW - 25 * 60_000, NOW))
-        assertEquals("3 h ago", Words.ago(NOW - 3 * 3_600_000, NOW))
-        assertEquals("yesterday", Words.ago(NOW - 26 * 3_600_000, NOW))
-        assertEquals("4 days ago", Words.ago(NOW - 4 * 86_400_000L, NOW))
-        assertEquals("for 25 min", Words.forHowLong(NOW - 25 * 60_000, NOW))
+        assertEquals("never", Words.ago(English, 0, NOW))
+        assertEquals("just now", Words.ago(English, NOW - 30_000, NOW))
+        assertEquals("25 min ago", Words.ago(English, NOW - 25 * 60_000, NOW))
+        assertEquals("3 h ago", Words.ago(English, NOW - 3 * 3_600_000, NOW))
+        assertEquals("yesterday", Words.ago(English, NOW - 26 * 3_600_000, NOW))
+        assertEquals("4 days ago", Words.ago(English, NOW - 4 * 86_400_000L, NOW))
+        assertEquals("for 25 min", Words.forHowLong(English, NOW - 25 * 60_000, NOW))
     }
 
     @Test
     fun `the welcome screen counts the rest of the supported apps`() {
-        assertEquals("EarnApp, IPRoyal Pawns, Grass, MystNodes and ${KnownApps.all.size - 4} more", Words.supportedSample())
+        assertEquals("EarnApp, IPRoyal Pawns, Grass, MystNodes and ${KnownApps.all.size - 4} more", Words.supportedSample(English))
     }
 
     @Test
@@ -382,8 +379,11 @@ class BoardTest {
         // The store listing and the screens describe what the app watches,
         // never what anyone will earn.
         val promises = Regex("""(?i)earn up to|guarantee|make money|passive income of|\bget paid\b|free money""")
-        val offenders = File("src/main/java/com/cashpilot/android/ui").walkTopDown()
-            .filter { it.extension == "kt" }
+        // The words live in strings.xml (every language), the code in ui/.
+        val sources = File("src/main/java/com/cashpilot/android/ui").walkTopDown().filter { it.extension == "kt" } +
+            File("src/main/res").walkTopDown().filter { it.name == "strings.xml" }
+        assertTrue(sources.any { it.name == "strings.xml" }, "strings.xml not scanned")
+        val offenders = sources
             .flatMap { f -> promises.findAll(f.readText()).map { "${f.name}: ${it.value}" } }
             .toList()
         assertTrue(offenders.isEmpty(), "income promises on screen: $offenders")

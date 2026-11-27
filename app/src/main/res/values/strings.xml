@@ -1,4 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Every word the app shows, in English, the source language.
+
+    Translations live in values-<qualifier>/strings.xml with the same names.
+    A name missing there shows this English text, never a blank.
+
+    Notes for translators:
+    - Keep every placeholder (%1$s, %1$d) and its number. The order inside the
+      sentence can change.
+    - "·" separates two short facts on one line. Keep it.
+    - Brand names stay as they are: CashPilot, Android, GitHub, Tailscale, and
+      the app names (EarnApp, Grass...).
+    - "Fleet" and "Reveal API Key" name the server dashboard's own page and
+      button: use the words the CashPilot web UI uses in your language.
+    - https://, http://, 192.168.x.x, 10.x.x.x, .local and .lan stay as written.
+-->
 <resources>
-    <string name="app_name">CashPilot</string>
+    <string name="app_name" translatable="false">CashPilot</string>
+
+    <!-- Shared words -->
+    <string name="settings_title">Settings</string>
+    <string name="back">Back</string>
+    <string name="details">Details</string>
+    <string name="action_open">Open</string>
+    <string name="action_get">Get</string>
+    <string name="action_exit">Exit</string>
+    <string name="action_allow">Allow</string>
+    <string name="action_turn_on">Turn on</string>
+    <string name="action_open_app">Open %1$s</string>
+    <string name="action_get_app">Get %1$s</string>
+    <string name="action_check_connection">Check connection</string>
+    <string name="action_fix_address">Fix the address</string>
+    <string name="action_open_battery">Open battery settings</string>
+    <string name="action_open_settings">Open settings</string>
+    <string name="action_test_connection">Test connection</string>
+    <string name="testing">Testing…</string>
+    <string name="notification_access">Notification access</string>
+    <string name="usage_access">Usage access</string>
+    <string name="battery_optimisation">Battery optimisation</string>
+    <string name="allow_notification_access">Allow notification access</string>
+    <string name="allow_usage_access">Allow usage access</string>
+    <string name="allowed">Allowed</string>
+    <string name="done">Done</string>
+    <string name="not_set">Not set</string>
+    <string name="not_measured">Not measured</string>
+    <string name="nothing_read_yet">Nothing read yet</string>
+    <!-- Between items of a list of app names: "EarnApp, Grass, MystNodes" -->
+    <string name="list_separator">", "</string>
+    <!-- The full list of supported app names as one sentence. -->
+    <string name="supported_names">%1$s.</string>
+
+    <!-- How long ago something happened -->
+    <string name="ago_never">never</string>
+    <string name="ago_just_now">just now</string>
+    <string name="ago_yesterday">yesterday</string>
+    <plurals name="ago_minutes">
+        <item quantity="one">%1$d min ago</item>
+        <item quantity="other">%1$d min ago</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="one">%1$d h ago</item>
+        <item quantity="other">%1$d h ago</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+
+    <!-- How long something has been wrong. Ends a sentence such as "No report has reached example.com for 25 min". -->
+    <string name="for_a_moment">for a moment</string>
+    <string name="for_yet">yet</string>
+    <string name="since_yesterday">since yesterday</string>
+    <plurals name="for_minutes">
+        <item quantity="one">for %1$d min</item>
+        <item quantity="other">for %1$d min</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="one">for %1$d h</item>
+        <item quantity="other">for %1$d h</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="one">for %1$d day</item>
+        <item quantity="other">for %1$d days</item>
+    </plurals>
+
+    <!-- Data sizes. %1$s is the number, already written the local way. -->
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+
+    <!-- The welcome screen: "EarnApp, IPRoyal Pawns, Grass, MystNodes and 6 more" -->
+    <plurals name="supported_sample">
+        <item quantity="one">%1$s and %2$d more</item>
+        <item quantity="other">%1$s and %2$d more</item>
+    </plurals>
+
+    <!-- An app's state, under its name -->
+    <string name="state_running">Running</string>
+    <string name="state_stopped">Stopped</string>
+    <!-- %1$s is an age, such as "3 h ago" -->
+    <string name="state_stopped_last_opened">Stopped · last opened %1$s</string>
+    <string name="state_unknown">Can\'t see it</string>
+    <string name="state_disabled">Not watched</string>
+    <string name="state_not_installed">Not installed</string>
+    <!-- %1$s is a data size, such as "450.0 MB" -->
+    <string name="row_running_data">Running · %1$s in 24 h</string>
+
+    <!-- The line about the server. %1$s is the server's host name; ages are "6 min ago" -->
+    <string name="server_line_none">No server · everything stays on this phone</string>
+    <string name="server_line_needs_https">Not sending to %1$s · it needs https://</string>
+    <string name="server_line_waiting">Paired with %1$s · waiting for the first report</string>
+    <string name="server_line_ok">Last report %1$s · sent every 15 min</string>
+    <string name="server_line_late">Last report %1$s · reports are late</string>
+    <string name="server_line_failing_never">No report has reached %1$s yet</string>
+    <!-- %2$s is "for 25 min", "since yesterday"... -->
+    <string name="server_line_failing">No report has reached %1$s %2$s</string>
+
+    <!-- The headline of the home screen -->
+    <string name="verdict_one_running">Your app is running</string>
+    <!-- Used only for 2 or more apps -->
+    <plurals name="verdict_all_running">
+        <item quantity="one">All %1$d apps running</item>
+        <item quantity="other">All %1$d apps running</item>
+    </plurals>
+    <string name="verdict_none_title">No apps watched</string>
+    <string name="verdict_none_sub">Every installed app is switched off. Turn them back on in Settings, Apps to watch.</string>
+    <!-- %1$d stopped of %2$d apps. The plural follows %2$d. -->
+    <plurals name="verdict_stopped_title">
+        <item quantity="one">%1$d of %2$d app stopped</item>
+        <item quantity="other">%1$d of %2$d apps stopped</item>
+    </plurals>
+    <string name="verdict_stopped_sub">Opening a stopped app usually starts it again.</string>
+    <!-- %1$d running of %2$d apps. The plural follows %2$d. -->
+    <plurals name="verdict_unknown_title">
+        <item quantity="one">%1$d of %2$d app running</item>
+        <item quantity="other">%1$d of %2$d apps running</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="one">CashPilot can\'t see the other %1$d until its access is back on.</item>
+        <item quantity="other">CashPilot can\'t see the other %1$d until its access is back on.</item>
+    </plurals>
+    <string name="verdict_server_sub">But your server isn\'t getting this phone\'s reports.</string>
+    <!-- %1$s is "for 25 min", "since yesterday"... -->
+    <string name="verdict_late_sub">But no report has gone out %1$s.</string>
+    <string name="verdict_ok_sub">Nothing needs you right now.</string>
+
+    <!-- The list of things that need the user -->
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s stopped</string>
+    <string name="task_stopped_body">Opening it usually starts it again.</string>
+    <string name="task_failing_title">Reports aren\'t getting through</string>
+    <!-- "Check connection" is the button below this text: use the same words as action_check_connection. -->
+    <string name="task_failing_body_never">No report has reached %1$s yet. Check connection says why.</string>
+    <!-- %2$s is "for 25 min", "since yesterday"... -->
+    <string name="task_failing_body">Nothing has reached %1$s %2$s. Check connection says why.</string>
+    <string name="task_late_title">Reports are late</string>
+    <string name="task_late_body">No report has gone out %1$s. Android holds background work back, more so with battery optimisation on or no network.</string>
+    <string name="task_https_title">Reports are not being sent</string>
+    <string name="task_https_body">%1$s is on the public internet, so CashPilot sends the key only over https://.</string>
+    <string name="task_notif_title">Notification access is off</string>
+    <string name="task_notif_body">CashPilot can\'t tell which apps are running until it\'s back on.</string>
+    <string name="task_usage_title">Usage access is off</string>
+    <string name="task_usage_body">No last-seen times or data use until it\'s back on.</string>
+    <string name="task_battery_title">Reports may arrive late</string>
+    <string name="task_battery_body">Battery optimisation is on for CashPilot, so Android can hold reports back while the screen is off.</string>
+
+    <!-- Earnings -->
+    <plurals name="earnings_label">
+        <item quantity="one">Your server reports, last %1$d day</item>
+        <item quantity="other">Your server reports, last %1$d days</item>
+    </plurals>
+    <string name="earnings_needs_server">Add a server to see figures</string>
+    <!-- %1$s is an age, such as "7 h ago" -->
+    <string name="earnings_from">From %1$s</string>
+    <string name="shared_footnote">* Runs on more than one of your devices. The provider reports one balance for the account, so this is not this phone alone.</string>
+    <string name="no_reading_note">No reading means your server has sent no figure for that provider. It is not $0.</string>
+    <string name="app_earnings_needs_server">Needs a server</string>
+    <!-- A whole-account figure, starred to point at shared_footnote -->
+    <string name="app_earnings_shared">%1$s *</string>
+
+    <!-- The server row in Settings -->
+    <string name="settings_server_none">Everything stays on this phone · add a server for figures</string>
+    <string name="settings_server_needs_https">Not sending · this address needs https://</string>
+    <string name="settings_server_failing_never">Not getting through · no report yet</string>
+    <string name="settings_server_failing">Not getting through · last report %1$s</string>
+    <string name="settings_server_late">Reports are late · last report %1$s</string>
+    <string name="settings_server_waiting">Paired · waiting for the first report</string>
+    <string name="settings_server_ok">Reports every 15 min · last report %1$s</string>
+
+    <!-- What a connection test says. %1$s is the server's host name. -->
+    <string name="pair_testing_body">Sending one report to %1$s.</string>
+    <string name="pair_ok_title">Connected</string>
+    <!-- %1$s is this phone's name, such as "Google Pixel 8" -->
+    <string name="pair_ok_body">Your server answered and accepted the key. This phone appears in Fleet as %1$s.</string>
+    <string name="pair_key_refused_title">The server refused this API key</string>
+    <string name="pair_key_refused_body">The address is right: the server answered. Copy the key again from Fleet → Reveal API Key.</string>
+    <string name="pair_unreachable_title">No answer from %1$s</string>
+    <string name="pair_unreachable_body">Check the address, and that this phone can reach it: on the same network, or over your VPN.</string>
+    <string name="pair_url_refused_title">This address needs https://</string>
+    <string name="pair_url_refused_body">CashPilot sends the key over http:// only to your own network: 192.168.x.x, 10.x.x.x, a .local or .lan name, or Tailscale.</string>
+    <string name="pair_rejected_title">The server answered with an error</string>
+    <string name="pair_rejected_body">It is reachable but did not accept the report. Check that it runs a recent CashPilot release.</string>
+    <string name="pair_not_cashpilot_title">%1$s answered, but not as CashPilot</string>
+    <string name="pair_not_cashpilot_body">Something else answers at this address, such as a login page or another app. Use the address you open the CashPilot dashboard at.</string>
+    <string name="pair_save_failed_title">Couldn\'t save the details</string>
+    <string name="pair_save_failed_body">Android didn\'t store the address and key, so nothing was sent. Try again.</string>
+
+    <!-- Home screen -->
+    <plurals name="home_tasks_heading">
+        <item quantity="one">%1$d thing needs you</item>
+        <item quantity="other">%1$d things need you</item>
+    </plurals>
+    <string name="home_all_switched_off">Every installed app is switched off in Settings.</string>
+    <plurals name="home_other_supported">
+        <item quantity="one">%1$d other supported app</item>
+        <item quantity="other">%1$d other supported apps</item>
+    </plurals>
+
+    <!-- One app's detail screen -->
+    <!-- %1$s is an age, such as "3 h ago" -->
+    <string name="detail_stopped">Stopped. Last opened %1$s.</string>
+    <string name="detail_unknown">CashPilot can\'t see whether it runs.</string>
+    <string name="detail_hint">These apps often stop when Android clears them from memory. Opening the app usually starts it again.</string>
+    <plurals name="detail_server_reports">
+        <item quantity="one">Server reports, last %1$d day</item>
+        <item quantity="other">Server reports, last %1$d days</item>
+    </plurals>
+    <string name="detail_data_moved">Data moved, last 24 h</string>
+    <string name="detail_last_opened">Last opened</string>
+    <string name="detail_watched">Watched by CashPilot</string>
+
+    <!-- Home screen with no access at all -->
+    <string name="blind_title">CashPilot can\'t see your apps yet</string>
+    <plurals name="blind_body">
+        <item quantity="one">%1$d app you use is installed, but Android won\'t show CashPilot whether they run until you allow two things. Each one explains what it reads first.</item>
+        <item quantity="other">%1$d apps you use are installed, but Android won\'t show CashPilot whether they run until you allow two things. Each one explains what it reads first.</item>
+    </plurals>
+
+    <!-- Home screen with no supported app installed -->
+    <string name="no_apps_title">No supported app on this phone yet</string>
+    <string name="no_apps_body">CashPilot watches passive-income apps you already use, such as EarnApp or Grass, and tells you when one stops running. Once one is installed it appears here by itself.</string>
+    <string name="no_apps_standalone_title">Works without a server</string>
+    <string name="no_apps_standalone_body">On its own, CashPilot shows which apps run, which have stopped, and opens them for you. A CashPilot server adds earnings figures and lists this phone with your other machines.</string>
+    <string name="demo_start">Show a demo with sample data</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="one">See the %1$d supported app</item>
+        <item quantity="other">See the %1$d supported apps</item>
+    </plurals>
+
+    <!-- The supported apps. "Referral" in supported_referral_note names the label in supported_referral: keep them the same word. -->
+    <string name="supported_title">Supported apps</string>
+    <string name="supported_intro_all">The apps CashPilot can watch. What any of them pays depends on the provider, your connection and your region.</string>
+    <string name="supported_intro_missing">CashPilot can watch these apps if you install them. What any of them pays depends on the provider, your connection and your region.</string>
+    <string name="supported_referral_note">Links marked Referral include CashPilot\'s referral code, which supports CashPilot\'s development. The others go to the app store.</string>
+    <string name="supported_installed">Installed</string>
+    <string name="supported_referral">Referral · provider\'s sign-up page</string>
+    <string name="supported_store">App store page</string>
+
+    <!-- Demo mode -->
+    <string name="demo_banner">Demo · sample data, nothing here is real</string>
+
+    <!-- Onboarding -->
+    <string name="onboard_step">Step %1$d of %2$d</string>
+    <string name="welcome_title">Know when an earning app stops</string>
+    <string name="welcome_lead">CashPilot checks the passive-income apps on this phone and shows you which ones stopped, and how to start them again.</string>
+    <string name="welcome_start">Get started</string>
+    <string name="welcome_fact_running_title">Which apps are running</string>
+    <!-- %1$s is supported_sample: "EarnApp, IPRoyal Pawns, Grass, MystNodes and 6 more" -->
+    <string name="welcome_fact_running_body">%1$s, checked whenever you open CashPilot.</string>
+    <string name="welcome_fact_stops_title">What to do when one stops</string>
+    <string name="welcome_fact_stops_body">One tap opens the app so you can start it again.</string>
+    <string name="welcome_fact_server_title">Figures from your server, if you have one</string>
+    <string name="welcome_fact_server_body">A CashPilot server reports what each app\'s account shows. Optional; reports go every 15 minutes.</string>
+    <string name="welcome_fact_private_title">Nothing leaves this phone</string>
+    <string name="welcome_fact_private_body">Except to your own server, if you add one. No ads, no tracking.</string>
+
+    <string name="permissions_title">Let CashPilot see your apps</string>
+    <string name="permissions_lead">Android hides other apps\' state. Two switches in system settings fix that; you come straight back here.</string>
+    <string name="permissions_without">Without both, CashPilot can\'t tell running from stopped. You can allow them later from Settings.</string>
+    <string name="permissions_continue">Continue</string>
+    <string name="permissions_continue_without">Continue without them</string>
+    <!-- %1$d is the number of supported apps -->
+    <string name="permissions_notif_why">These apps keep a notification up while they run. CashPilot checks whether it is there, for the %1$d supported apps only.</string>
+    <string name="permissions_notif_not_read">Never reads notification text. You\'ll see exactly what it reads before Android asks.</string>
+    <string name="permissions_usage_why">Shows when each supported app last ran and how much data it moved in the last 24 hours, which shows it is working.</string>
+    <string name="permissions_usage_not_read">Never looks at other apps or websites. You\'ll see exactly what it reads first.</string>
+    <string name="permissions_battery_why">CashPilot reports every 15 minutes. With battery optimisation on, Android can hold those reports back while the screen is off.</string>
+    <!-- "All apps" and "Don't optimize" are Android's own settings labels: use the words Android shows in your language. -->
+    <string name="permissions_battery_not_read">Optional. Opens Android\'s battery list: choose All apps, then CashPilot, then Don\'t optimize.</string>
+
+    <string name="server_address">Server address</string>
+    <string name="server_address_refused">This address is on the public internet, so it needs https://. CashPilot never sends the key over plain http:// there.</string>
+    <string name="server_address_cleartext">Plain http:// on your own network: the key and app list travel unencrypted on it.</string>
+    <string name="api_key">API key</string>
+    <string name="api_key_where">On your server: Fleet → Reveal API Key. Stored only on this phone.</string>
+    <string name="server_address_hint">Use https://. Plain http:// works only for an address on your own network, such as 192.168.x.x or a .local or Tailscale name.</string>
+
+    <string name="server_title">Connect your server</string>
+    <string name="server_lead">Optional. Without one you still see which apps run and which stopped. A server adds the figures its provider accounts show, and lists this phone in your fleet.</string>
+    <string name="server_finish">Finish</string>
+    <string name="server_skip">Use without a server</string>
+
+    <!-- Shown before Android's own settings screen opens. Google Play requires it. -->
+    <string name="disclose_title_notifications">Before you turn on notification access</string>
+    <string name="disclose_title_usage">Before you turn on usage access</string>
+    <string name="disclose_lead">Android will open its settings next. This is what CashPilot does with it.</string>
+    <string name="disclose_reads">CashPilot reads</string>
+    <string name="disclose_never">It never reads</string>
+    <!-- %1$d is the number of supported apps, listed below this text -->
+    <string name="disclose_notif_reads">Only whether one of the %1$d apps below is showing an ongoing notification right now. That notification is how those apps show they are running.</string>
+    <string name="disclose_notif_never">The text of any notification, and anything from any other app. Only two things go out, and only to your own server if you add one: whether each of these apps has that notification up, and whether it is running.</string>
+    <string name="disclose_usage_reads">For the %1$d apps below only: when each one was last in use, and how much data it sent and received in the last 24 hours.</string>
+    <string name="disclose_usage_never">Which other apps you use, which websites you visit, or what any app does. The results stay on this phone, unless you add your own server.</string>
+    <string name="disclose_continue">Continue to Android settings</string>
+    <string name="disclose_not_now">Not now</string>
+
+    <!-- Settings -->
+    <string name="settings_section_server">Server</string>
+    <string name="settings_no_server">No server</string>
+    <!-- %1$s is the masked key, such as "•••• •••• 9a7b" -->
+    <string name="settings_key_stored">%1$s · stored on this phone only</string>
+    <string name="settings_test_hint">Sends a report now and shows what the server said.</string>
+    <string name="settings_section_phone">This phone</string>
+    <string name="settings_notif_off">Off · can\'t see running apps</string>
+    <string name="settings_usage_off">Off · no last-seen times</string>
+    <string name="settings_battery_off">Off for CashPilot</string>
+    <string name="settings_battery_on">On · reports may arrive late</string>
+    <string name="settings_section_apps">Apps to watch</string>
+    <plurals name="settings_all_supported">
+        <item quantity="one">All %1$d supported apps</item>
+        <item quantity="other">All %1$d supported apps</item>
+    </plurals>
+    <string name="settings_installed_count">%1$d installed · %2$d not installed</string>
+    <string name="settings_section_about">About</string>
+    <!-- %1$s is the version, such as "1.0.3" -->
+    <string name="settings_about_app">CashPilot for Android %1$s</string>
+    <string name="settings_about_source">Source code and licence (GPL-3.0)</string>
+    <string name="settings_about_server">CashPilot server</string>
+    <string name="settings_about_server_body">The self-hosted dashboard this app reports to</string>
+    <string name="settings_about_sponsor">Sponsor the project</string>
+    <string name="settings_about_sponsor_body" translatable="false">GitHub Sponsors</string>
+    <string name="settings_demo">Demo mode</string>
+    <string name="settings_demo_body">Shows the screens with sample data</string>
 </resources>
