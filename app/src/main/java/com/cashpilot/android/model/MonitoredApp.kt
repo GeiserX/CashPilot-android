@@ -34,7 +34,8 @@ object KnownApps {
             referralUrl = "https://app.grass.io/register?referralCode=kn8FNEPnUr2tMqE"),
         MonitoredApp("titan", "com.titan_network_vip.titan_app", "Titan Network",
             referralUrl = "https://edge.titannet.info/signup?inviteCode=2GKKJ495"),
-        MonitoredApp("nodle", "io.nodle.cash", "Nodle Cash"),
+        MonitoredApp("nodle", "io.nodle.cash", "Nodle Cash",
+            referralUrl = "https://join.nodle.com/p/YDFoLA4iO08LI7igSskPjw"),
         MonitoredApp("wipter", "com.wipter.app", "Wipter",
             referralUrl = "https://wipter.com/register?via=FB1373FBDA"),
     )
