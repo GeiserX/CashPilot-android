@@ -8,6 +8,8 @@
 [![CI](https://github.com/GeiserX/CashPilot-android/actions/workflows/ci.yml/badge.svg)](https://github.com/GeiserX/CashPilot-android/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/GeiserX/CashPilot-android?style=flat-square)](LICENSE)
 [![codecov](https://codecov.io/gh/GeiserX/CashPilot-android/graph/badge.svg)](https://codecov.io/gh/GeiserX/CashPilot-android)
+[![Website](https://img.shields.io/badge/website-cashpilot.club-blue?style=flat-square)](https://cashpilot.club)
+[![X](https://img.shields.io/badge/X-%40CashPilotClub-000000?style=flat-square&logo=x)](https://x.com/CashPilotClub)
 
 CashPilot Android is the Android companion app for [CashPilot](https://github.com/GeiserX/CashPilot). It detects which passive income apps are installed and running on your phone, without root, and reports them to your CashPilot fleet dashboard.
 
