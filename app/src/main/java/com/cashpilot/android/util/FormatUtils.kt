@@ -1,5 +1,6 @@
 package com.cashpilot.android.util
 
+import java.math.RoundingMode
 import java.text.NumberFormat
 import java.time.Instant
 import java.util.Currency
@@ -57,6 +58,8 @@ object FormatUtils {
             currency = Currency.getInstance("USD")
             minimumFractionDigits = 2
             maximumFractionDigits = 2
+            // Half up, as String.format did before: 1.125 shows as 1.13, not 1.12.
+            roundingMode = RoundingMode.HALF_UP
         }
 
     /**

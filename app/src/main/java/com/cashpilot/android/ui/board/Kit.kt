@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -109,8 +108,8 @@ fun Heading(text: String, modifier: Modifier = Modifier, style: androidx.compose
 
 @Composable
 fun SectionLabel(text: String) = Text(
-    // The language's own capitals: Turkish "i" becomes "İ", not "I".
-    text.uppercase(LocalConfiguration.current.locales[0]),
+    // The capitals of the language on screen: Turkish "i" becomes "İ", English stays "I".
+    text.uppercase(textLocale()),
     Modifier.padding(start = 4.dp, bottom = 8.dp, top = 4.dp).semantics { heading() },
     style = MaterialTheme.typography.labelMedium,
     letterSpacing = 1.2.sp,

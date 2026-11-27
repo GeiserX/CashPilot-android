@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import com.cashpilot.android.R
 import com.cashpilot.android.ui.theme.LocalPalette
+import java.util.Locale
 
 /** One language the app is translated into, named in that language. */
 data class Language(val tag: String, val name: String)
@@ -89,12 +91,24 @@ object Languages {
      * stores the choice and recreates the screen; Android 13 and later store it
      * in the system's per-app language setting.
      */
+    /**
+     * The language the words on screen are in for a phone set to [locale]:
+     * [locale] itself when the app has that language, else English, which
+     * Android shows instead. Capitals follow this, so a phone in a language the
+     * app lacks, such as Azerbaijani, never writes "THİS PHONE".
+     */
+    fun spoken(locale: Locale): Locale = if (find(locale.toLanguageTag()) != null) locale else Locale.ENGLISH
+
     fun pick(tag: String) {
         AppCompatDelegate.setApplicationLocales(
             if (tag.isBlank()) LocaleListCompat.getEmptyLocaleList() else LocaleListCompat.forLanguageTags(tag),
         )
     }
 }
+
+/** The language of the words on screen now; see [Languages.spoken]. */
+@Composable
+fun textLocale(): Locale = Languages.spoken(LocalConfiguration.current.locales[0])
 
 /** What the Language row in Settings says: the picked language, or the system default. */
 @Composable

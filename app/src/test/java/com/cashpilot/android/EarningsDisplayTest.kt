@@ -49,6 +49,11 @@ class EarningsDisplayTest {
     }
 
     @Test
+    fun `a half cent rounds up, as it always did`() {
+        assertEquals("$1.13", FormatUtils.formatPlatformEarnings(1.125))
+    }
+
+    @Test
     fun `no total is shown when nothing has been read`() {
         assertNull(FormatUtils.formatEarningsTotal(null, 30))
     }
