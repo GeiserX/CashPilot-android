@@ -1,0 +1,1 @@
+CashPilot is now in 20 languages. It follows your phone's language, and Settings, Language picks another one. Android 13 and later also list it in the system's app language setting. Arabic reads right to left.
