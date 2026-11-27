@@ -27,7 +27,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -36,11 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cashpilot.android.R
-import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.theme.LocalPalette
 import com.cashpilot.android.ui.theme.Tnum
-import com.cashpilot.android.util.FormatUtils
 
 /** What the home screens can ask for. The activity wires these to real intents. */
 data class BoardActions(
@@ -75,20 +76,21 @@ fun HomeScreen(b: Board, actions: BoardActions) {
         b.blind -> return BlindHome(b, actions)
     }
     val c = LocalPalette.current
+    val s = strings()
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        TopBar("CashPilot") {
+        TopBar(stringResource(R.string.app_name)) {
             IconButton(onClick = actions.openSettings, modifier = Modifier.size(48.dp)) {
-                Ic(R.drawable.ic_settings, size = 24, description = "Settings")
+                Ic(R.drawable.ic_settings, size = 24, description = stringResource(R.string.settings_title))
             }
         }
         Gap(12)
         VerdictBlock(b)
         Gap(24)
         Column(Modifier.padding(horizontal = 16.dp)) {
-            val tasks = b.tasksToShow()
+            val tasks = b.tasksToShow(s)
             if (tasks.size >= 2) {
                 Heading(
-                    "${tasks.size} things need you",
+                    pluralStringResource(R.plurals.home_tasks_heading, tasks.size, tasks.size),
                     Modifier.padding(start = 4.dp, bottom = 10.dp),
                     MaterialTheme.typography.titleMedium,
                 )
@@ -104,18 +106,18 @@ fun HomeScreen(b: Board, actions: BoardActions) {
                 }
             } else {
                 Panel {
-                    Text("Every installed app is switched off in Settings.", color = c.text2)
+                    Text(stringResource(R.string.home_all_switched_off), color = c.text2)
                 }
             }
             Gap(12)
             EarningsStrip(b, actions)
-            b.footnotes().forEach {
+            b.footnotes(s).forEach {
                 Gap(8)
                 Text(it, style = MaterialTheme.typography.bodySmall, color = c.muted, modifier = Modifier.padding(horizontal = 4.dp))
             }
             if (b.notInstalled.isNotEmpty()) {
                 Gap(8)
-                LinkRow("${b.notInstalled.size} other supported apps", actions.showSupported)
+                LinkRow(pluralStringResource(R.plurals.home_other_supported, b.notInstalled.size, b.notInstalled.size), actions.showSupported)
             }
             Gap(24)
         }
@@ -125,7 +127,7 @@ fun HomeScreen(b: Board, actions: BoardActions) {
 @Composable
 private fun VerdictBlock(b: Board) {
     val c = LocalPalette.current
-    val v = b.verdict()
+    val v = b.verdict(strings())
     val ring = toneColor(v.tone)
     Column(Modifier.padding(horizontal = 20.dp)) {
         Box(
@@ -134,7 +136,7 @@ private fun VerdictBlock(b: Board) {
         ) {
             if (v.count != null) {
                 Text(
-                    "${v.count}",
+                    String.format(LocalConfiguration.current.locales[0], "%d", v.count),
                     Modifier.clearAndSetSemantics { },
                     style = MaterialTheme.typography.headlineSmall.merge(Tnum),
                     fontWeight = FontWeight.Bold,
@@ -180,7 +182,7 @@ private fun TaskCard(t: Task, first: Boolean, numbered: Boolean, index: Int, b: 
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text(
-                    (if (numbered) "$index. " else "") + t.title,
+                    if (numbered) stringResource(R.string.task_numbered, index, t.title) else t.title,
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.titleMedium,
                 )
@@ -196,9 +198,10 @@ private fun TaskCard(t: Task, first: Boolean, numbered: Boolean, index: Int, b: 
 @Composable
 private fun BoardRow(a: AppRow, now: Long, actions: BoardActions) {
     val c = LocalPalette.current
+    val s = strings()
     Row(
         Modifier.fillMaxWidth()
-            .clickable(onClickLabel = "Details", role = Role.Button) { actions.showApp(a.slug) }
+            .clickable(onClickLabel = stringResource(R.string.details), role = Role.Button) { actions.showApp(a.slug) }
             .heightIn(min = 56.dp)
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -211,14 +214,15 @@ private fun BoardRow(a: AppRow, now: Long, actions: BoardActions) {
                 Dot(toneColor(a.state.tone()), 7)
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    a.rowLine(now),
+                    a.rowLine(s, now),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (a.state == AppState.STOPPED) c.bad else c.text2,
                 )
             }
         }
         if (a.state == AppState.STOPPED) {
-            SmallAction("Open", { actions.openApp(a) }, filled = true, modifier = Modifier.semantics { contentDescription = "Open ${a.name}" })
+            val openApp = stringResource(R.string.action_open_app, a.name)
+            SmallAction(stringResource(R.string.action_open), { actions.openApp(a) }, filled = true, modifier = Modifier.semantics { contentDescription = openApp })
         } else {
             Ic(R.drawable.ic_chevron_right, tint = c.muted, size = 18)
         }
@@ -228,7 +232,7 @@ private fun BoardRow(a: AppRow, now: Long, actions: BoardActions) {
 @Composable
 private fun EarningsStrip(b: Board, actions: BoardActions) {
     val c = LocalPalette.current
-    val e = b.earningsLine()
+    val e = b.earningsLine(strings())
     val tap = if (!b.paired) Modifier.clickable(role = Role.Button, onClick = actions.openSettings) else Modifier
     Panel(Modifier.clip(RoundedCornerShape(16.dp)).then(tap).semantics(mergeDescendants = true) {}, pad = PaddingValues(horizontal = 16.dp, vertical = 14.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -263,6 +267,7 @@ private fun LinkRow(text: String, onClick: () -> Unit) {
 @Composable
 fun AppDetailScreen(a: AppRow, b: Board, actions: BoardActions, onBack: () -> Unit) {
     val c = LocalPalette.current
+    val s = strings()
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         BackBar(null, onBack)
         Column(Modifier.padding(horizontal = 20.dp)) {
@@ -276,31 +281,31 @@ fun AppDetailScreen(a: AppRow, b: Board, actions: BoardActions, onBack: () -> Un
                 Spacer(Modifier.width(8.dp))
                 Text(
                     when (a.state) {
-                        AppState.STOPPED -> "Stopped. Last opened ${b.ago(a.lastActive)}."
-                        AppState.UNKNOWN -> "CashPilot can't see whether it runs."
-                        else -> a.stateWord(b.now)
+                        AppState.STOPPED -> stringResource(R.string.detail_stopped, b.ago(s, a.lastActive))
+                        AppState.UNKNOWN -> stringResource(R.string.detail_unknown)
+                        else -> a.stateWord(s, b.now)
                     },
                     color = if (a.state == AppState.STOPPED) c.bad else c.text2,
                 )
             }
             Gap(20)
             if (a.state != AppState.NOT_INSTALLED) {
-                Primary("Open ${a.name}", { actions.openApp(a) }, Modifier.fillMaxWidth())
+                Primary(stringResource(R.string.action_open_app, a.name), { actions.openApp(a) }, Modifier.fillMaxWidth())
                 Gap(8)
                 Text(
-                    "These apps often stop when Android clears them from memory. Opening the app usually starts it again.",
+                    stringResource(R.string.detail_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = c.muted,
                 )
             }
             Gap(24)
             Panel(pad = PaddingValues(0.dp)) {
-                Fact("Server reports, last ${b.windowDays} days", b.appEarnings(a))
+                Fact(pluralStringResource(R.plurals.detail_server_reports, b.windowDays, b.windowDays), b.appEarnings(s, a))
                 Divider()
-                val (moved, opened) = b.measuredUse(a)
-                Fact("Data moved, last 24 h", moved)
+                val (moved, opened) = b.measuredUse(s, a)
+                Fact(stringResource(R.string.detail_data_moved), moved)
                 Divider()
-                Fact("Last opened", opened)
+                Fact(stringResource(R.string.detail_last_opened), opened)
                 Divider()
                 // The whole row is the switch: one 56 dp target, one TalkBack stop.
                 Row(
@@ -309,13 +314,13 @@ fun AppDetailScreen(a: AppRow, b: Board, actions: BoardActions, onBack: () -> Un
                         .heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Watched by CashPilot", color = c.text2, modifier = Modifier.weight(1f))
+                    Text(stringResource(R.string.detail_watched), color = c.text2, modifier = Modifier.weight(1f))
                     Switch(checked = a.state != AppState.DISABLED, onCheckedChange = null)
                 }
             }
             if (b.paired && a.shared && a.usd != null) {
                 Gap(10)
-                Text(SHARED_FOOTNOTE, style = MaterialTheme.typography.bodySmall, color = c.muted)
+                Text(stringResource(R.string.shared_footnote), style = MaterialTheme.typography.bodySmall, color = c.muted)
             }
             Gap(24)
         }
@@ -347,26 +352,24 @@ fun BlindHome(b: Board, actions: BoardActions) {
             Ic(R.drawable.ic_visibility_off, tint = c.text2, size = 28)
         }
         Gap(20)
-        Heading("CashPilot can't see your apps yet", style = MaterialTheme.typography.headlineSmall)
+        Heading(stringResource(R.string.blind_title), style = MaterialTheme.typography.headlineSmall)
         Gap(10)
         Text(
-            "${Words.apps(b.watched.size).replaceFirstChar { it.uppercase() }} you use " +
-                (if (b.watched.size == 1) "is" else "are") +
-                " installed, but Android won't show CashPilot whether they run until you allow two things. Each one explains what it reads first.",
+            pluralStringResource(R.plurals.blind_body, b.watched.size, b.watched.size),
             style = MaterialTheme.typography.bodyLarge,
             color = c.text2,
         )
         Gap(24)
-        Primary("Allow notification access", actions.allowNotifications, Modifier.fillMaxWidth())
+        Primary(stringResource(R.string.allow_notification_access), actions.allowNotifications, Modifier.fillMaxWidth())
         Gap(10)
-        Secondary("Allow usage access", actions.allowUsage, Modifier.fillMaxWidth())
+        Secondary(stringResource(R.string.allow_usage_access), actions.allowUsage, Modifier.fillMaxWidth())
         Gap(12)
         if (b.paired) {
             Gap(20)
             EarningsStrip(b, actions)
         }
         Gap(12)
-        LinkRow("Settings", actions.openSettings)
+        LinkRow(stringResource(R.string.settings_title), actions.openSettings)
         Gap(12)
         ServerLine(b)
     }
@@ -384,7 +387,7 @@ fun NoAppsHome(b: Board, actions: BoardActions) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Spacer(Modifier.weight(1f))
             IconButton(onClick = actions.openSettings, modifier = Modifier.size(48.dp)) {
-                Ic(R.drawable.ic_settings, size = 24, description = "Settings")
+                Ic(R.drawable.ic_settings, size = 24, description = stringResource(R.string.settings_title))
             }
         }
         Gap(8)
@@ -392,27 +395,27 @@ fun NoAppsHome(b: Board, actions: BoardActions) {
             Ic(R.drawable.ic_query_stats, tint = c.text2, size = 28)
         }
         Gap(20)
-        Heading("No supported app on this phone yet", style = MaterialTheme.typography.headlineSmall)
+        Heading(stringResource(R.string.no_apps_title), style = MaterialTheme.typography.headlineSmall)
         Gap(10)
         Text(
-            "CashPilot watches passive-income apps you already use, such as EarnApp or Grass, and tells you when one stops running. Once one is installed it appears here by itself.",
+            stringResource(R.string.no_apps_body),
             style = MaterialTheme.typography.bodyLarge,
             color = c.text2,
         )
         Gap(24)
         Panel(Modifier.semantics(mergeDescendants = true) {}) {
-            Text("Works without a server", fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.no_apps_standalone_title), fontWeight = FontWeight.SemiBold)
             Gap(6)
             Text(
-                "On its own, CashPilot shows which apps run, which have stopped, and opens them for you. A CashPilot server adds earnings figures and lists this phone with your other machines.",
+                stringResource(R.string.no_apps_standalone_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = c.text2,
             )
         }
         Gap(20)
-        Secondary("Show a demo with sample data", actions.startDemo, Modifier.fillMaxWidth())
+        Secondary(stringResource(R.string.demo_start), actions.startDemo, Modifier.fillMaxWidth())
         Gap(8)
-        LinkRow("See the ${b.apps.size} supported apps", actions.showSupported)
+        LinkRow(pluralStringResource(R.plurals.no_apps_see_supported, b.apps.size, b.apps.size), actions.showSupported)
         Gap(24)
         ServerLine(b)
     }
@@ -428,18 +431,17 @@ fun SupportedAppsScreen(b: Board, actions: BoardActions, all: Boolean = false, o
     val c = LocalPalette.current
     val rows = if (all) b.apps else b.notInstalled.ifEmpty { b.apps }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        BackBar("Supported apps", onBack)
+        BackBar(stringResource(R.string.supported_title), onBack)
         Column(Modifier.padding(horizontal = 16.dp)) {
             Text(
-                (if (all) "The apps CashPilot can watch." else "CashPilot can watch these apps if you install them.") +
-                    " What any of them pays depends on the provider, your connection and your region.",
+                stringResource(if (all) R.string.supported_intro_all else R.string.supported_intro_missing),
                 color = c.text2,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp),
             )
             Panel(fill = c.raised, pad = PaddingValues(horizontal = 14.dp, vertical = 10.dp)) {
                 Text(
-                    "Links marked Referral include CashPilot's referral code, which supports CashPilot's development. The others go to the app store.",
+                    stringResource(R.string.supported_referral_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = c.text2,
                 )
@@ -458,20 +460,23 @@ fun SupportedAppsScreen(b: Board, actions: BoardActions, all: Boolean = false, o
                         Column(Modifier.weight(1f)) {
                             Text(a.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                             Text(
-                                when {
-                                    have -> "Installed"
-                                    a.referralUrl != null -> "Referral · provider's sign-up page"
-                                    else -> "App store page"
-                                },
+                                stringResource(
+                                    when {
+                                        have -> R.string.supported_installed
+                                        a.referralUrl != null -> R.string.supported_referral
+                                        else -> R.string.supported_store
+                                    },
+                                ),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = c.muted,
                             )
                         }
+                        val named = stringResource(if (have) R.string.action_open_app else R.string.action_get_app, a.name)
                         SmallAction(
-                            if (have) "Open" else "Get",
+                            stringResource(if (have) R.string.action_open else R.string.action_get),
                             { if (have) actions.openApp(a) else actions.install(a) },
                             color = c.text,
-                            modifier = Modifier.semantics { contentDescription = (if (have) "Open " else "Get ") + a.name },
+                            modifier = Modifier.semantics { contentDescription = named },
                         )
                     }
                 }
@@ -491,16 +496,13 @@ fun DemoFrame(onExit: () -> Unit, content: @Composable () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                "Demo · sample data, nothing here is real",
+                stringResource(R.string.demo_banner),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f),
             )
-            SmallAction("Exit", onExit, color = c.accent)
+            SmallAction(stringResource(R.string.action_exit), onExit, color = c.accent)
         }
         Box(Modifier.weight(1f)) { content() }
     }
 }
-
-/** The supported apps, by name, for the disclosures. */
-fun supportedNames(): String = KnownApps.all.joinToString(", ") { it.displayName } + "."

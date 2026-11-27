@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -74,27 +76,29 @@ fun SettingsScreen(
     onBack: () -> Unit,
 ) {
     val c = LocalPalette.current
+    val s = strings()
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        BackBar("Settings", onBack)
+        BackBar(stringResource(R.string.settings_title), onBack)
         Column(Modifier.padding(horizontal = 16.dp)) {
             Gap(8)
-            SectionLabel("Server")
+            SectionLabel(stringResource(R.string.settings_section_server))
             Panel(pad = PaddingValues(0.dp)) {
-                val s = b.serverSetting()
-                SettingRow(if (b.paired) b.host else "No server", s.text, toneColor(s.tone))
+                val line = b.serverSetting(s)
+                SettingRow(if (b.paired) b.host else stringResource(R.string.settings_no_server), line.text, toneColor(line.tone))
                 Divider()
-                SettingRow("API key", Words.maskKey(form.savedKey) + if (form.savedKey.isNotBlank()) " · stored on this phone only" else "")
+                val masked = Words.maskKey(s, form.savedKey)
+                SettingRow(stringResource(R.string.api_key), if (form.savedKey.isNotBlank()) stringResource(R.string.settings_key_stored, masked) else masked)
                 Divider()
                 Column(Modifier.padding(16.dp)) {
                     ServerFields(form.url, form.key, settings.onUrl, settings.onKey)
                     Gap(12)
                     Secondary(
-                        if (form.result == PairResult.TESTING) "Testing…" else "Test connection",
+                        stringResource(if (form.result == PairResult.TESTING) R.string.testing else R.string.action_test_connection),
                         settings.testConnection,
                         Modifier.fillMaxWidth(),
                     )
                     Gap(4)
-                    Text("Sends a report now and shows what the server said.", style = MaterialTheme.typography.bodySmall, color = c.muted)
+                    Text(stringResource(R.string.settings_test_hint), style = MaterialTheme.typography.bodySmall, color = c.muted)
                     if (form.result != PairResult.NONE) {
                         Gap(12)
                         PairNotice(form.result, Board.hostOf(form.url), deviceName)
@@ -102,31 +106,31 @@ fun SettingsScreen(
                 }
             }
             Gap(20)
-            SectionLabel("This phone")
+            SectionLabel(stringResource(R.string.settings_section_phone))
             Panel(pad = PaddingValues(0.dp)) {
                 SettingRow(
-                    "Notification access",
-                    if (b.notif) "Allowed" else "Off · can't see running apps",
+                    stringResource(R.string.notification_access),
+                    stringResource(if (b.notif) R.string.allowed else R.string.settings_notif_off),
                     if (b.notif) c.ok else c.bad,
                     actions.allowNotifications,
                 )
                 Divider()
                 SettingRow(
-                    "Usage access",
-                    if (b.usage) "Allowed" else "Off · no last-seen times",
+                    stringResource(R.string.usage_access),
+                    stringResource(if (b.usage) R.string.allowed else R.string.settings_usage_off),
                     if (b.usage) c.ok else c.bad,
                     actions.allowUsage,
                 )
                 Divider()
                 SettingRow(
-                    "Battery optimisation",
-                    if (b.battery) "Off for CashPilot" else "On · reports may arrive late",
+                    stringResource(R.string.battery_optimisation),
+                    stringResource(if (b.battery) R.string.settings_battery_off else R.string.settings_battery_on),
                     if (b.battery) c.ok else c.warn,
                     actions.openBattery,
                 )
             }
             Gap(20)
-            SectionLabel("Apps to watch")
+            SectionLabel(stringResource(R.string.settings_section_apps))
             Panel(pad = PaddingValues(0.dp)) {
                 b.installed.forEachIndexed { i, a ->
                     if (i > 0) Divider()
@@ -145,21 +149,21 @@ fun SettingsScreen(
                 }
                 if (b.installed.isNotEmpty()) Divider()
                 SettingRow(
-                    "All ${b.apps.size} supported apps",
-                    "${b.installed.size} installed · ${b.notInstalled.size} not installed",
+                    pluralStringResource(R.plurals.settings_all_supported, b.apps.size, b.apps.size),
+                    stringResource(R.string.settings_installed_count, b.installed.size, b.notInstalled.size),
                     onClick = actions.showAllSupported,
                 )
             }
             Gap(20)
-            SectionLabel("About")
+            SectionLabel(stringResource(R.string.settings_section_about))
             Panel(pad = PaddingValues(0.dp)) {
-                SettingRow("CashPilot for Android $version", "Source code and licence (GPL-3.0)", onClick = { settings.openUrl(SOURCE_URL) })
+                SettingRow(stringResource(R.string.settings_about_app, version), stringResource(R.string.settings_about_source), onClick = { settings.openUrl(SOURCE_URL) })
                 Divider()
-                SettingRow("CashPilot server", "The self-hosted dashboard this app reports to", onClick = { settings.openUrl(SERVER_PROJECT_URL) })
+                SettingRow(stringResource(R.string.settings_about_server), stringResource(R.string.settings_about_server_body), onClick = { settings.openUrl(SERVER_PROJECT_URL) })
                 Divider()
-                SettingRow("Sponsor the project", "GitHub Sponsors", onClick = { settings.openUrl(SPONSOR_URL) })
+                SettingRow(stringResource(R.string.settings_about_sponsor), stringResource(R.string.settings_about_sponsor_body), onClick = { settings.openUrl(SPONSOR_URL) })
                 Divider()
-                SettingRow("Demo mode", "Shows the screens with sample data", onClick = actions.startDemo)
+                SettingRow(stringResource(R.string.settings_demo), stringResource(R.string.settings_demo_body), onClick = actions.startDemo)
             }
             Gap(24)
         }

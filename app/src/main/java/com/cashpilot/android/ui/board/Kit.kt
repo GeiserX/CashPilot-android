@@ -32,7 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -107,7 +109,8 @@ fun Heading(text: String, modifier: Modifier = Modifier, style: androidx.compose
 
 @Composable
 fun SectionLabel(text: String) = Text(
-    text.uppercase(),
+    // The language's own capitals: Turkish "i" becomes "İ", not "I".
+    text.uppercase(LocalConfiguration.current.locales[0]),
     Modifier.padding(start = 4.dp, bottom = 8.dp, top = 4.dp).semantics { heading() },
     style = MaterialTheme.typography.labelMedium,
     letterSpacing = 1.2.sp,
@@ -191,7 +194,7 @@ fun Pill(text: String, tone: Tone) = Text(
 /** One line about the server, the same words on every screen. */
 @Composable
 fun ServerLine(b: Board, modifier: Modifier = Modifier) {
-    val line = b.serverLine()
+    val line = b.serverLine(strings())
     Row(modifier.semantics(mergeDescendants = true) {}, verticalAlignment = Alignment.CenterVertically) {
         Dot(toneColor(line.tone))
         Spacer(Modifier.width(8.dp))
@@ -219,7 +222,7 @@ fun BackBar(title: String?, onBack: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(onClick = onBack, modifier = Modifier.size(48.dp)) {
-            Ic(R.drawable.ic_arrow_back, tint = LocalPalette.current.text, size = 24, description = "Back")
+            Ic(R.drawable.ic_arrow_back, tint = LocalPalette.current.text, size = 24, description = stringResource(R.string.back))
         }
         if (title != null) Heading(title, style = MaterialTheme.typography.titleLarge)
     }
