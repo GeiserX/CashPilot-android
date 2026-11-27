@@ -1,0 +1,20 @@
+Cada app de renda, cada máquina, uma só visão. O CashPilot mostra quais dos seus apps de compartilhamento de largura de banda e DePIN estão instalados, em execução e ativos neste celular. Não precisa de root.
+
+Ele monitora EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash e Wipter. Para cada um, mostra se o app está instalado, se está em execução e quando esteve ativo pela última vez.
+
+Ao abrir, uma linha diz se todos os apps estão em execução. Se algo precisar de você, ele diz o quê, em ordem, com o botão que resolve, como Abrir para um app parado.
+
+Como ele sabe:
+- Acesso a notificações: a maioria desses apps mantém uma notificação enquanto roda, então o CashPilot a lê para saber que o app está vivo.
+- Acesso aos dados de uso: quando cada app foi usado pela última vez.
+- Uso da rede: quantos dados cada app enviou e recebeu recentemente, para que um app em execução que ficou em silêncio se destaque.
+
+Tudo isso é lido no celular. Sem servidor, a lista de apps é o app inteiro.
+
+Com um servidor CashPilot auto-hospedado (https://github.com/GeiserX/CashPilot), o celular também entra na sua frota. O app envia o status dos apps ao seu servidor a cada 15 minutos, sem notificação permanente, e mostra seus ganhos a partir do servidor. Testar conexão envia um relatório e diz se o servidor respondeu e aceitou sua chave de API. O celular envia o status dos apps, nunca o conteúdo das notificações.
+
+A configuração leva três etapas e explica cada permissão antes que o Android a peça. Você pode pular as permissões ou o servidor. O app está em 20 idiomas. Ele segue o idioma do celular, e em Configurações > Idioma você escolhe outro. Os temas claro e escuro seguem o sistema. Cada controle tem um rótulo que o TalkBack lê, e as telas continuam cabendo com texto maior.
+
+Privacidade: sem conta, sem análises, sem anúncios. Os dados vão só para o servidor que você definir. O app não faz nenhuma outra requisição.
+
+O CashPilot é software livre sob a licença GPL-3.0-or-later.

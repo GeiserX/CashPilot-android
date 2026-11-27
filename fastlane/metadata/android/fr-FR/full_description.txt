@@ -1,0 +1,20 @@
+Chaque app de gains, chaque machine, une seule vue. CashPilot affiche lesquelles de vos apps de partage de bande passante et DePIN sont installées, en cours d'exécution et actives sur ce téléphone. Aucun root n'est nécessaire.
+
+Il surveille EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash et Wipter. Pour chacune, il indique si l'app est installée, si elle tourne et quand elle a été active pour la dernière fois.
+
+À l'ouverture, une ligne indique si toutes les apps tournent. Si quelque chose demande votre intervention, il dit quoi, dans l'ordre, avec le bouton qui règle le problème, comme Ouvrir pour une app arrêtée.
+
+Comment il le sait :
+- Accès aux notifications : la plupart de ces apps gardent une notification affichée pendant qu'elles tournent, CashPilot la lit donc pour savoir que l'app est en vie.
+- Accès aux données d'utilisation : quand chaque app a été utilisée pour la dernière fois.
+- Utilisation du réseau : combien de données chaque app a envoyées et reçues récemment, pour qu'une app en cours d'exécution devenue silencieuse se remarque.
+
+Tout cela est lu sur le téléphone. Sans serveur, la liste des apps est toute l'app.
+
+Avec un serveur CashPilot auto-hébergé (https://github.com/GeiserX/CashPilot), le téléphone rejoint aussi votre parc. L'app envoie l'état des apps à votre serveur toutes les 15 minutes, sans notification permanente, et affiche vos gains depuis le serveur. Tester la connexion envoie un rapport et vous dit si le serveur a répondu et accepté votre clé d'API. Le téléphone envoie l'état des apps, jamais le contenu des notifications.
+
+La configuration se fait en trois étapes et explique chaque autorisation avant qu'Android ne la demande. Vous pouvez passer les autorisations ou le serveur. L'app est disponible en 20 langues. Elle suit la langue du téléphone, et Paramètres > Langue permet d'en choisir une autre. Les thèmes clair et sombre suivent le système. Chaque contrôle a un libellé que TalkBack lit, et les écrans s'affichent toujours en entier avec un texte plus grand.
+
+Confidentialité : pas de compte, pas de mesure d'audience, pas de publicité. Les données vont uniquement au serveur que vous définissez. L'app n'envoie aucune autre requête.
+
+CashPilot est un logiciel libre sous licence GPL-3.0-or-later.

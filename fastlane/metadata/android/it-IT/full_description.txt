@@ -1,0 +1,20 @@
+Ogni app di guadagno, ogni macchina, un'unica vista. CashPilot mostra quali delle tue app di condivisione della banda e DePIN sono installate, in esecuzione e attive su questo telefono. Non serve il root.
+
+Controlla EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash e Wipter. Per ognuna mostra se l'app è installata, se è in esecuzione e quando è stata attiva l'ultima volta.
+
+Quando lo apri, una riga ti dice se tutte le app sono in esecuzione. Se qualcosa richiede il tuo intervento, ti dice cosa, in ordine, con il pulsante che lo risolve, come Apri per un'app ferma.
+
+Come lo sa:
+- Accesso alle notifiche: la maggior parte di queste app mantiene una notifica mentre è in esecuzione, quindi CashPilot la legge per capire che l'app è in funzione.
+- Accesso ai dati di utilizzo: quando ogni app è stata usata l'ultima volta.
+- Utilizzo della rete: quanti dati ogni app ha inviato e ricevuto di recente, così un'app in esecuzione che è diventata silenziosa salta all'occhio.
+
+Tutto questo viene letto sul telefono. Senza server, l'elenco delle app è tutta l'app.
+
+Con un server CashPilot self-hosted (https://github.com/GeiserX/CashPilot), il telefono entra anche nella tua flotta. L'app invia lo stato delle app al tuo server ogni 15 minuti, senza notifica permanente, e mostra i tuoi guadagni dal server. Prova connessione invia un report e ti dice se il server ha risposto e ha accettato la tua chiave API. Il telefono invia lo stato delle app, mai il contenuto delle notifiche.
+
+La configurazione richiede tre passaggi e spiega ogni autorizzazione prima che Android la chieda. Puoi saltare le autorizzazioni o il server. L'app è in 20 lingue. Segue la lingua del telefono, e da Impostazioni > Lingua ne scegli un'altra. I temi chiaro e scuro seguono il sistema. Ogni controllo ha un'etichetta che TalkBack legge, e le schermate ci stanno ancora anche con il testo più grande.
+
+Privacy: nessun account, nessuna analisi, nessuna pubblicità. I dati vanno solo al server che imposti. L'app non fa nessun'altra richiesta.
+
+CashPilot è software libero con licenza GPL-3.0-or-later.

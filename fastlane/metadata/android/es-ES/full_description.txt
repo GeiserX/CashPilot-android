@@ -1,0 +1,20 @@
+Cada app de ingresos, cada equipo, una sola vista. CashPilot muestra cuáles de tus apps de ancho de banda compartido y DePIN están instaladas, en marcha y activas en este móvil. No necesita root.
+
+Vigila EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash y Wipter. Para cada una muestra si la app está instalada, si está en marcha y cuándo estuvo activa por última vez.
+
+Al abrirla, una línea te dice si todas las apps están en marcha. Si algo requiere tu atención, te dice qué, en orden, con el botón que lo arregla, como Abrir para una app detenida.
+
+Cómo lo sabe:
+- Acceso a notificaciones: la mayoría de estas apps mantienen una notificación mientras funcionan, así que CashPilot la lee para saber que la app sigue viva.
+- Acceso a datos de uso: cuándo se usó cada app por última vez.
+- Uso de red: cuántos datos envió y recibió cada app hace poco, para que destaque una app en marcha que se ha quedado en silencio.
+
+Todo esto se lee en el móvil. Sin servidor, la lista de apps es toda la app.
+
+Con un servidor de CashPilot autoalojado (https://github.com/GeiserX/CashPilot), el móvil también se une a tu flota. La app envía el estado de las apps a tu servidor cada 15 minutos, sin notificación permanente, y muestra tus ganancias desde el servidor. Probar conexión envía un informe y te dice si el servidor respondió y aceptó tu clave de API. El móvil envía el estado de las apps, nunca el contenido de las notificaciones.
+
+La configuración tiene tres pasos y explica cada permiso antes de que Android lo pida. Puedes saltarte los permisos o el servidor. La app está en 20 idiomas. Sigue el idioma del móvil, y en Ajustes > Idioma puedes elegir otro. Los temas claro y oscuro siguen al sistema. Cada control tiene una etiqueta que TalkBack lee, y las pantallas siguen cabiendo con texto más grande.
+
+Privacidad: sin cuenta, sin analíticas, sin anuncios. Los datos van solo al servidor que configures. La app no hace ninguna otra petición.
+
+CashPilot es software libre bajo la licencia GPL-3.0-or-later.

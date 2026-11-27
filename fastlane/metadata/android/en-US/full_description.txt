@@ -13,7 +13,7 @@ All of this is read on the phone. Without a server, the app list is the whole ap
 
 With a self-hosted CashPilot server (https://github.com/GeiserX/CashPilot), the phone also joins your fleet. The app sends the apps' status to your server every 15 minutes, with no permanent notification, and shows your earnings from the server. Test connection sends one report and tells you whether the server answered and accepted your key. The phone sends app status, never notification content.
 
-Setup takes three steps and explains each permission before Android asks for it. You can skip the permissions or the server. Light and dark themes follow the system. Every control has a label TalkBack reads, and the screens still fit with larger text.
+Setup takes three steps and explains each permission before Android asks for it. You can skip the permissions or the server. The app is in 20 languages. It follows the phone's language, and Settings, Language picks another one. Light and dark themes follow the system. Every control has a label TalkBack reads, and the screens still fit with larger text.
 
 Privacy: no account, no analytics, no ads. Data goes only to the server you set. The app makes no other request.
 

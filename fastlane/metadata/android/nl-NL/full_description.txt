@@ -1,0 +1,20 @@
+Elke verdien-app, elke machine, één overzicht. CashPilot toont welke van je apps voor het delen van bandbreedte en DePIN-apps op deze telefoon geïnstalleerd zijn, draaien en actief zijn. Root is niet nodig.
+
+Het houdt EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash en Wipter in de gaten. Voor elke app toont het of die geïnstalleerd is, of die draait en wanneer die voor het laatst actief was.
+
+Als je het opent, zegt één regel of alle apps draaien. Als iets jou nodig heeft, zegt het wat, op volgorde, met de knop die het oplost, zoals Openen voor een gestopte app.
+
+Hoe het dat weet:
+- Toegang tot meldingen: de meeste van deze apps houden een melding open zolang ze draaien, dus CashPilot leest die om te zien dat de app nog leeft.
+- Gebruikstoegang: wanneer elke app voor het laatst gebruikt is.
+- Netwerkgebruik: hoeveel data elke app de laatste tijd heeft verzonden en ontvangen, zodat een draaiende app die stil is gevallen opvalt.
+
+Dit wordt allemaal op de telefoon gelezen. Zonder server is de lijst met apps de hele app.
+
+Met een zelf gehoste CashPilot-server (https://github.com/GeiserX/CashPilot) sluit de telefoon zich ook aan bij je vloot. De app stuurt elke 15 minuten de status van de apps naar je server, zonder permanente melding, en toont je inkomsten van de server. Verbinding testen stuurt één rapport en vertelt je of de server heeft geantwoord en je API-sleutel heeft geaccepteerd. De telefoon stuurt de status van de apps, nooit de inhoud van meldingen.
+
+De installatie heeft drie stappen en legt elke toestemming uit voordat Android erom vraagt. Je kunt de toestemmingen of de server overslaan. De app is er in 20 talen. Hij volgt de taal van de telefoon, en via Instellingen > Taal kies je een andere. Lichte en donkere thema's volgen het systeem. Elk bedieningselement heeft een label dat TalkBack voorleest, en de schermen passen ook met grotere tekst.
+
+Privacy: geen account, geen analytics, geen advertenties. Gegevens gaan alleen naar de server die je instelt. De app doet geen enkel ander verzoek.
+
+CashPilot is vrije software onder de licentie GPL-3.0-or-later.

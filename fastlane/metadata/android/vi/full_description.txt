@@ -1,0 +1,20 @@
+Mọi ứng dụng kiếm tiền, mọi máy, trong một màn hình. CashPilot cho biết ứng dụng chia sẻ băng thông và DePIN nào của bạn đã được cài đặt, đang chạy và đang hoạt động trên điện thoại này. Không cần root.
+
+Ứng dụng theo dõi EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash và Wipter. Với mỗi ứng dụng, CashPilot cho biết ứng dụng đã được cài đặt chưa, có đang chạy không và hoạt động lần cuối khi nào.
+
+Khi bạn mở ứng dụng, một dòng cho biết mọi ứng dụng có đang chạy không. Nếu có việc cần bạn xử lý, ứng dụng nói rõ việc gì, theo thứ tự, kèm nút để khắc phục, chẳng hạn Mở cho một ứng dụng đã dừng.
+
+Cách ứng dụng biết:
+- Quyền truy cập thông báo: hầu hết các ứng dụng này giữ một thông báo trong khi chạy, nên CashPilot đọc thông báo đó để biết ứng dụng vẫn còn hoạt động.
+- Quyền truy cập dữ liệu sử dụng: thời điểm mỗi ứng dụng được dùng lần cuối.
+- Mức sử dụng mạng: lượng dữ liệu mỗi ứng dụng đã gửi và nhận gần đây, để một ứng dụng đang chạy nhưng đã im lặng hiện rõ.
+
+Tất cả được đọc ngay trên điện thoại. Không có máy chủ, danh sách ứng dụng là toàn bộ ứng dụng.
+
+Với một máy chủ CashPilot tự lưu trữ (https://github.com/GeiserX/CashPilot), điện thoại cũng tham gia đội máy của bạn. Ứng dụng gửi trạng thái của các ứng dụng đến máy chủ của bạn mỗi 15 phút, không cần thông báo cố định, và hiển thị thu nhập của bạn từ máy chủ. Thử kết nối gửi một báo cáo và cho bạn biết máy chủ có phản hồi và chấp nhận khóa API của bạn không. Điện thoại gửi trạng thái ứng dụng, không bao giờ gửi nội dung thông báo.
+
+Thiết lập gồm ba bước và giải thích từng quyền trước khi Android yêu cầu. Bạn có thể bỏ qua các quyền hoặc máy chủ. Ứng dụng có 20 ngôn ngữ. Ứng dụng theo ngôn ngữ của điện thoại, và bạn có thể chọn ngôn ngữ khác trong Cài đặt > Ngôn ngữ. Giao diện sáng và tối theo hệ thống. Mỗi thành phần điều khiển đều có nhãn để TalkBack đọc, và màn hình vẫn hiển thị vừa với chữ lớn hơn.
+
+Quyền riêng tư: không tài khoản, không phân tích, không quảng cáo. Dữ liệu chỉ được gửi đến máy chủ bạn đặt. Ứng dụng không gửi yêu cầu nào khác.
+
+CashPilot là phần mềm tự do theo giấy phép GPL-3.0-or-later.

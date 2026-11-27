@@ -1,0 +1,20 @@
+Każda aplikacja zarobkowa, każda maszyna, jeden widok. CashPilot pokazuje, które z twoich aplikacji do udostępniania przepustowości i DePIN są zainstalowane, działają i są aktywne na tym telefonie. Nie wymaga roota.
+
+Obserwuje EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash i Wipter. Dla każdej z nich pokazuje, czy aplikacja jest zainstalowana, czy działa i kiedy była ostatnio aktywna.
+
+Po otwarciu jedna linia mówi, czy wszystkie aplikacje działają. Jeśli coś wymaga twojej uwagi, mówi co, po kolei, z przyciskiem, który to naprawia, na przykład Otwórz dla zatrzymanej aplikacji.
+
+Skąd to wie:
+- Dostęp do powiadomień: większość tych aplikacji wyświetla powiadomienie, gdy działa, więc CashPilot je odczytuje, by wiedzieć, że aplikacja żyje.
+- Dostęp do danych o użyciu: kiedy każda aplikacja była ostatnio używana.
+- Użycie sieci: ile danych każda aplikacja ostatnio wysłała i odebrała, dzięki czemu działająca aplikacja, która ucichła, się wyróżnia.
+
+Wszystko to jest odczytywane na telefonie. Bez serwera lista aplikacji to cała aplikacja.
+
+Z samodzielnie hostowanym serwerem CashPilot (https://github.com/GeiserX/CashPilot) telefon dołącza też do twojej floty. Aplikacja co 15 minut wysyła stan aplikacji na twój serwer, bez stałego powiadomienia, i pokazuje twoje zarobki z serwera. Testuj połączenie wysyła jeden raport i mówi, czy serwer odpowiedział i zaakceptował twój klucz API. Telefon wysyła stan aplikacji, nigdy treść powiadomień.
+
+Konfiguracja ma trzy kroki i wyjaśnia każde uprawnienie, zanim Android o nie poprosi. Możesz pominąć uprawnienia lub serwer. Aplikacja jest dostępna w 20 językach. Używa języka telefonu, a w Ustawienia > Język możesz wybrać inny. Jasny i ciemny motyw podążają za systemem. Każdy element sterujący ma etykietę, którą czyta TalkBack, a ekrany mieszczą się także przy większym tekście.
+
+Prywatność: bez konta, bez analityki, bez reklam. Dane trafiają tylko na serwer, który ustawisz. Aplikacja nie wysyła żadnych innych żądań.
+
+CashPilot to wolne oprogramowanie na licencji GPL-3.0-or-later.

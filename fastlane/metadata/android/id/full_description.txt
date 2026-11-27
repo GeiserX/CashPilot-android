@@ -1,0 +1,20 @@
+Setiap aplikasi penghasil, setiap mesin, satu tampilan. CashPilot menampilkan aplikasi berbagi bandwidth dan DePIN Anda yang terpasang, berjalan, dan aktif di ponsel ini. Tidak perlu root.
+
+Aplikasi ini memantau EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, dan Wipter. Untuk masing-masing, aplikasi ini menampilkan apakah aplikasinya terpasang, apakah sedang berjalan, dan kapan terakhir aktif.
+
+Saat Anda membukanya, satu baris memberi tahu apakah semua aplikasi berjalan. Jika ada yang memerlukan tindakan Anda, aplikasi ini memberi tahu apa itu, secara berurutan, beserta tombol untuk memperbaikinya, seperti Buka untuk aplikasi yang berhenti.
+
+Cara aplikasi ini tahu:
+- Akses notifikasi: sebagian besar aplikasi ini menampilkan notifikasi selama berjalan, jadi CashPilot membacanya untuk mengetahui bahwa aplikasi itu masih hidup.
+- Akses penggunaan: kapan setiap aplikasi terakhir digunakan.
+- Penggunaan jaringan: berapa banyak data yang dikirim dan diterima setiap aplikasi baru-baru ini, sehingga aplikasi yang berjalan tetapi sudah diam akan terlihat.
+
+Semua ini dibaca di ponsel. Tanpa server, daftar aplikasi adalah seluruh aplikasinya.
+
+Dengan server CashPilot yang di-host sendiri (https://github.com/GeiserX/CashPilot), ponsel juga bergabung ke armada Anda. Aplikasi mengirim status aplikasi-aplikasi tersebut ke server Anda setiap 15 menit, tanpa notifikasi permanen, dan menampilkan penghasilan Anda dari server. Uji koneksi mengirim satu laporan dan memberi tahu apakah server menjawab dan menerima kunci API Anda. Ponsel mengirim status aplikasi, tidak pernah isi notifikasi.
+
+Penyiapan terdiri dari tiga langkah dan menjelaskan setiap izin sebelum Android memintanya. Anda dapat melewati izin atau server. Aplikasi ini tersedia dalam 20 bahasa. Aplikasi mengikuti bahasa ponsel, dan Setelan > Bahasa memungkinkan Anda memilih bahasa lain. Tema terang dan gelap mengikuti sistem. Setiap kontrol memiliki label yang dibacakan TalkBack, dan layar tetap muat dengan teks yang lebih besar.
+
+Privasi: tanpa akun, tanpa analitik, tanpa iklan. Data hanya dikirim ke server yang Anda atur. Aplikasi tidak membuat permintaan lain apa pun.
+
+CashPilot adalah perangkat lunak bebas dengan lisensi GPL-3.0-or-later.
