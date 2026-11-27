@@ -92,12 +92,14 @@ object Languages {
      * in the system's per-app language setting.
      */
     /**
-     * The language the words on screen are in for a phone set to [locale]:
-     * [locale] itself when the app has that language, else English, which
-     * Android shows instead. Capitals follow this, so a phone in a language the
-     * app lacks, such as Azerbaijani, never writes "THİS PHONE".
+     * The language the words on screen are in for a phone whose languages are
+     * [locales], in its order of preference. Android takes the resources of the
+     * first one the app has, and English when it has none, so this does the
+     * same. Capitals follow it: a phone set to Azerbaijani alone gets English
+     * words and English capitals, never "THİS PHONE".
      */
-    fun spoken(locale: Locale): Locale = if (find(locale.toLanguageTag()) != null) locale else Locale.ENGLISH
+    fun spoken(locales: List<Locale>): Locale =
+        locales.firstOrNull { find(it.toLanguageTag()) != null } ?: Locale.ENGLISH
 
     fun pick(tag: String) {
         AppCompatDelegate.setApplicationLocales(
@@ -108,7 +110,10 @@ object Languages {
 
 /** The language of the words on screen now; see [Languages.spoken]. */
 @Composable
-fun textLocale(): Locale = Languages.spoken(LocalConfiguration.current.locales[0])
+fun textLocale(): Locale {
+    val list = LocalConfiguration.current.locales
+    return Languages.spoken((0 until list.size()).map { list[it] })
+}
 
 /** What the Language row in Settings says: the picked language, or the system default. */
 @Composable

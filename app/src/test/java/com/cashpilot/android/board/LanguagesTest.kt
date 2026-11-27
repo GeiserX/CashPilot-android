@@ -40,10 +40,13 @@ class LanguagesTest {
     @Test
     fun `capitals follow the language on screen, English when the app lacks the phone's`() {
         val turkish = Locale.forLanguageTag("tr-TR")
-        assertEquals(turkish, Languages.spoken(turkish))
-        assertEquals("İ", "i".uppercase(Languages.spoken(turkish)))
+        val azeri = Locale.forLanguageTag("az")
+        assertEquals(turkish, Languages.spoken(listOf(turkish)))
+        assertEquals("İ", "i".uppercase(Languages.spoken(listOf(turkish))))
         // Azerbaijani also dots its capital I, but the app shows English there.
-        assertEquals(Locale.ENGLISH, Languages.spoken(Locale.forLanguageTag("az")))
-        assertEquals("THIS PHONE", "This phone".uppercase(Languages.spoken(Locale.forLanguageTag("az"))))
+        assertEquals(Locale.ENGLISH, Languages.spoken(listOf(azeri)))
+        assertEquals("THIS PHONE", "This phone".uppercase(Languages.spoken(listOf(azeri))))
+        // Android takes the first language the app has, so the capitals do too.
+        assertEquals(turkish, Languages.spoken(listOf(Locale.forLanguageTag("fi"), turkish)))
     }
 }

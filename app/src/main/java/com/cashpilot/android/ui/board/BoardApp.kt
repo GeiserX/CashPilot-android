@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.listSaver
@@ -56,6 +57,8 @@ fun BoardApp(vm: MainViewModel) {
     val stack = rememberSaveable(saver = listSaver<SnapshotStateList<String>, String>({ it.toList() }, { it.toMutableStateList() })) {
         mutableStateListOf(HOME)
     }
+    // The picked language, read again after each pick; AppCompat is the source of truth.
+    var language by remember { mutableStateOf(Languages.current()) }
     var demo by rememberSaveable { mutableStateOf(false) }
     var step by rememberSaveable { mutableStateOf(0) }
 
@@ -155,11 +158,13 @@ fun BoardApp(vm: MainViewModel) {
             when {
                 route == SETTINGS -> SettingsScreen(
                     board, ServerForm(url, key, settings.apiKey, pair), BuildConfig.VERSION_NAME, deviceName,
-                    Languages.current(), actions, settingsActions, ::pop,
+                    language, actions, settingsActions, ::pop,
                 )
-                // Picking a language recreates the activity; the saved stack
-                // brings the user back to this screen, now in that language.
-                route == LANGUAGE -> LanguageScreen(Languages.current(), Languages::pick, ::pop)
+                // A pick that changes the language recreates the activity, and the
+                // saved stack brings the user back here in that language. A pick
+                // that leaves it unchanged, such as Español on a Spanish phone,
+                // recreates nothing, so `language` moves the check mark.
+                route == LANGUAGE -> LanguageScreen(language, { tag -> Languages.pick(tag); language = Languages.current() }, ::pop)
                 route == SUPPORTED -> SupportedAppsScreen(board, actions, onBack = ::pop)
                 route == SUPPORTED_ALL -> SupportedAppsScreen(board, actions, all = true, onBack = ::pop)
                 route.startsWith(APP) -> {
