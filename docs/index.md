@@ -6,7 +6,7 @@ hide:
 # CashPilot Android { .cpa-visually-hidden }
 
 <p align="center">
-  <img src="images/banner.svg" alt="CashPilot Android: passive income in your pocket" width="100%">
+  <img src="images/banner.svg" alt="CashPilot Android: every earner, every box, one view" width="100%">
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@ hide:
 
 ---
 
-**CashPilot Android** tells you which of your passive income apps are actually running on your phone, without root. It watches 10 apps (EarnApp, IPRoyal Pawns, MystNodes, Grass and more) through three Android APIs. A bandwidth app that has stopped earns nothing and usually shows nothing on the phone; here it goes to the top of the list in red. Paired with a [CashPilot](https://geiserx.github.io/CashPilot/) server, the phone joins your fleet next to the Docker workers and shows what its platforms earned. Start with [Getting started](getting-started.md), then [Usage](usage.md).
+**Every earner, every box, one view.** **CashPilot Android** is the Android agent of CashPilot, the self-hosted dashboard for bandwidth sharing, DePIN, mining, GPU compute and storage earners. It tells you which of your earning apps are actually running on your phone, without root. It watches 10 apps (EarnApp, IPRoyal Pawns, MystNodes, Grass and more) through three Android APIs. A bandwidth app that has stopped earns nothing and usually shows nothing on the phone; here it goes to the top of the list in red. Paired with a [CashPilot](https://geiserx.github.io/CashPilot/) server, the phone joins your fleet next to the Docker workers and shows what its platforms earned. Start with [Getting started](getting-started.md), then [Usage](usage.md).
 
 <div class="grid cards" markdown>
 

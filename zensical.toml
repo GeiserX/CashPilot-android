@@ -4,7 +4,7 @@
 [project]
 site_name = "CashPilot Android"
 site_url = "https://geiserx.github.io/CashPilot-android/"
-site_description = "See which passive income apps are running on your Android phone, without root, and report them to your CashPilot fleet."
+site_description = "Every earner, every box, one view. See which earning apps run on your Android phone, without root, and report them to your CashPilot fleet."
 repo_url = "https://github.com/GeiserX/CashPilot-android"
 repo_name = "GeiserX/CashPilot-android"
 edit_uri = "edit/main/docs/"
