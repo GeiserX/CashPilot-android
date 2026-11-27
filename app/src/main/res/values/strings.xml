@@ -336,6 +336,9 @@
     <string name="settings_usage_off">Off · no last-seen times</string>
     <string name="settings_battery_off">Off for CashPilot</string>
     <string name="settings_battery_on">On · reports may arrive late</string>
+    <string name="language">Language</string>
+    <string name="language_system">System default</string>
+    <string name="language_system_body">Follows your phone\'s language</string>
     <string name="settings_section_apps">Apps to watch</string>
     <plurals name="settings_all_supported">
         <item quantity="one">All %1$d supported apps</item>

@@ -2,8 +2,15 @@ package com.cashpilot.android.board
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import android.content.res.Configuration
+import android.view.View
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
+import java.util.Locale
 import com.cashpilot.android.board.Situations.NOW
 import com.cashpilot.android.ui.AppState
 import com.cashpilot.android.ui.board.Access
@@ -14,6 +21,7 @@ import com.cashpilot.android.ui.board.Demo
 import com.cashpilot.android.ui.board.DemoFrame
 import com.cashpilot.android.ui.board.DisclosureScreen
 import com.cashpilot.android.ui.board.HomeScreen
+import com.cashpilot.android.ui.board.LanguageScreen
 import com.cashpilot.android.ui.board.OnboardPermissions
 import com.cashpilot.android.ui.board.OnboardServer
 import com.cashpilot.android.ui.board.OnboardWelcome
@@ -27,21 +35,43 @@ import com.cashpilot.android.ui.theme.CashPilotTheme
 /** A phone-sized canvas: 411 x 891 dp at xhdpi (822 x 1782 px). */
 const val PHONE = "w411dp-h891dp-xhdpi"
 
-/** One screen to photograph and to check for accessibility. */
-class Shot(val name: String, val dark: Boolean, val fontScale: Float = 1f, val content: @Composable () -> Unit) {
+/** One screen to photograph and to check for accessibility. [locale] null is the default, English. */
+class Shot(val name: String, val dark: Boolean, val fontScale: Float = 1f, val locale: String? = null, val content: @Composable () -> Unit) {
     val file get() = "src/test/screenshots/screens/$name.png"
 }
 
 @Composable
 fun Themed(shot: Shot) {
-    CashPilotTheme(darkTheme = shot.dark) {
-        if (shot.fontScale == 1f) {
-            shot.content()
-        } else {
-            val d = LocalDensity.current
-            CompositionLocalProvider(LocalDensity provides Density(d.density, shot.fontScale)) { shot.content() }
+    InLocale(shot.locale) {
+        CashPilotTheme(darkTheme = shot.dark) {
+            if (shot.fontScale == 1f) {
+                shot.content()
+            } else {
+                val d = LocalDensity.current
+                CompositionLocalProvider(LocalDensity provides Density(d.density, shot.fontScale)) { shot.content() }
+            }
         }
     }
+}
+
+/**
+ * The screens as a phone set to [tag] draws them: that language's strings,
+ * and right to left for Arabic. The same resources the app reads, through a
+ * context with that locale, so a missing translation shows as English here too.
+ */
+@Composable
+fun InLocale(tag: String?, content: @Composable () -> Unit) {
+    if (tag == null) return content()
+    val base = LocalContext.current
+    val config = Configuration(LocalConfiguration.current).apply { setLocale(Locale.forLanguageTag(tag)) }
+    val context = base.createConfigurationContext(config)
+    val direction = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr
+    CompositionLocalProvider(
+        LocalContext provides context,
+        LocalConfiguration provides config,
+        LocalLayoutDirection provides direction,
+        content = content,
+    )
 }
 
 /**
@@ -49,6 +79,9 @@ fun Themed(shot: Shot) {
  * The same list drives the goldens and the accessibility checks, so a screen
  * cannot be photographed without also being checked.
  */
+/** The languages every screen check also runs in. */
+val LOCALE_SHOTS = listOf("ar")
+
 object Screens {
     private const val VERSION = "1.0.0"
     private const val DEVICE = "Google Pixel 8"
@@ -70,7 +103,7 @@ object Screens {
         for ((s, b) in Situations.four) {
             addAll(both("home_$s") { HomeScreen(b, none) })
             addAll(both("detail_$s") { AppDetailScreen(detailRow(b), b, none) {} })
-            addAll(both("settings_$s") { SettingsScreen(b, form(b), VERSION, DEVICE, none, SettingsActions()) {} })
+            addAll(both("settings_$s") { SettingsScreen(b, form(b), VERSION, DEVICE, "", none, SettingsActions()) {} })
             addAll(both("supported_$s") { SupportedAppsScreen(b, none) {} })
             addAll(both("supported_all_$s") { SupportedAppsScreen(b, none, all = true) {} })
             addAll(both("onboard_2_permissions_$s") { OnboardPermissions(b.notif, b.usage, b.battery, {}, {}, {}) {} })
@@ -84,10 +117,20 @@ object Screens {
         addAll(both("disclose_usage") { DisclosureScreen(Access.USAGE, {}, {}) })
         addAll(both("home_no_apps") { HomeScreen(Situations.empty, none) })
         addAll(both("home_demo") { DemoFrame({}) { HomeScreen(Demo.board(NOW), none) } })
+        addAll(both("language_system") { LanguageScreen("", {}) {} })
+        addAll(both("language_picked") { LanguageScreen("es", {}) {} })
+        // Each language in use: Arabic for right to left, German for long
+        // words, Japanese for text with no spaces, Spanish as the plan's sample.
+        for (tag in LOCALE_SHOTS) {
+            add(Shot("home_problems_${tag}_dark", true, locale = tag) { HomeScreen(Situations.problems, none) })
+            add(Shot("settings_healthy_${tag}_light", false, locale = tag) { SettingsScreen(Situations.healthy, form(Situations.healthy), VERSION, DEVICE, "", none, SettingsActions()) {} })
+            add(Shot("onboard_2_permissions_${tag}_dark", true, locale = tag) { OnboardPermissions(false, false, false, {}, {}, {}) {} })
+            add(Shot("disclose_notifications_${tag}_light", false, locale = tag) { DisclosureScreen(Access.NOTIFICATIONS, {}, {}) })
+        }
         // Font scale 1.3: the screens with the most text, so a layout that only
         // fits at the default size shows up here first.
         add(Shot("font130_home_problems_dark", true, 1.3f) { HomeScreen(Situations.problems, none) })
         add(Shot("font130_onboard_2_permissions_dark", true, 1.3f) { OnboardPermissions(false, false, false, {}, {}, {}) {} })
-        add(Shot("font130_settings_healthy_light", false, 1.3f) { SettingsScreen(Situations.healthy, form(Situations.healthy), VERSION, DEVICE, none, SettingsActions()) {} })
+        add(Shot("font130_settings_healthy_light", false, 1.3f) { SettingsScreen(Situations.healthy, form(Situations.healthy), VERSION, DEVICE, "", none, SettingsActions()) {} })
     }
 }

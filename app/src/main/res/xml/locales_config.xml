@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The languages Android 13 and later offer in the app's language setting.
+     Keep it the same list as Languages.all. LanguagesTest checks both. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="es" />
+    <locale android:name="pt-BR" />
+    <locale android:name="fr" />
+    <locale android:name="de" />
+    <locale android:name="it" />
+    <locale android:name="nl" />
+    <locale android:name="pl" />
+    <locale android:name="ru" />
+    <locale android:name="uk" />
+    <locale android:name="tr" />
+    <locale android:name="ar" />
+    <locale android:name="hi" />
+    <locale android:name="id" />
+    <locale android:name="vi" />
+    <locale android:name="th" />
+    <locale android:name="fil" />
+    <locale android:name="zh-Hans" />
+    <locale android:name="ja" />
+    <locale android:name="ko" />
+</locale-config>
