@@ -8,37 +8,27 @@
 [![CI](https://github.com/GeiserX/CashPilot-android/actions/workflows/ci.yml/badge.svg)](https://github.com/GeiserX/CashPilot-android/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/GeiserX/CashPilot-android?style=flat-square)](LICENSE)
 [![codecov](https://codecov.io/gh/GeiserX/CashPilot-android/graph/badge.svg)](https://codecov.io/gh/GeiserX/CashPilot-android)
-[![Website](https://img.shields.io/badge/website-cashpilot.club-blue?style=flat-square)](https://cashpilot.club)
-[![X](https://img.shields.io/badge/X-%40CashPilotClub-000000?style=flat-square&logo=x)](https://x.com/CashPilotClub)
 
-CashPilot Android is the Android companion app for [CashPilot](https://github.com/GeiserX/CashPilot). It detects which passive income apps are installed and running on your phone, without root, and reports them to your CashPilot fleet dashboard.
+**Every earner, every box, one view.** Website: https://cashpilot.club, on X: https://x.com/CashPilotClub
 
-## What's new in 1.0
+CashPilot Android is the Android agent of [CashPilot](https://github.com/GeiserX/CashPilot), the self-hosted dashboard for bandwidth sharing, DePIN, mining, GPU compute and storage earners. It checks, without root, which earning apps are installed and running on your phone, and reports them to your CashPilot fleet, so the phone shows up next to your servers and desktops.
 
 <p align="center">
   <img src="app/src/test/screenshots/screens/home_healthy_dark.png" alt="Home screen, dark: All 6 apps running" width="270"/>
   <img src="app/src/test/screenshots/screens/home_problems_light.png" alt="Home screen, light: 2 of 6 apps stopped, four things to fix listed in order" width="270"/>
 </p>
 
-- **One line tells you if every app is running.** When something is wrong, the home screen says what and gives you the button to fix it, such as **Open** for a stopped app.
-- **Setup explains each permission first.** Three short steps, a plain screen before every Android prompt, and you can skip the permissions or the server.
-- **Test connection is a real test.** It sends one report and tells you whether the server answered and accepted your key.
-- **Reports every 15 minutes through WorkManager**, with no permanent notification and no battery exemption request.
-- **Nothing leaves the phone except to your own server.** The public IP lookup is gone.
-- **Accessibility is tested**: 48 dp touch targets, TalkBack labels and order, text at 1.3x size, WCAG AA contrast in the Light and Classic night palettes.
-- **10 supported apps.**
-- **In progress:** inclusion in F-Droid.
-
-CashPilot Android 1.0 ships alongside [CashPilot](https://github.com/GeiserX/CashPilot) 2.0 and [CashPilot Desktop](https://github.com/GeiserX/CashPilot-Desktop) 1.0. The full list is in the [changelog](CHANGELOG.md).
-
 ## Features
 
-- Detects 10 passive income apps: EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, Wipter
-- Instant detection from each app's ongoing notification (NotificationListenerService)
-- Confirms activity from per-app network traffic and recent foreground use (NetworkStatsManager, UsageStatsManager)
-- Periodic heartbeats to your server (`POST /api/workers/heartbeat`), so phones appear next to Docker workers in the fleet view
-- Sends data only to your own CashPilot server, and to nothing else
-- No root required; Android 8.0 or later
+- Watches 10 earning apps: EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash, Wipter
+- One line says whether every app is running; when one is not, the home screen says what and gives the button that fixes it, such as **Open**
+- Detects each app from its ongoing notification, and confirms activity from its network traffic and recent use
+- Joins your fleet: a report every 15 minutes through WorkManager, so the phone appears next to Docker workers and CashPilot Desktop
+- Test connection sends one report and tells you whether the server answered and accepted your key
+- Sends data only to your own CashPilot server or CashPilot Desktop, and to nothing else
+- Setup explains each permission before Android asks, and you can skip the permissions or the server
+- Accessibility tested: 48 dp touch targets, TalkBack labels and order, text at 1.3x, WCAG AA contrast
+- No root, no permanent notification and no battery exemption request; Android 8.0 or later
 
 ## Quick start
 

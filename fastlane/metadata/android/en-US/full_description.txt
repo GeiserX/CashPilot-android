@@ -1,4 +1,4 @@
-CashPilot shows which of your passive-income and DePIN apps are installed, running and active on this phone. It needs no root.
+Every earner, every box, one view. CashPilot shows which of your bandwidth-sharing and DePIN apps are installed, running and active on this phone. It needs no root.
 
 It watches EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash and Wipter. For each one it shows whether the app is installed, whether it is running, and when it was last active.
 
