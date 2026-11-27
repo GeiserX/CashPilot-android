@@ -35,6 +35,7 @@ data class SettingsActions(
     val onKey: (String) -> Unit = {},
     val testConnection: () -> Unit = {},
     val openUrl: (String) -> Unit = {},
+    val openLanguage: () -> Unit = {},
 )
 
 /** The server fields as typed, and what the last test said. */
@@ -71,6 +72,8 @@ fun SettingsScreen(
     form: ServerForm,
     version: String,
     deviceName: String,
+    /** The language picked in the app, or "" when it follows the system. */
+    language: String,
     actions: BoardActions,
     settings: SettingsActions,
     onBack: () -> Unit,
@@ -86,7 +89,9 @@ fun SettingsScreen(
                 val line = b.serverSetting(s)
                 SettingRow(if (b.paired) b.host else stringResource(R.string.settings_no_server), line.text, toneColor(line.tone))
                 Divider()
-                val masked = Words.maskKey(s, form.savedKey)
+                // Left-to-right marks around the key, so in Arabic the dots stay
+                // before its last four characters instead of moving after them.
+                val masked = "\u200E" + Words.maskKey(s, form.savedKey) + "\u200E"
                 SettingRow(stringResource(R.string.api_key), if (form.savedKey.isNotBlank()) stringResource(R.string.settings_key_stored, masked) else masked)
                 Divider()
                 Column(Modifier.padding(16.dp)) {
@@ -128,6 +133,8 @@ fun SettingsScreen(
                     if (b.battery) c.ok else c.warn,
                     actions.openBattery,
                 )
+                Divider()
+                SettingRow(stringResource(R.string.language), languageLabel(language), onClick = settings.openLanguage)
             }
             Gap(20)
             SectionLabel(stringResource(R.string.settings_section_apps))

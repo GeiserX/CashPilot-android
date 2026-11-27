@@ -107,6 +107,7 @@ fun BoardApp(vm: MainViewModel) {
         onKey = { key = it; keySynced = true; vm.clearPairResult(); vm.updateApiKey(it) },
         testConnection = { vm.testConnection(url, key) },
         openUrl = { openUri(context, it) },
+        openLanguage = { push(LANGUAGE) },
     )
 
     val route = stack.last()
@@ -154,8 +155,11 @@ fun BoardApp(vm: MainViewModel) {
             when {
                 route == SETTINGS -> SettingsScreen(
                     board, ServerForm(url, key, settings.apiKey, pair), BuildConfig.VERSION_NAME, deviceName,
-                    actions, settingsActions, ::pop,
+                    Languages.current(), actions, settingsActions, ::pop,
                 )
+                // Picking a language recreates the activity; the saved stack
+                // brings the user back to this screen, now in that language.
+                route == LANGUAGE -> LanguageScreen(Languages.current(), Languages::pick, ::pop)
                 route == SUPPORTED -> SupportedAppsScreen(board, actions, onBack = ::pop)
                 route == SUPPORTED_ALL -> SupportedAppsScreen(board, actions, all = true, onBack = ::pop)
                 route.startsWith(APP) -> {
@@ -178,6 +182,7 @@ fun BoardApp(vm: MainViewModel) {
 
 private const val HOME = "home"
 private const val SETTINGS = "settings"
+private const val LANGUAGE = "language"
 private const val SUPPORTED = "supported"
 private const val SUPPORTED_ALL = "supported/all"
 private const val APP = "app/"

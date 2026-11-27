@@ -1,10 +1,10 @@
 package com.cashpilot.android.ui
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -13,7 +13,11 @@ import com.cashpilot.android.ui.board.BoardApp
 import com.cashpilot.android.ui.theme.CashPilotTheme
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+/**
+ * An AppCompatActivity, not a plain ComponentActivity, because AppCompat is
+ * what applies the language picked in Settings on Android 8 to 12.
+ */
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
