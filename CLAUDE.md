@@ -57,7 +57,7 @@ unreachable at font scale 1.3; TalkBack order on the home screen). Contrast is
 
 - **Package:** `com.cashpilot.android`
 - **Version source of truth:** `gradle.properties` (`VERSION_NAME`, `VERSION_CODE` = major*10000 + minor*100 + patch). Bump it in a PR before tagging: `release.yml` runs `scripts/check-release-version.sh` and refuses a tag that disagrees, because F-Droid builds from this file without our `-P` flags.
-- **Release workflow:** Push a `v*` tag -> GitHub Actions builds signed APK+AAB, creates GitHub Release
+- **Release workflow:** Push a `v*` tag -> GitHub Actions builds signed APK+AAB, creates GitHub Release with the tag's CHANGELOG.md entry as its notes (`scripts/release-notes.sh`; a tag without an entry fails before the build)
 - **CI workflow:** On push to main -> debug APK + lint + signed release APK. On PR -> debug + lint only (no keystore access)
 - **Signing keystore:** a JKS file kept outside the repository (alias: `cashpilot`). **The password is NOT recorded here — this repository is public.** It is kept with the maintainer's other credentials. The keystore is base64-encoded in the GitHub secret `KEYSTORE_BASE64`.
 - **F-Droid: submitted, not listed yet.** MR !56196 (fdroiddata) adds the app at 0.4.0. Its recipe uses `UpdateCheckMode: Tags` and `AutoUpdateMode: Version`, so after inclusion F-Droid's checkupdates adds each new `vX.Y.Z` tag by itself, reading the version from `gradle.properties` at that tag; the APK it builds must match our release APK byte for byte. The recipe is `fdroid/com.cashpilot.android.yml`, with NonFreeAdd declared; steps in `PUBLISHING.md`.
