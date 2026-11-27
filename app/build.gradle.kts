@@ -181,6 +181,15 @@ tasks.withType<Test> {
     // an earlier run without it would leave the task UP-TO-DATE and the check
     // would never run. With it on, the task always runs and is never taken from
     // the build cache, because the catalog can change between two runs.
+    // A failed test prints its assertion message. Gradle's default prints only
+    // the exception class, so the drift run that opened issue #119 said
+    // "AssertionFailedError at KnownAppsTest.kt:136" and never named the app
+    // whose link had changed, although the test's message does.
+    testLogging {
+        events("failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+
     val catalogDrift = System.getenv("CATALOG_DRIFT") == "1"
     inputs.property("catalogDrift", catalogDrift)
     if (catalogDrift) {

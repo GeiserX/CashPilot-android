@@ -76,8 +76,12 @@ rsync -a --delete \
 # The tmpdir is emptied at the start of each run. It now outlives the container,
 # so Robolectric's per-test directories, which it often fails to delete, would
 # otherwise pile up in the cache (2.1 GB after one day of screen tests).
+# CATALOG_DRIFT=1 turns on KnownAppsTest's web catalog check. The container
+# starts with a clean environment, so without passing it on the check is
+# skipped and the run still reports BUILD SUCCESSFUL.
 echo "==> gradle $TASK"
 ssh "$HOST" "docker run --rm \
+  -e CATALOG_DRIFT=${CATALOG_DRIFT:-} \
   -v $REMOTE_ROOT/sdk:/sdk \
   -v $REMOTE_ROOT/src:/src \
   -v $REMOTE_ROOT/gradle:/root/.gradle \
