@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-27
+
+### Added
+
+- **The app is in 20 languages:** English, Spanish, Portuguese (Brazil), French, German, Italian, Dutch, Polish, Russian, Ukrainian, Turkish, Arabic, Hindi, Indonesian, Vietnamese, Thai, Filipino, Simplified Chinese, Japanese and Korean. It follows the phone's language and falls back to English. Settings, Language picks another one, and Android 13 and later also list the app in the system's own app language setting. Arabic lays out right to left. The translations use the same words as CashPilot on the web, and each disclosure about what the app reads and sends keeps its full meaning.
+- **The store listing is in the same 20 languages.**
+- **CI checks the translations.** A missing string, a changed placeholder or a missing plural form fails the build, and a translation whose English changed later shows as stale.
+
+### Changed
+
+- **Numbers, data sizes and money follow the phone's language and region**, such as "4,12 $" on a German phone.
+
 ## [1.0.3] - 2026-11-27
 
 ### Fixed

@@ -1,0 +1,1 @@
+O CashPilot agora está em 20 idiomas. Ele segue o idioma do seu celular, e em Configurações > Idioma você escolhe outro. No Android 13 e posteriores, ele também aparece na configuração de idioma de apps do sistema. O árabe é lido da direita para a esquerda.
