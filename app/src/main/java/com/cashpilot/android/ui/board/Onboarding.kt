@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -169,7 +170,7 @@ fun OnboardPermissions(
     val n = KnownApps.all.size
     PermissionCard(
         R.drawable.ic_notifications, stringResource(R.string.notification_access), stringResource(R.string.allow_notification_access),
-        stringResource(R.string.permissions_notif_why, n),
+        pluralStringResource(R.plurals.permissions_notif_why, n, n),
         stringResource(R.string.permissions_notif_not_read),
         notif, required = true, onAllow = onAllowNotifications,
     )
@@ -294,13 +295,13 @@ fun DisclosureScreen(kind: Access, onContinue: () -> Unit, onNotNow: () -> Unit)
         Access.NOTIFICATIONS -> {
             icon = R.drawable.ic_notifications
             title = stringResource(R.string.disclose_title_notifications)
-            reads = stringResource(R.string.disclose_notif_reads, n)
+            reads = pluralStringResource(R.plurals.disclose_notif_reads, n, n)
             never = stringResource(R.string.disclose_notif_never)
         }
         Access.USAGE -> {
             icon = R.drawable.ic_query_stats
             title = stringResource(R.string.disclose_title_usage)
-            reads = stringResource(R.string.disclose_usage_reads, n)
+            reads = pluralStringResource(R.plurals.disclose_usage_reads, n, n)
             never = stringResource(R.string.disclose_usage_never)
         }
     }

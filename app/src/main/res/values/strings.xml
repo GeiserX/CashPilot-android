@@ -15,7 +15,7 @@
       button: use the words the CashPilot web UI uses in your language.
     - https://, http://, 192.168.x.x, 10.x.x.x, .local and .lan stay as written.
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">CashPilot</string>
 
     <!-- Shared words -->
@@ -282,7 +282,10 @@
     <string name="permissions_continue">Continue</string>
     <string name="permissions_continue_without">Continue without them</string>
     <!-- %1$d is the number of supported apps -->
-    <string name="permissions_notif_why">These apps keep a notification up while they run. CashPilot checks whether it is there, for the %1$d supported apps only.</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="one">These apps keep a notification up while they run. CashPilot checks whether it is there, for the %1$d supported apps only.</item>
+        <item quantity="other">These apps keep a notification up while they run. CashPilot checks whether it is there, for the %1$d supported apps only.</item>
+    </plurals>
     <string name="permissions_notif_not_read">Never reads notification text. You\'ll see exactly what it reads before Android asks.</string>
     <string name="permissions_usage_why">Shows when each supported app last ran and how much data it moved in the last 24 hours, which shows it is working.</string>
     <string name="permissions_usage_not_read">Never looks at other apps or websites. You\'ll see exactly what it reads first.</string>
@@ -309,9 +312,15 @@
     <string name="disclose_reads">CashPilot reads</string>
     <string name="disclose_never">It never reads</string>
     <!-- %1$d is the number of supported apps, listed below this text -->
-    <string name="disclose_notif_reads">Only whether one of the %1$d apps below is showing an ongoing notification right now. That notification is how those apps show they are running.</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="one">Only whether one of the %1$d apps below is showing an ongoing notification right now. That notification is how those apps show they are running.</item>
+        <item quantity="other">Only whether one of the %1$d apps below is showing an ongoing notification right now. That notification is how those apps show they are running.</item>
+    </plurals>
     <string name="disclose_notif_never">The text of any notification, and anything from any other app. Only two things go out, and only to your own server if you add one: whether each of these apps has that notification up, and whether it is running.</string>
-    <string name="disclose_usage_reads">For the %1$d apps below only: when each one was last in use, and how much data it sent and received in the last 24 hours.</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="one">For the %1$d apps below only: when each one was last in use, and how much data it sent and received in the last 24 hours.</item>
+        <item quantity="other">For the %1$d apps below only: when each one was last in use, and how much data it sent and received in the last 24 hours.</item>
+    </plurals>
     <string name="disclose_usage_never">Which other apps you use, which websites you visit, or what any app does. The results stay on this phone, unless you add your own server.</string>
     <string name="disclose_continue">Continue to Android settings</string>
     <string name="disclose_not_now">Not now</string>
@@ -332,7 +341,8 @@
         <item quantity="one">All %1$d supported apps</item>
         <item quantity="other">All %1$d supported apps</item>
     </plurals>
-    <string name="settings_installed_count">%1$d installed · %2$d not installed</string>
+    <!-- Two counts on one line. Use a form that reads right for any number, such as "Installed: %1$d". -->
+    <string name="settings_installed_count" tools:ignore="PluralsCandidate">%1$d installed · %2$d not installed</string>
     <string name="settings_section_about">About</string>
     <!-- %1$s is the version, such as "1.0.3" -->
     <string name="settings_about_app">CashPilot for Android %1$s</string>
