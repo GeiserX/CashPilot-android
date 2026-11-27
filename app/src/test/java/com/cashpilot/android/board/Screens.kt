@@ -80,7 +80,7 @@ fun InLocale(tag: String?, content: @Composable () -> Unit) {
  * cannot be photographed without also being checked.
  */
 /** The languages every screen check also runs in. */
-val LOCALE_SHOTS = listOf("ar")
+val LOCALE_SHOTS = listOf("ar", "de", "ja", "es")
 
 object Screens {
     private const val VERSION = "1.0.0"

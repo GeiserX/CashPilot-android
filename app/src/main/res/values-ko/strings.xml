@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">설정</string>
+    <string name="back">뒤로</string>
+    <string name="details">세부정보</string>
+    <string name="action_open">열기</string>
+    <string name="action_get">받기</string>
+    <string name="action_exit">종료</string>
+    <string name="action_allow">허용</string>
+    <string name="action_turn_on">켜기</string>
+    <string name="action_open_app">%1$s 열기</string>
+    <string name="action_get_app">%1$s 받기</string>
+    <string name="action_check_connection">연결 확인</string>
+    <string name="action_fix_address">주소 수정</string>
+    <string name="action_open_battery">배터리 설정 열기</string>
+    <string name="action_open_settings">설정 열기</string>
+    <string name="action_test_connection">연결 테스트</string>
+    <string name="testing">테스트 중…</string>
+    <string name="notification_access">알림 액세스</string>
+    <string name="usage_access">사용 기록 액세스</string>
+    <string name="battery_optimisation">배터리 최적화</string>
+    <string name="allow_notification_access">알림 액세스 허용</string>
+    <string name="allow_usage_access">사용 기록 액세스 허용</string>
+    <string name="allowed">허용됨</string>
+    <string name="done">완료</string>
+    <string name="not_set">설정 안 됨</string>
+    <string name="not_measured">측정 안 됨</string>
+    <string name="nothing_read_yet">아직 읽은 값 없음</string>
+    <string name="list_separator">", "</string>
+    <string name="supported_names">%1$s.</string>
+    <string name="ago_never">없음</string>
+    <string name="ago_just_now">방금</string>
+    <string name="ago_yesterday">어제</string>
+    <plurals name="ago_minutes">
+        <item quantity="other">%1$d분 전</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="other">%1$d시간 전</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="other">%1$d일 전</item>
+    </plurals>
+    <string name="for_a_moment">잠시</string>
+    <string name="for_yet">아직</string>
+    <string name="since_yesterday">어제부터</string>
+    <plurals name="for_minutes">
+        <item quantity="other">%1$d분 동안</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="other">%1$d시간 동안</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="other">%1$d일 동안</item>
+    </plurals>
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+    <plurals name="supported_sample">
+        <item quantity="other">%1$s 외 %2$d개</item>
+    </plurals>
+    <string name="state_running">실행 중</string>
+    <string name="state_stopped">중지됨</string>
+    <string name="state_stopped_last_opened">중지됨 · 마지막으로 연 시간 %1$s</string>
+    <string name="state_unknown">확인할 수 없음</string>
+    <string name="state_disabled">감시 안 함</string>
+    <string name="state_not_installed">설치되지 않음</string>
+    <string name="row_running_data">실행 중 · 24시간 동안 %1$s</string>
+    <string name="server_line_none">서버 없음 · 모든 데이터가 이 휴대전화에만 남음</string>
+    <string name="server_line_needs_https">%1$s에 전송하지 않음 · https://가 필요함</string>
+    <string name="server_line_waiting">%1$s와(과) 페어링됨 · 첫 보고를 기다리는 중</string>
+    <string name="server_line_ok">마지막 보고 %1$s · 15분마다 전송</string>
+    <string name="server_line_late">마지막 보고 %1$s · 보고가 늦어지고 있음</string>
+    <string name="server_line_failing_never">아직 %1$s에 도달한 보고가 없음</string>
+    <string name="server_line_failing">%2$s %1$s에 도달한 보고가 없음</string>
+    <string name="verdict_one_running">앱이 실행 중입니다</string>
+    <plurals name="verdict_all_running">
+        <item quantity="other">앱 %1$d개 모두 실행 중</item>
+    </plurals>
+    <string name="verdict_none_title">감시 중인 앱 없음</string>
+    <string name="verdict_none_sub">설치된 앱이 모두 감시에서 꺼져 있습니다. 설정의 감시할 앱에서 다시 켜세요.</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="other">앱 %2$d개 중 %1$d개 중지됨</item>
+    </plurals>
+    <string name="verdict_stopped_sub">중지된 앱은 열면 대개 다시 시작됩니다.</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="other">앱 %2$d개 중 %1$d개 실행 중</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="other">액세스가 다시 켜질 때까지 CashPilot은 나머지 %1$d개를 확인할 수 없습니다.</item>
+    </plurals>
+    <string name="verdict_server_sub">하지만 서버가 이 휴대전화의 보고를 받지 못하고 있습니다.</string>
+    <string name="verdict_late_sub">하지만 %1$s 보고가 전송되지 않았습니다.</string>
+    <string name="verdict_ok_sub">지금은 처리할 일이 없습니다.</string>
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s 중지됨</string>
+    <string name="task_stopped_body">열면 대개 다시 시작됩니다.</string>
+    <string name="task_failing_title">보고가 전달되지 않음</string>
+    <string name="task_failing_body_never">아직 %1$s에 도달한 보고가 없습니다. 연결 확인에서 이유를 볼 수 있습니다.</string>
+    <string name="task_failing_body">%2$s %1$s에 아무것도 도달하지 않았습니다. 연결 확인에서 이유를 볼 수 있습니다.</string>
+    <string name="task_late_title">보고가 늦어지고 있음</string>
+    <string name="task_late_body">%1$s 보고가 전송되지 않았습니다. Android는 백그라운드 작업을 미루며, 배터리 최적화가 켜져 있거나 네트워크가 없으면 더 많이 미룹니다.</string>
+    <string name="task_https_title">보고가 전송되지 않음</string>
+    <string name="task_https_body">%1$s 주소는 공용 인터넷에 있으므로 CashPilot은 https://로만 키를 전송합니다.</string>
+    <string name="task_notif_title">알림 액세스가 꺼져 있음</string>
+    <string name="task_notif_body">다시 켤 때까지 CashPilot은 어떤 앱이 실행 중인지 알 수 없습니다.</string>
+    <string name="task_usage_title">사용 기록 액세스가 꺼져 있음</string>
+    <string name="task_usage_body">다시 켤 때까지 마지막 사용 시간과 데이터 사용량이 표시되지 않습니다.</string>
+    <string name="task_battery_title">보고가 늦게 도착할 수 있음</string>
+    <string name="task_battery_body">CashPilot에 배터리 최적화가 켜져 있어 화면이 꺼져 있는 동안 Android가 보고를 미룰 수 있습니다.</string>
+    <plurals name="earnings_label">
+        <item quantity="other">서버 보고, 최근 %1$d일</item>
+    </plurals>
+    <string name="earnings_needs_server">수치를 보려면 서버를 추가하세요</string>
+    <string name="earnings_from">%1$s 기준</string>
+    <string name="shared_footnote">* 여러 기기에서 실행 중입니다. 제공업체는 계정 전체의 잔액을 보고하므로 이 수치는 이 휴대전화만의 것이 아닙니다.</string>
+    <string name="no_reading_note">값이 없다는 것은 서버가 해당 제공업체의 수치를 보내지 않았다는 뜻입니다. 0달러라는 뜻이 아닙니다.</string>
+    <string name="app_earnings_needs_server">서버 필요</string>
+    <string name="app_earnings_shared">%1$s *</string>
+    <string name="settings_server_none">모든 데이터가 이 휴대전화에만 남음 · 수치를 보려면 서버 추가</string>
+    <string name="settings_server_needs_https">전송하지 않음 · 이 주소에는 https://가 필요함</string>
+    <string name="settings_server_failing_never">전달되지 않음 · 아직 보고 없음</string>
+    <string name="settings_server_failing">전달되지 않음 · 마지막 보고 %1$s</string>
+    <string name="settings_server_late">보고가 늦어지고 있음 · 마지막 보고 %1$s</string>
+    <string name="settings_server_waiting">페어링됨 · 첫 보고를 기다리는 중</string>
+    <string name="settings_server_ok">15분마다 보고 · 마지막 보고 %1$s</string>
+    <string name="pair_testing_body">%1$s에 보고를 1건 보내는 중입니다.</string>
+    <string name="pair_ok_title">연결됨</string>
+    <string name="pair_ok_body">서버가 응답하고 키를 승인했습니다. 이 휴대전화는 플릿에 %1$s 이름으로 표시됩니다.</string>
+    <string name="pair_key_refused_title">서버가 이 API 키를 거부했습니다</string>
+    <string name="pair_key_refused_body">주소는 맞습니다. 서버가 응답했습니다. 플릿 → API 키 표시에서 키를 다시 복사하세요.</string>
+    <string name="pair_unreachable_title">%1$s에서 응답 없음</string>
+    <string name="pair_unreachable_body">주소를 확인하고, 이 휴대전화가 같은 네트워크에 있거나 VPN을 통해 그 주소에 연결할 수 있는지 확인하세요.</string>
+    <string name="pair_url_refused_title">이 주소에는 https://가 필요합니다</string>
+    <string name="pair_url_refused_body">CashPilot은 내 네트워크에서만 http://로 키를 전송합니다. 192.168.x.x, 10.x.x.x, .local 또는 .lan 이름, Tailscale이 해당됩니다.</string>
+    <string name="pair_rejected_title">서버가 오류로 응답했습니다</string>
+    <string name="pair_rejected_body">서버에 연결할 수 있지만 보고를 받아들이지 않았습니다. 최신 CashPilot 릴리스를 실행하고 있는지 확인하세요.</string>
+    <string name="pair_not_cashpilot_title">%1$s에서 응답했지만 CashPilot이 아닙니다</string>
+    <string name="pair_not_cashpilot_body">이 주소에서 로그인 페이지나 다른 앱 등 다른 무언가가 응답합니다. CashPilot 대시보드를 여는 주소를 사용하세요.</string>
+    <string name="pair_save_failed_title">세부정보를 저장할 수 없음</string>
+    <string name="pair_save_failed_body">Android가 주소와 키를 저장하지 않아 아무것도 전송되지 않았습니다. 다시 시도하세요.</string>
+    <plurals name="home_tasks_heading">
+        <item quantity="other">확인이 필요한 항목 %1$d개</item>
+    </plurals>
+    <string name="home_all_switched_off">설치된 앱이 모두 설정에서 감시가 꺼져 있습니다.</string>
+    <plurals name="home_other_supported">
+        <item quantity="other">지원되는 다른 앱 %1$d개</item>
+    </plurals>
+    <string name="detail_stopped">중지됨. 마지막으로 연 시간: %1$s.</string>
+    <string name="detail_unknown">CashPilot이 이 앱의 실행 여부를 확인할 수 없습니다.</string>
+    <string name="detail_hint">이런 앱은 Android가 메모리에서 지우면 자주 중지됩니다. 앱을 열면 대개 다시 시작됩니다.</string>
+    <plurals name="detail_server_reports">
+        <item quantity="other">서버 보고, 최근 %1$d일</item>
+    </plurals>
+    <string name="detail_data_moved">전송된 데이터, 최근 24시간</string>
+    <string name="detail_last_opened">마지막으로 연 시간</string>
+    <string name="detail_watched">CashPilot으로 감시</string>
+    <string name="blind_title">CashPilot이 아직 앱을 확인할 수 없습니다</string>
+    <plurals name="blind_body">
+        <item quantity="other">사용하는 앱 %1$d개가 설치되어 있지만, 두 가지를 허용하기 전에는 Android가 CashPilot에 앱의 실행 여부를 보여 주지 않습니다. 각 항목은 무엇을 읽는지 먼저 설명합니다.</item>
+    </plurals>
+    <string name="no_apps_title">이 휴대전화에 아직 지원되는 앱이 없습니다</string>
+    <string name="no_apps_body">CashPilot은 EarnApp, Grass 등 이미 사용 중인 패시브 인컴 앱을 감시하고, 앱이 중지되면 알려 줍니다. 앱을 설치하면 여기에 자동으로 표시됩니다.</string>
+    <string name="no_apps_standalone_title">서버 없이도 작동합니다</string>
+    <string name="no_apps_standalone_body">CashPilot만으로도 어떤 앱이 실행 중이고 어떤 앱이 중지되었는지 보여 주고, 앱을 바로 열어 줍니다. CashPilot 서버를 추가하면 수익 수치가 더해지고 이 휴대전화가 다른 머신과 함께 표시됩니다.</string>
+    <string name="demo_start">샘플 데이터로 데모 보기</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="other">지원되는 앱 %1$d개 보기</item>
+    </plurals>
+    <string name="supported_title">지원되는 앱</string>
+    <string name="supported_intro_all">CashPilot이 감시할 수 있는 앱입니다. 각 앱의 지급액은 제공업체, 연결 상태, 지역에 따라 다릅니다.</string>
+    <string name="supported_intro_missing">이 앱을 설치하면 CashPilot이 감시할 수 있습니다. 각 앱의 지급액은 제공업체, 연결 상태, 지역에 따라 다릅니다.</string>
+    <string name="supported_referral_note">추천으로 표시된 링크에는 CashPilot의 추천 코드가 포함되어 있으며, CashPilot 개발을 지원합니다. 다른 링크는 앱 스토어로 연결됩니다.</string>
+    <string name="supported_installed">설치됨</string>
+    <string name="supported_referral">추천 · 제공업체 가입 페이지</string>
+    <string name="supported_store">앱 스토어 페이지</string>
+    <string name="demo_banner">데모 · 샘플 데이터이며 실제 데이터가 아닙니다</string>
+    <string name="onboard_step">%2$d단계 중 %1$d단계</string>
+    <string name="welcome_title">수익 앱이 중지되면 바로 알 수 있습니다</string>
+    <string name="welcome_lead">CashPilot은 이 휴대전화의 패시브 인컴 앱을 확인하여 어떤 앱이 중지되었는지, 어떻게 다시 시작하는지 알려 줍니다.</string>
+    <string name="welcome_start">시작하기</string>
+    <string name="welcome_fact_running_title">실행 중인 앱</string>
+    <string name="welcome_fact_running_body">%1$s, CashPilot을 열 때마다 확인합니다.</string>
+    <string name="welcome_fact_stops_title">앱이 중지되었을 때 할 일</string>
+    <string name="welcome_fact_stops_body">한 번 탭하면 앱이 열려 다시 시작할 수 있습니다.</string>
+    <string name="welcome_fact_server_title">서버가 있다면 서버의 수치</string>
+    <string name="welcome_fact_server_body">CashPilot 서버는 각 앱 계정에 표시되는 내용을 보고합니다. 선택 사항이며, 보고는 15분마다 전송됩니다.</string>
+    <string name="welcome_fact_private_title">이 휴대전화 밖으로 나가는 데이터 없음</string>
+    <string name="welcome_fact_private_body">직접 추가한 서버로만 전송됩니다. 광고도 추적도 없습니다.</string>
+    <string name="permissions_title">CashPilot이 앱을 확인하도록 허용</string>
+    <string name="permissions_lead">Android는 다른 앱의 상태를 숨깁니다. 시스템 설정에서 스위치 두 개를 켜면 해결되며, 바로 이 화면으로 돌아옵니다.</string>
+    <string name="permissions_without">둘 다 허용하지 않으면 CashPilot은 실행 중인 앱과 중지된 앱을 구분할 수 없습니다. 나중에 설정에서 허용할 수도 있습니다.</string>
+    <string name="permissions_continue">계속</string>
+    <string name="permissions_continue_without">허용 없이 계속</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="other">이 앱들은 실행 중에 알림을 계속 표시합니다. CashPilot은 지원되는 앱 %1$d개에 대해서만 그 알림이 있는지 확인합니다.</item>
+    </plurals>
+    <string name="permissions_notif_not_read">알림 내용은 절대 읽지 않습니다. Android가 묻기 전에 무엇을 읽는지 정확히 확인할 수 있습니다.</string>
+    <string name="permissions_usage_why">지원되는 각 앱이 마지막으로 실행된 시간과 최근 24시간 동안 전송한 데이터 양을 보여 주어, 앱이 작동 중임을 알려 줍니다.</string>
+    <string name="permissions_usage_not_read">다른 앱이나 웹사이트는 절대 보지 않습니다. 무엇을 읽는지 먼저 정확히 확인할 수 있습니다.</string>
+    <string name="permissions_battery_why">CashPilot은 15분마다 보고합니다. 배터리 최적화가 켜져 있으면 화면이 꺼져 있는 동안 Android가 보고를 미룰 수 있습니다.</string>
+    <string name="permissions_battery_not_read">선택 사항입니다. Android의 배터리 목록이 열립니다. 모든 앱을 선택하고, CashPilot을 선택한 다음, 최적화하지 않음을 선택하세요.</string>
+    <string name="server_address">서버 주소</string>
+    <string name="server_address_refused">이 주소는 공용 인터넷에 있으므로 https://가 필요합니다. CashPilot은 이런 주소에 암호화되지 않은 http://로 키를 보내지 않습니다.</string>
+    <string name="server_address_cleartext">내 네트워크에서 암호화되지 않은 http://를 사용 중입니다. 키와 앱 목록이 그 네트워크에서 암호화되지 않은 채 전송됩니다.</string>
+    <string name="api_key">API 키</string>
+    <string name="api_key_where">서버에서: 플릿 → API 키 표시. 이 휴대전화에만 저장됩니다.</string>
+    <string name="server_address_hint">https://를 사용하세요. 암호화되지 않은 http://는 192.168.x.x나 .local 또는 Tailscale 이름처럼 내 네트워크에 있는 주소에서만 작동합니다.</string>
+    <string name="server_title">서버 연결</string>
+    <string name="server_lead">선택 사항입니다. 서버가 없어도 어떤 앱이 실행 중이고 어떤 앱이 중지되었는지 볼 수 있습니다. 서버를 추가하면 제공업체 계정에 표시되는 수치가 더해지고, 이 휴대전화가 플릿에 표시됩니다.</string>
+    <string name="server_finish">완료</string>
+    <string name="server_skip">서버 없이 사용</string>
+    <string name="disclose_title_notifications">알림 액세스를 켜기 전에</string>
+    <string name="disclose_title_usage">사용 기록 액세스를 켜기 전에</string>
+    <string name="disclose_lead">다음으로 Android 설정이 열립니다. CashPilot이 이 액세스로 하는 일은 다음과 같습니다.</string>
+    <string name="disclose_reads">CashPilot이 읽는 정보</string>
+    <string name="disclose_never">절대 읽지 않는 정보</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="other">아래 앱 %1$d개 중 하나가 지금 진행 중 알림을 표시하고 있는지 여부만 읽습니다. 이 앱들은 그 알림으로 실행 중임을 표시합니다.</item>
+    </plurals>
+    <string name="disclose_notif_never">모든 알림의 내용, 그리고 다른 앱의 모든 정보. 직접 추가한 서버가 있을 때 그 서버로만 두 가지 정보가 전송됩니다. 각 앱에 그 알림이 표시되어 있는지, 그리고 실행 중인지입니다.</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="other">아래 앱 %1$d개에 대해서만, 각 앱이 마지막으로 사용된 시간과 최근 24시간 동안 보내고 받은 데이터 양을 읽습니다.</item>
+    </plurals>
+    <string name="disclose_usage_never">사용하는 다른 앱, 방문하는 웹사이트, 앱이 하는 작업. 직접 서버를 추가하지 않는 한 결과는 이 휴대전화에만 남습니다.</string>
+    <string name="disclose_continue">Android 설정으로 이동</string>
+    <string name="disclose_not_now">나중에</string>
+    <string name="settings_section_server">서버</string>
+    <string name="settings_no_server">서버 없음</string>
+    <string name="settings_key_stored">%1$s · 이 휴대전화에만 저장됨</string>
+    <string name="settings_test_hint">지금 보고를 보내고 서버의 응답을 보여 줍니다.</string>
+    <string name="settings_section_phone">이 휴대전화</string>
+    <string name="settings_notif_off">꺼짐 · 실행 중인 앱을 확인할 수 없음</string>
+    <string name="settings_usage_off">꺼짐 · 마지막 사용 시간 없음</string>
+    <string name="settings_battery_off">CashPilot에 꺼져 있음</string>
+    <string name="settings_battery_on">켜짐 · 보고가 늦게 도착할 수 있음</string>
+    <string name="language">언어</string>
+    <string name="language_system">시스템 기본값</string>
+    <string name="language_system_body">휴대전화의 언어를 따름</string>
+    <string name="settings_section_apps">감시할 앱</string>
+    <plurals name="settings_all_supported">
+        <item quantity="other">지원되는 앱 %1$d개 전체</item>
+    </plurals>
+    <string name="settings_installed_count">설치됨: %1$d · 설치 안 됨: %2$d</string>
+    <string name="settings_section_about">정보</string>
+    <string name="settings_about_app">CashPilot for Android %1$s</string>
+    <string name="settings_about_source">소스 코드 및 라이선스(GPL-3.0)</string>
+    <string name="settings_about_server">CashPilot 서버</string>
+    <string name="settings_about_server_body">이 앱이 보고하는 자체 호스팅 대시보드</string>
+    <string name="settings_about_sponsor">프로젝트 후원</string>
+    <string name="settings_demo">데모 모드</string>
+    <string name="settings_demo_body">샘플 데이터로 화면을 보여 줍니다</string>
+</resources>

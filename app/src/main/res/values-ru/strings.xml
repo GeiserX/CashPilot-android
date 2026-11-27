@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Настройки</string>
+    <string name="back">Назад</string>
+    <string name="details">Подробнее</string>
+    <string name="action_open">Открыть</string>
+    <string name="action_get">Установить</string>
+    <string name="action_exit">Выйти</string>
+    <string name="action_allow">Разрешить</string>
+    <string name="action_turn_on">Включить</string>
+    <string name="action_open_app">Открыть %1$s</string>
+    <string name="action_get_app">Установить %1$s</string>
+    <string name="action_check_connection">Проверить подключение</string>
+    <string name="action_fix_address">Исправить адрес</string>
+    <string name="action_open_battery">Настройки батареи</string>
+    <string name="action_open_settings">Открыть настройки</string>
+    <string name="action_test_connection">Тест подключения</string>
+    <string name="testing">Проверка…</string>
+    <string name="notification_access">Доступ к уведомлениям</string>
+    <string name="usage_access">Доступ к истории использования</string>
+    <string name="battery_optimisation">Оптимизация батареи</string>
+    <string name="allow_notification_access">Разрешить доступ к уведомлениям</string>
+    <string name="allow_usage_access">Разрешить доступ к истории использования</string>
+    <string name="allowed">Разрешено</string>
+    <string name="done">Готово</string>
+    <string name="not_set">Не задано</string>
+    <string name="not_measured">Не измерено</string>
+    <string name="nothing_read_yet">Пока ничего не прочитано</string>
+    <string name="list_separator">", "</string>
+    <string name="supported_names">%1$s.</string>
+
+    <string name="ago_never">никогда</string>
+    <string name="ago_just_now">только что</string>
+    <string name="ago_yesterday">вчера</string>
+    <plurals name="ago_minutes">
+        <item quantity="one">%1$d мин назад</item>
+        <item quantity="few">%1$d мин назад</item>
+        <item quantity="many">%1$d мин назад</item>
+        <item quantity="other">%1$d мин назад</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="one">%1$d ч назад</item>
+        <item quantity="few">%1$d ч назад</item>
+        <item quantity="many">%1$d ч назад</item>
+        <item quantity="other">%1$d ч назад</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="one">%1$d день назад</item>
+        <item quantity="few">%1$d дня назад</item>
+        <item quantity="many">%1$d дней назад</item>
+        <item quantity="other">%1$d дня назад</item>
+    </plurals>
+
+    <string name="for_a_moment">в последние минуты</string>
+    <string name="for_yet">до сих пор</string>
+    <string name="since_yesterday">со вчерашнего дня</string>
+    <plurals name="for_minutes">
+        <item quantity="one">уже %1$d мин</item>
+        <item quantity="few">уже %1$d мин</item>
+        <item quantity="many">уже %1$d мин</item>
+        <item quantity="other">уже %1$d мин</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="one">уже %1$d ч</item>
+        <item quantity="few">уже %1$d ч</item>
+        <item quantity="many">уже %1$d ч</item>
+        <item quantity="other">уже %1$d ч</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="one">уже %1$d день</item>
+        <item quantity="few">уже %1$d дня</item>
+        <item quantity="many">уже %1$d дней</item>
+        <item quantity="other">уже %1$d дня</item>
+    </plurals>
+
+    <string name="bytes_b">%1$s Б</string>
+    <string name="bytes_kb">%1$s КБ</string>
+    <string name="bytes_mb">%1$s МБ</string>
+    <string name="bytes_gb">%1$s ГБ</string>
+
+    <plurals name="supported_sample">
+        <item quantity="one">%1$s и ещё %2$d</item>
+        <item quantity="few">%1$s и ещё %2$d</item>
+        <item quantity="many">%1$s и ещё %2$d</item>
+        <item quantity="other">%1$s и ещё %2$d</item>
+    </plurals>
+
+    <string name="state_running">Работает</string>
+    <string name="state_stopped">Остановлено</string>
+    <string name="state_stopped_last_opened">Остановлено · открывалось %1$s</string>
+    <string name="state_unknown">Не видно</string>
+    <string name="state_disabled">Не отслеживается</string>
+    <string name="state_not_installed">Не установлено</string>
+    <string name="row_running_data">Работает · %1$s за 24 ч</string>
+
+    <string name="server_line_none">Без сервера · всё остаётся на этом телефоне</string>
+    <string name="server_line_needs_https">Не отправляется на %1$s · нужен https://</string>
+    <string name="server_line_waiting">Связано с %1$s · ждём первый отчёт</string>
+    <string name="server_line_ok">Последний отчёт %1$s · отправка каждые 15 мин</string>
+    <string name="server_line_late">Последний отчёт %1$s · отчёты опаздывают</string>
+    <string name="server_line_failing_never">Ни один отчёт ещё не дошёл до %1$s</string>
+    <string name="server_line_failing">Отчёты не доходят до %1$s %2$s</string>
+
+    <string name="verdict_one_running">Ваше приложение работает</string>
+    <plurals name="verdict_all_running">
+        <item quantity="one">Все %1$d приложение работают</item>
+        <item quantity="few">Все %1$d приложения работают</item>
+        <item quantity="many">Все %1$d приложений работают</item>
+        <item quantity="other">Все %1$d приложения работают</item>
+    </plurals>
+    <string name="verdict_none_title">Нет отслеживаемых приложений</string>
+    <string name="verdict_none_sub">Все установленные приложения выключены. Включите их снова в настройках, в разделе «Отслеживаемые приложения».</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="one">Остановлено: %1$d из %2$d приложения</item>
+        <item quantity="few">Остановлено: %1$d из %2$d приложений</item>
+        <item quantity="many">Остановлено: %1$d из %2$d приложений</item>
+        <item quantity="other">Остановлено: %1$d из %2$d приложения</item>
+    </plurals>
+    <string name="verdict_stopped_sub">Открытие остановленного приложения обычно запускает его снова.</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="one">Работает: %1$d из %2$d приложения</item>
+        <item quantity="few">Работает: %1$d из %2$d приложений</item>
+        <item quantity="many">Работает: %1$d из %2$d приложений</item>
+        <item quantity="other">Работает: %1$d из %2$d приложения</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="one">CashPilot не видит ещё %1$d приложение, пока доступ снова не включён.</item>
+        <item quantity="few">CashPilot не видит ещё %1$d приложения, пока доступ снова не включён.</item>
+        <item quantity="many">CashPilot не видит ещё %1$d приложений, пока доступ снова не включён.</item>
+        <item quantity="other">CashPilot не видит ещё %1$d приложения, пока доступ снова не включён.</item>
+    </plurals>
+    <string name="verdict_server_sub">Но ваш сервер не получает отчёты с этого телефона.</string>
+    <string name="verdict_late_sub">Но отчёты не отправлялись %1$s.</string>
+    <string name="verdict_ok_sub">Сейчас от вас ничего не требуется.</string>
+
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s: остановлено</string>
+    <string name="task_stopped_body">Обычно приложение снова запускается, если его открыть.</string>
+    <string name="task_failing_title">Отчёты не доходят</string>
+    <string name="task_failing_body_never">Ни один отчёт ещё не дошёл до %1$s. Кнопка «Проверить подключение» покажет причину.</string>
+    <string name="task_failing_body">Ничего не доходит до %1$s %2$s. Кнопка «Проверить подключение» покажет причину.</string>
+    <string name="task_late_title">Отчёты опаздывают</string>
+    <string name="task_late_body">Отчёты не отправлялись %1$s. Android сдерживает фоновую работу, особенно при включённой оптимизации батареи или без сети.</string>
+    <string name="task_https_title">Отчёты не отправляются</string>
+    <string name="task_https_body">%1$s находится в открытом интернете, поэтому CashPilot отправляет ключ только по https://.</string>
+    <string name="task_notif_title">Доступ к уведомлениям выключен</string>
+    <string name="task_notif_body">CashPilot не видит, какие приложения работают, пока доступ снова не включён.</string>
+    <string name="task_usage_title">Доступ к истории использования выключен</string>
+    <string name="task_usage_body">Нет времени последней активности и расхода трафика, пока доступ снова не включён.</string>
+    <string name="task_battery_title">Отчёты могут опаздывать</string>
+    <string name="task_battery_body">Для CashPilot включена оптимизация батареи, поэтому Android может задерживать отчёты при выключенном экране.</string>
+
+    <plurals name="earnings_label">
+        <item quantity="one">Данные вашего сервера за последний %1$d день</item>
+        <item quantity="few">Данные вашего сервера за последние %1$d дня</item>
+        <item quantity="many">Данные вашего сервера за последние %1$d дней</item>
+        <item quantity="other">Данные вашего сервера за последние %1$d дня</item>
+    </plurals>
+    <string name="earnings_needs_server">Добавьте сервер, чтобы видеть суммы</string>
+    <string name="earnings_from">Данные: %1$s</string>
+    <string name="shared_footnote">* Работает на нескольких ваших устройствах. Провайдер сообщает один баланс на весь аккаунт, поэтому это сумма не только этого телефона.</string>
+    <string name="no_reading_note">Нет данных — значит, ваш сервер не прислал сумму по этому провайдеру. Это не 0 $.</string>
+    <string name="app_earnings_needs_server">Нужен сервер</string>
+    <string name="app_earnings_shared">%1$s *</string>
+
+    <string name="settings_server_none">Всё остаётся на этом телефоне · добавьте сервер, чтобы видеть суммы</string>
+    <string name="settings_server_needs_https">Не отправляется · этому адресу нужен https://</string>
+    <string name="settings_server_failing_never">Не доходит · отчётов пока нет</string>
+    <string name="settings_server_failing">Не доходит · последний отчёт %1$s</string>
+    <string name="settings_server_late">Отчёты опаздывают · последний отчёт %1$s</string>
+    <string name="settings_server_waiting">Связано · ждём первый отчёт</string>
+    <string name="settings_server_ok">Отчёты каждые 15 мин · последний отчёт %1$s</string>
+
+    <string name="pair_testing_body">Отправляем один отчёт на %1$s.</string>
+    <string name="pair_ok_title">Подключено</string>
+    <string name="pair_ok_body">Ваш сервер ответил и принял ключ. Этот телефон появится в разделе «Парк» как %1$s.</string>
+    <string name="pair_key_refused_title">Сервер отклонил этот API-ключ</string>
+    <string name="pair_key_refused_body">Адрес верный: сервер ответил. Скопируйте ключ ещё раз: «Парк» → «Показать API-ключ».</string>
+    <string name="pair_unreachable_title">Нет ответа от %1$s</string>
+    <string name="pair_unreachable_body">Проверьте адрес и то, что этот телефон может до него достучаться: в той же сети или через ваш VPN.</string>
+    <string name="pair_url_refused_title">Этому адресу нужен https://</string>
+    <string name="pair_url_refused_body">CashPilot отправляет ключ по http:// только в вашей собственной сети: 192.168.x.x, 10.x.x.x, имя .local или .lan либо Tailscale.</string>
+    <string name="pair_rejected_title">Сервер ответил ошибкой</string>
+    <string name="pair_rejected_body">Он доступен, но не принял отчёт. Проверьте, что на нём установлена свежая версия CashPilot.</string>
+    <string name="pair_not_cashpilot_title">%1$s ответил, но не как CashPilot</string>
+    <string name="pair_not_cashpilot_body">По этому адресу отвечает что-то другое, например страница входа или другое приложение. Укажите адрес, по которому вы открываете панель CashPilot.</string>
+    <string name="pair_save_failed_title">Не удалось сохранить данные</string>
+    <string name="pair_save_failed_body">Android не сохранил адрес и ключ, поэтому ничего не отправлено. Попробуйте ещё раз.</string>
+
+    <plurals name="home_tasks_heading">
+        <item quantity="one">%1$d пункт требует вашего внимания</item>
+        <item quantity="few">%1$d пункта требуют вашего внимания</item>
+        <item quantity="many">%1$d пунктов требуют вашего внимания</item>
+        <item quantity="other">%1$d пункта требуют вашего внимания</item>
+    </plurals>
+    <string name="home_all_switched_off">Все установленные приложения выключены в настройках.</string>
+    <plurals name="home_other_supported">
+        <item quantity="one">Ещё %1$d поддерживаемое приложение</item>
+        <item quantity="few">Ещё %1$d поддерживаемых приложения</item>
+        <item quantity="many">Ещё %1$d поддерживаемых приложений</item>
+        <item quantity="other">Ещё %1$d поддерживаемого приложения</item>
+    </plurals>
+
+    <string name="detail_stopped">Остановлено. Последний раз открывалось %1$s.</string>
+    <string name="detail_unknown">CashPilot не видит, работает ли оно.</string>
+    <string name="detail_hint">Эти приложения часто останавливаются, когда Android выгружает их из памяти. Открытие приложения обычно запускает его снова.</string>
+    <plurals name="detail_server_reports">
+        <item quantity="one">Отчёты сервера за последний %1$d день</item>
+        <item quantity="few">Отчёты сервера за последние %1$d дня</item>
+        <item quantity="many">Отчёты сервера за последние %1$d дней</item>
+        <item quantity="other">Отчёты сервера за последние %1$d дня</item>
+    </plurals>
+    <string name="detail_data_moved">Передано данных за 24 ч</string>
+    <string name="detail_last_opened">Последний запуск</string>
+    <string name="detail_watched">Отслеживается CashPilot</string>
+
+    <string name="blind_title">CashPilot пока не видит ваши приложения</string>
+    <plurals name="blind_body">
+        <item quantity="one">У вас установлено %1$d приложение, но Android не покажет CashPilot, работает ли оно, пока вы не дадите два разрешения. Для каждого сначала будет объяснено, что оно читает.</item>
+        <item quantity="few">У вас установлено %1$d приложения, но Android не покажет CashPilot, работают ли они, пока вы не дадите два разрешения. Для каждого сначала будет объяснено, что оно читает.</item>
+        <item quantity="many">У вас установлено %1$d приложений, но Android не покажет CashPilot, работают ли они, пока вы не дадите два разрешения. Для каждого сначала будет объяснено, что оно читает.</item>
+        <item quantity="other">У вас установлено %1$d приложения, но Android не покажет CashPilot, работают ли они, пока вы не дадите два разрешения. Для каждого сначала будет объяснено, что оно читает.</item>
+    </plurals>
+
+    <string name="no_apps_title">На этом телефоне пока нет поддерживаемых приложений</string>
+    <string name="no_apps_body">CashPilot следит за приложениями пассивного дохода, которыми вы уже пользуетесь, например EarnApp или Grass, и сообщает, когда одно из них перестаёт работать. Как только такое приложение будет установлено, оно само появится здесь.</string>
+    <string name="no_apps_standalone_title">Работает без сервера</string>
+    <string name="no_apps_standalone_body">Сам по себе CashPilot показывает, какие приложения работают, а какие остановились, и открывает их за вас. Сервер CashPilot добавляет суммы заработка и показывает этот телефон вместе с другими вашими машинами.</string>
+    <string name="demo_start">Показать демо с тестовыми данными</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="one">Посмотреть %1$d поддерживаемое приложение</item>
+        <item quantity="few">Посмотреть %1$d поддерживаемых приложения</item>
+        <item quantity="many">Посмотреть %1$d поддерживаемых приложений</item>
+        <item quantity="other">Посмотреть %1$d поддерживаемого приложения</item>
+    </plurals>
+
+    <string name="supported_title">Поддерживаемые приложения</string>
+    <string name="supported_intro_all">Приложения, за которыми может следить CashPilot. Сколько платит каждое из них, зависит от провайдера, вашего подключения и региона.</string>
+    <string name="supported_intro_missing">CashPilot может следить за этими приложениями, если вы их установите. Сколько платит каждое из них, зависит от провайдера, вашего подключения и региона.</string>
+    <string name="supported_referral_note">Ссылки с пометкой «Реферал» содержат реферальный код CashPilot, который поддерживает разработку CashPilot. Остальные ведут в магазин приложений.</string>
+    <string name="supported_installed">Установлено</string>
+    <string name="supported_referral">Реферал · страница регистрации провайдера</string>
+    <string name="supported_store">Страница в магазине</string>
+
+    <string name="demo_banner">Демо · тестовые данные, здесь всё ненастоящее</string>
+
+    <string name="onboard_step">Шаг %1$d из %2$d</string>
+    <string name="welcome_title">Узнавайте, когда приложение для заработка останавливается</string>
+    <string name="welcome_lead">CashPilot проверяет приложения пассивного дохода на этом телефоне и показывает, какие из них остановились и как запустить их снова.</string>
+    <string name="welcome_start">Начать</string>
+    <string name="welcome_fact_running_title">Какие приложения работают</string>
+    <string name="welcome_fact_running_body">%1$s — проверка при каждом открытии CashPilot.</string>
+    <string name="welcome_fact_stops_title">Что делать, если одно остановилось</string>
+    <string name="welcome_fact_stops_body">Одно касание открывает приложение, чтобы вы запустили его снова.</string>
+    <string name="welcome_fact_server_title">Данные с вашего сервера, если он есть</string>
+    <string name="welcome_fact_server_body">Сервер CashPilot сообщает, что показывает аккаунт каждого приложения. Необязательно; отчёты уходят каждые 15 минут.</string>
+    <string name="welcome_fact_private_title">Ничего не покидает этот телефон</string>
+    <string name="welcome_fact_private_body">Кроме отправки на ваш собственный сервер, если вы его добавите. Без рекламы и слежки.</string>
+
+    <string name="permissions_title">Разрешите CashPilot видеть ваши приложения</string>
+    <string name="permissions_lead">Android скрывает состояние других приложений. Это исправляют два переключателя в системных настройках; потом вы сразу вернётесь сюда.</string>
+    <string name="permissions_without">Без обоих CashPilot не отличит работающие приложения от остановленных. Разрешить их можно позже в настройках.</string>
+    <string name="permissions_continue">Продолжить</string>
+    <string name="permissions_continue_without">Продолжить без них</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="one">Эти приложения показывают уведомление, пока работают. CashPilot проверяет, есть ли оно, только для %1$d поддерживаемого приложения.</item>
+        <item quantity="few">Эти приложения показывают уведомление, пока работают. CashPilot проверяет, есть ли оно, только для %1$d поддерживаемых приложений.</item>
+        <item quantity="many">Эти приложения показывают уведомление, пока работают. CashPilot проверяет, есть ли оно, только для %1$d поддерживаемых приложений.</item>
+        <item quantity="other">Эти приложения показывают уведомление, пока работают. CashPilot проверяет, есть ли оно, только для %1$d поддерживаемого приложения.</item>
+    </plurals>
+    <string name="permissions_notif_not_read">Никогда не читает текст уведомлений. Ещё до запроса Android вы увидите, что именно читается.</string>
+    <string name="permissions_usage_why">Показывает, когда каждое поддерживаемое приложение последний раз работало и сколько данных оно передало за последние 24 часа. Это подтверждает, что оно работает.</string>
+    <string name="permissions_usage_not_read">Никогда не смотрит другие приложения и сайты. Сначала вы увидите, что именно читается.</string>
+    <string name="permissions_battery_why">CashPilot отправляет отчёты каждые 15 минут. При включённой оптимизации батареи Android может задерживать эти отчёты, пока экран выключен.</string>
+    <string name="permissions_battery_not_read">Необязательно. Откроется список батареи Android: выберите «Все приложения», затем CashPilot, затем «Не экономить».</string>
+
+    <string name="server_address">Адрес сервера</string>
+    <string name="server_address_refused">Этот адрес находится в открытом интернете, поэтому нужен https://. CashPilot никогда не отправляет туда ключ по обычному http://.</string>
+    <string name="server_address_cleartext">Обычный http:// в вашей сети: ключ и список приложений передаются по ней без шифрования.</string>
+    <string name="api_key">API-ключ</string>
+    <string name="api_key_where">На вашем сервере: «Парк» → «Показать API-ключ». Хранится только на этом телефоне.</string>
+    <string name="server_address_hint">Используйте https://. Обычный http:// работает только для адреса в вашей сети, например 192.168.x.x или имени .local или Tailscale.</string>
+
+    <string name="server_title">Подключите сервер</string>
+    <string name="server_lead">Необязательно. Без сервера вы всё равно видите, какие приложения работают, а какие остановились. Сервер добавляет суммы из ваших аккаунтов у провайдеров и показывает этот телефон в вашем парке.</string>
+    <string name="server_finish">Готово</string>
+    <string name="server_skip">Без сервера</string>
+
+    <string name="disclose_title_notifications">Перед включением доступа к уведомлениям</string>
+    <string name="disclose_title_usage">Перед включением доступа к истории использования</string>
+    <string name="disclose_lead">Сейчас Android откроет свои настройки. Вот что CashPilot делает с этим доступом.</string>
+    <string name="disclose_reads">CashPilot читает</string>
+    <string name="disclose_never">Никогда не читает</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="one">Только то, показывает ли сейчас какое-либо из %1$d приложения ниже постоянное уведомление. Этим уведомлением такие приложения показывают, что работают.</item>
+        <item quantity="few">Только то, показывает ли сейчас какое-либо из %1$d приложений ниже постоянное уведомление. Этим уведомлением такие приложения показывают, что работают.</item>
+        <item quantity="many">Только то, показывает ли сейчас какое-либо из %1$d приложений ниже постоянное уведомление. Этим уведомлением такие приложения показывают, что работают.</item>
+        <item quantity="other">Только то, показывает ли сейчас какое-либо из %1$d приложения ниже постоянное уведомление. Этим уведомлением такие приложения показывают, что работают.</item>
+    </plurals>
+    <string name="disclose_notif_never">Текст любых уведомлений и что-либо из других приложений. Наружу уходят только две вещи и только на ваш собственный сервер, если вы его добавите: есть ли у каждого из этих приложений это уведомление и работает ли оно.</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="one">Только для %1$d приложения ниже: когда каждое последний раз использовалось и сколько данных оно отправило и получило за последние 24 часа.</item>
+        <item quantity="few">Только для %1$d приложений ниже: когда каждое последний раз использовалось и сколько данных оно отправило и получило за последние 24 часа.</item>
+        <item quantity="many">Только для %1$d приложений ниже: когда каждое последний раз использовалось и сколько данных оно отправило и получило за последние 24 часа.</item>
+        <item quantity="other">Только для %1$d приложения ниже: когда каждое последний раз использовалось и сколько данных оно отправило и получило за последние 24 часа.</item>
+    </plurals>
+    <string name="disclose_usage_never">Какими другими приложениями вы пользуетесь, какие сайты посещаете и что делает любое приложение. Результаты остаются на этом телефоне, если вы не добавите собственный сервер.</string>
+    <string name="disclose_continue">Перейти в настройки Android</string>
+    <string name="disclose_not_now">Не сейчас</string>
+
+    <string name="settings_section_server">Сервер</string>
+    <string name="settings_no_server">Без сервера</string>
+    <string name="settings_key_stored">%1$s · хранится только на этом телефоне</string>
+    <string name="settings_test_hint">Отправляет отчёт сейчас и показывает ответ сервера.</string>
+    <string name="settings_section_phone">Этот телефон</string>
+    <string name="settings_notif_off">Выкл. · не видит работающие приложения</string>
+    <string name="settings_usage_off">Выкл. · нет времени последней активности</string>
+    <string name="settings_battery_off">Выкл. для CashPilot</string>
+    <string name="settings_battery_on">Вкл. · отчёты могут опаздывать</string>
+    <string name="language">Язык</string>
+    <string name="language_system">Как в системе</string>
+    <string name="language_system_body">Используется язык телефона</string>
+    <string name="settings_section_apps">Отслеживаемые приложения</string>
+    <plurals name="settings_all_supported">
+        <item quantity="one">Все поддерживаемые приложения: %1$d</item>
+        <item quantity="few">Все поддерживаемые приложения: %1$d</item>
+        <item quantity="many">Все поддерживаемые приложения: %1$d</item>
+        <item quantity="other">Все поддерживаемые приложения: %1$d</item>
+    </plurals>
+    <string name="settings_installed_count">Установлено: %1$d · не установлено: %2$d</string>
+    <string name="settings_section_about">О приложении</string>
+    <string name="settings_about_app">CashPilot для Android %1$s</string>
+    <string name="settings_about_source">Исходный код и лицензия (GPL-3.0)</string>
+    <string name="settings_about_server">Сервер CashPilot</string>
+    <string name="settings_about_server_body">Панель на вашем собственном сервере, куда это приложение отправляет отчёты</string>
+    <string name="settings_about_sponsor">Поддержать проект</string>
+    <string name="settings_demo">Демо-режим</string>
+    <string name="settings_demo_body">Показывает экраны с тестовыми данными</string>
+</resources>

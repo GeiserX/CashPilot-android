@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">設定</string>
+    <string name="back">戻る</string>
+    <string name="details">詳細</string>
+    <string name="action_open">開く</string>
+    <string name="action_get">入手</string>
+    <string name="action_exit">終了</string>
+    <string name="action_allow">許可</string>
+    <string name="action_turn_on">オンにする</string>
+    <string name="action_open_app">%1$s を開く</string>
+    <string name="action_get_app">%1$s を入手</string>
+    <string name="action_check_connection">接続を確認</string>
+    <string name="action_fix_address">アドレスを修正</string>
+    <string name="action_open_battery">バッテリー設定を開く</string>
+    <string name="action_open_settings">設定を開く</string>
+    <string name="action_test_connection">接続をテスト</string>
+    <string name="testing">テスト中…</string>
+    <string name="notification_access">通知へのアクセス</string>
+    <string name="usage_access">使用状況へのアクセス</string>
+    <string name="battery_optimisation">バッテリーの最適化</string>
+    <string name="allow_notification_access">通知へのアクセスを許可</string>
+    <string name="allow_usage_access">使用状況へのアクセスを許可</string>
+    <string name="allowed">許可済み</string>
+    <string name="done">完了</string>
+    <string name="not_set">未設定</string>
+    <string name="not_measured">未測定</string>
+    <string name="nothing_read_yet">まだ読み取りなし</string>
+    <string name="list_separator">"、"</string>
+    <string name="supported_names">%1$s。</string>
+    <string name="ago_never">なし</string>
+    <string name="ago_just_now">たった今</string>
+    <string name="ago_yesterday">昨日</string>
+    <plurals name="ago_minutes">
+        <item quantity="other">%1$d 分前</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="other">%1$d 時間前</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="other">%1$d 日前</item>
+    </plurals>
+    <string name="for_a_moment">しばらく</string>
+    <string name="for_yet">まだ</string>
+    <string name="since_yesterday">昨日から</string>
+    <plurals name="for_minutes">
+        <item quantity="other">%1$d 分間</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="other">%1$d 時間</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="other">%1$d 日間</item>
+    </plurals>
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+    <plurals name="supported_sample">
+        <item quantity="other">%1$s ほか %2$d 個</item>
+    </plurals>
+    <string name="state_running">実行中</string>
+    <string name="state_stopped">停止</string>
+    <string name="state_stopped_last_opened">停止 · 最終起動 %1$s</string>
+    <string name="state_unknown">確認できません</string>
+    <string name="state_disabled">監視対象外</string>
+    <string name="state_not_installed">未インストール</string>
+    <string name="row_running_data">実行中 · 24 時間で %1$s</string>
+    <string name="server_line_none">サーバーなし · すべてこのスマートフォン内に保存</string>
+    <string name="server_line_needs_https">%1$s に送信していません · https:// が必要です</string>
+    <string name="server_line_waiting">%1$s とペア設定済み · 最初のレポートを待っています</string>
+    <string name="server_line_ok">最終レポート %1$s · 15 分ごとに送信</string>
+    <string name="server_line_late">最終レポート %1$s · レポートが遅れています</string>
+    <string name="server_line_failing_never">%1$s にまだレポートが届いていません</string>
+    <string name="server_line_failing">%2$s、%1$s にレポートが届いていません</string>
+    <string name="verdict_one_running">アプリは実行中です</string>
+    <plurals name="verdict_all_running">
+        <item quantity="other">%1$d 個のアプリがすべて実行中です</item>
+    </plurals>
+    <string name="verdict_none_title">監視中のアプリはありません</string>
+    <string name="verdict_none_sub">インストール済みのアプリはすべて監視がオフになっています。[設定] の [監視するアプリ] でオンに戻してください。</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="other">%2$d 個中 %1$d 個のアプリが停止しています</item>
+    </plurals>
+    <string name="verdict_stopped_sub">停止したアプリは、開くと通常は再び起動します。</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="other">%2$d 個中 %1$d 個のアプリが実行中です</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="other">アクセスがオンに戻るまで、CashPilot は残りの %1$d 個を確認できません。</item>
+    </plurals>
+    <string name="verdict_server_sub">ただし、サーバーにこのスマートフォンのレポートが届いていません。</string>
+    <string name="verdict_late_sub">ただし、%1$sレポートが送信されていません。</string>
+    <string name="verdict_ok_sub">今のところ対応が必要なことはありません。</string>
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s が停止しました</string>
+    <string name="task_stopped_body">開くと通常は再び起動します。</string>
+    <string name="task_failing_title">レポートが届いていません</string>
+    <string name="task_failing_body_never">%1$s にまだレポートが届いていません。[接続を確認] で原因がわかります。</string>
+    <string name="task_failing_body">%2$s、%1$s に何も届いていません。[接続を確認] で原因がわかります。</string>
+    <string name="task_late_title">レポートが遅れています</string>
+    <string name="task_late_body">%1$sレポートが送信されていません。Android はバックグラウンドの処理を遅らせます。バッテリーの最適化がオンのときやネットワークがないときは特に遅れます。</string>
+    <string name="task_https_title">レポートが送信されていません</string>
+    <string name="task_https_body">%1$s は公開インターネット上にあるため、CashPilot はキーを https:// でのみ送信します。</string>
+    <string name="task_notif_title">通知へのアクセスがオフです</string>
+    <string name="task_notif_body">オンに戻るまで、CashPilot はどのアプリが実行中か判断できません。</string>
+    <string name="task_usage_title">使用状況へのアクセスがオフです</string>
+    <string name="task_usage_body">オンに戻るまで、最終使用時刻とデータ使用量は表示されません。</string>
+    <string name="task_battery_title">レポートが遅れる可能性があります</string>
+    <string name="task_battery_body">CashPilot のバッテリーの最適化がオンになっているため、画面がオフの間、Android がレポートを遅らせることがあります。</string>
+    <plurals name="earnings_label">
+        <item quantity="other">サーバーのレポート（過去 %1$d 日間）</item>
+    </plurals>
+    <string name="earnings_needs_server">サーバーを追加すると数値が表示されます</string>
+    <string name="earnings_from">%1$s時点</string>
+    <string name="shared_footnote">* 複数のデバイスで実行中です。プロバイダーはアカウント全体の残高を報告するため、この数値はこのスマートフォンだけのものではありません。</string>
+    <string name="no_reading_note">数値がない場合は、そのプロバイダーの数値がサーバーからまだ送られていないという意味です。0 ドルという意味ではありません。</string>
+    <string name="app_earnings_needs_server">サーバーが必要です</string>
+    <string name="app_earnings_shared">%1$s *</string>
+    <string name="settings_server_none">すべてこのスマートフォン内に保存 · サーバーを追加すると数値を表示</string>
+    <string name="settings_server_needs_https">送信していません · このアドレスには https:// が必要です</string>
+    <string name="settings_server_failing_never">届いていません · レポートはまだありません</string>
+    <string name="settings_server_failing">届いていません · 最終レポート %1$s</string>
+    <string name="settings_server_late">レポートが遅れています · 最終レポート %1$s</string>
+    <string name="settings_server_waiting">ペア設定済み · 最初のレポートを待っています</string>
+    <string name="settings_server_ok">15 分ごとにレポート · 最終レポート %1$s</string>
+    <string name="pair_testing_body">%1$s にレポートを 1 件送信しています。</string>
+    <string name="pair_ok_title">接続しました</string>
+    <string name="pair_ok_body">サーバーが応答し、キーを受け入れました。このスマートフォンはフリートに %1$s として表示されます。</string>
+    <string name="pair_key_refused_title">サーバーがこの API キーを拒否しました</string>
+    <string name="pair_key_refused_body">アドレスは正しく、サーバーは応答しています。[フリート] → [API キーを表示] からキーをもう一度コピーしてください。</string>
+    <string name="pair_unreachable_title">%1$s から応答がありません</string>
+    <string name="pair_unreachable_body">アドレスと、このスマートフォンからアクセスできるかを確認してください。同じネットワーク上にいるか、VPN を経由している必要があります。</string>
+    <string name="pair_url_refused_title">このアドレスには https:// が必要です</string>
+    <string name="pair_url_refused_body">CashPilot が http:// でキーを送信するのは自分のネットワーク内だけです（192.168.x.x、10.x.x.x、.local や .lan の名前、Tailscale）。</string>
+    <string name="pair_rejected_title">サーバーがエラーを返しました</string>
+    <string name="pair_rejected_body">サーバーには接続できますが、レポートを受け入れませんでした。最近の CashPilot リリースが動作しているか確認してください。</string>
+    <string name="pair_not_cashpilot_title">%1$s は応答しましたが、CashPilot ではありません</string>
+    <string name="pair_not_cashpilot_body">このアドレスでは、ログインページや別のアプリなど、別のものが応答しています。CashPilot ダッシュボードを開くときのアドレスを使ってください。</string>
+    <string name="pair_save_failed_title">詳細を保存できませんでした</string>
+    <string name="pair_save_failed_body">Android がアドレスとキーを保存しなかったため、何も送信されていません。もう一度お試しください。</string>
+    <plurals name="home_tasks_heading">
+        <item quantity="other">対応が必要な項目が %1$d 件あります</item>
+    </plurals>
+    <string name="home_all_switched_off">インストール済みのアプリは、すべて [設定] で監視がオフになっています。</string>
+    <plurals name="home_other_supported">
+        <item quantity="other">その他の対応アプリ %1$d 個</item>
+    </plurals>
+    <string name="detail_stopped">停止しています。最終起動は %1$s です。</string>
+    <string name="detail_unknown">CashPilot は、このアプリが実行中かどうかを確認できません。</string>
+    <string name="detail_hint">これらのアプリは、Android がメモリから消去すると停止することがよくあります。アプリを開くと、通常は再び起動します。</string>
+    <plurals name="detail_server_reports">
+        <item quantity="other">サーバーのレポート（過去 %1$d 日間）</item>
+    </plurals>
+    <string name="detail_data_moved">データ転送量（過去 24 時間）</string>
+    <string name="detail_last_opened">最終起動</string>
+    <string name="detail_watched">CashPilot で監視</string>
+    <string name="blind_title">CashPilot はまだアプリを確認できません</string>
+    <plurals name="blind_body">
+        <item quantity="other">ご利用のアプリが %1$d 個インストールされていますが、2 つの項目を許可するまで、Android はそれらが実行中かどうかを CashPilot に見せません。どちらも、読み取る内容を先に説明します。</item>
+    </plurals>
+    <string name="no_apps_title">このスマートフォンには対応アプリがまだありません</string>
+    <string name="no_apps_body">CashPilot は、EarnApp や Grass など、すでに使っている不労所得アプリを監視し、停止したときにお知らせします。インストールすると、ここに自動的に表示されます。</string>
+    <string name="no_apps_standalone_title">サーバーなしでも使えます</string>
+    <string name="no_apps_standalone_body">CashPilot 単体でも、どのアプリが実行中か、どれが停止したかを表示し、アプリを開くことができます。CashPilot サーバーを使うと、収益の数値が追加され、このスマートフォンがほかのマシンと一緒に一覧表示されます。</string>
+    <string name="demo_start">サンプルデータでデモを表示</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="other">対応アプリ %1$d 個を見る</item>
+    </plurals>
+    <string name="supported_title">対応アプリ</string>
+    <string name="supported_intro_all">CashPilot が監視できるアプリです。どのアプリの支払額も、プロバイダー、接続環境、地域によって異なります。</string>
+    <string name="supported_intro_missing">これらのアプリをインストールすると、CashPilot で監視できます。どのアプリの支払額も、プロバイダー、接続環境、地域によって異なります。</string>
+    <string name="supported_referral_note">「紹介」と表示されたリンクには CashPilot の紹介コードが含まれており、CashPilot の開発の支援になります。それ以外のリンクはアプリストアに移動します。</string>
+    <string name="supported_installed">インストール済み</string>
+    <string name="supported_referral">紹介 · プロバイダーの登録ページ</string>
+    <string name="supported_store">アプリストアのページ</string>
+    <string name="demo_banner">デモ · サンプルデータです。実際のデータではありません</string>
+    <string name="onboard_step">ステップ %1$d/%2$d</string>
+    <string name="welcome_title">収益アプリの停止にすぐ気づけます</string>
+    <string name="welcome_lead">CashPilot は、このスマートフォンの不労所得アプリをチェックし、停止したアプリと再起動の方法を表示します。</string>
+    <string name="welcome_start">始める</string>
+    <string name="welcome_fact_running_title">実行中のアプリ</string>
+    <string name="welcome_fact_running_body">%1$s を、CashPilot を開くたびにチェックします。</string>
+    <string name="welcome_fact_stops_title">停止したときの対処</string>
+    <string name="welcome_fact_stops_body">タップ 1 回でアプリが開き、再び起動できます。</string>
+    <string name="welcome_fact_server_title">サーバーからの数値（お持ちの場合）</string>
+    <string name="welcome_fact_server_body">CashPilot サーバーは、各アプリのアカウントに表示される内容を報告します。任意です。レポートは 15 分ごとに送信されます。</string>
+    <string name="welcome_fact_private_title">データはこのスマートフォンの外に出ません</string>
+    <string name="welcome_fact_private_body">ご自身のサーバーを追加した場合、そのサーバーにだけ送信されます。広告もトラッキングもありません。</string>
+    <string name="permissions_title">CashPilot にアプリを確認させる</string>
+    <string name="permissions_lead">Android はほかのアプリの状態を隠しています。システム設定で 2 つのスイッチをオンにすると解決し、すぐにこの画面に戻ります。</string>
+    <string name="permissions_without">両方を許可しないと、CashPilot は実行中と停止を区別できません。後で [設定] から許可することもできます。</string>
+    <string name="permissions_continue">続行</string>
+    <string name="permissions_continue_without">許可せずに続行</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="other">これらのアプリは、実行中は通知を表示し続けます。CashPilot は、対応アプリ %1$d 個についてのみ、その通知があるかどうかを確認します。</item>
+    </plurals>
+    <string name="permissions_notif_not_read">通知の本文は一切読み取りません。Android が許可を求める前に、読み取る内容を正確に確認できます。</string>
+    <string name="permissions_usage_why">各対応アプリが最後に実行された時刻と、過去 24 時間のデータ転送量を表示し、動作していることを示します。</string>
+    <string name="permissions_usage_not_read">ほかのアプリやウェブサイトは一切見ません。読み取る内容を先に正確に確認できます。</string>
+    <string name="permissions_battery_why">CashPilot は 15 分ごとにレポートを送信します。バッテリーの最適化がオンだと、画面がオフの間、Android がレポートを遅らせることがあります。</string>
+    <string name="permissions_battery_not_read">任意です。Android のバッテリーの一覧を開きます。[すべてのアプリ] を選び、CashPilot を選んでから [最適化しない] を選んでください。</string>
+    <string name="server_address">サーバーのアドレス</string>
+    <string name="server_address_refused">このアドレスは公開インターネット上にあるため、https:// が必要です。CashPilot はこの場合、暗号化されていない http:// でキーを送信することはありません。</string>
+    <string name="server_address_cleartext">自分のネットワーク内で暗号化されていない http:// を使っています。キーとアプリの一覧は、そのネットワーク上を暗号化されずに送られます。</string>
+    <string name="api_key">API キー</string>
+    <string name="api_key_where">サーバーで [フリート] → [API キーを表示] を開きます。このスマートフォンにのみ保存されます。</string>
+    <string name="server_address_hint">https:// を使ってください。暗号化されていない http:// は、192.168.x.x や .local、Tailscale の名前など、自分のネットワーク内のアドレスでのみ使えます。</string>
+    <string name="server_title">サーバーに接続</string>
+    <string name="server_lead">任意です。サーバーがなくても、どのアプリが実行中でどれが停止したかを確認できます。サーバーを使うと、プロバイダーのアカウントに表示される数値が追加され、このスマートフォンがフリートに表示されます。</string>
+    <string name="server_finish">完了</string>
+    <string name="server_skip">サーバーなしで使う</string>
+    <string name="disclose_title_notifications">通知へのアクセスをオンにする前に</string>
+    <string name="disclose_title_usage">使用状況へのアクセスをオンにする前に</string>
+    <string name="disclose_lead">次に Android の設定が開きます。CashPilot がこのアクセスで何をするかを説明します。</string>
+    <string name="disclose_reads">CashPilot が読み取るもの</string>
+    <string name="disclose_never">読み取らないもの</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="other">下の %1$d 個のアプリが、今、常駐通知を表示しているかどうかだけです。これらのアプリは、この通知で実行中であることを示します。</item>
+    </plurals>
+    <string name="disclose_notif_never">通知の本文や、ほかのアプリの情報は一切読み取りません。送信されるのは 2 つの情報だけで、ご自身でサーバーを追加した場合に、そのサーバーにのみ送信されます。各アプリにその通知が表示されているかどうかと、実行中かどうかです。</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="other">下の %1$d 個のアプリについてのみ、それぞれが最後に使われた時刻と、過去 24 時間に送受信したデータ量です。</item>
+    </plurals>
+    <string name="disclose_usage_never">ほかにどのアプリを使っているか、どのウェブサイトにアクセスしているか、アプリが何をしているかは読み取りません。ご自身のサーバーを追加しない限り、結果はこのスマートフォン内にとどまります。</string>
+    <string name="disclose_continue">Android の設定に進む</string>
+    <string name="disclose_not_now">後で</string>
+    <string name="settings_section_server">サーバー</string>
+    <string name="settings_no_server">サーバーなし</string>
+    <string name="settings_key_stored">%1$s · このスマートフォンにのみ保存</string>
+    <string name="settings_test_hint">今すぐレポートを送信し、サーバーの応答を表示します。</string>
+    <string name="settings_section_phone">このスマートフォン</string>
+    <string name="settings_notif_off">オフ · 実行中のアプリを確認できません</string>
+    <string name="settings_usage_off">オフ · 最終使用時刻なし</string>
+    <string name="settings_battery_off">CashPilot ではオフ</string>
+    <string name="settings_battery_on">オン · レポートが遅れる可能性があります</string>
+    <string name="language">言語</string>
+    <string name="language_system">システムのデフォルト</string>
+    <string name="language_system_body">スマートフォンの言語に合わせます</string>
+    <string name="settings_section_apps">監視するアプリ</string>
+    <plurals name="settings_all_supported">
+        <item quantity="other">対応アプリ %1$d 個すべて</item>
+    </plurals>
+    <string name="settings_installed_count">インストール済み: %1$d · 未インストール: %2$d</string>
+    <string name="settings_section_about">情報</string>
+    <string name="settings_about_app">CashPilot for Android %1$s</string>
+    <string name="settings_about_source">ソースコードとライセンス（GPL-3.0）</string>
+    <string name="settings_about_server">CashPilot サーバー</string>
+    <string name="settings_about_server_body">このアプリがレポートを送る、セルフホスト型のダッシュボード</string>
+    <string name="settings_about_sponsor">プロジェクトを支援</string>
+    <string name="settings_demo">デモモード</string>
+    <string name="settings_demo_body">サンプルデータで画面を表示します</string>
+</resources>

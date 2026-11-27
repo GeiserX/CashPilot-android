@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">设置</string>
+    <string name="back">返回</string>
+    <string name="details">详情</string>
+    <string name="action_open">打开</string>
+    <string name="action_get">获取</string>
+    <string name="action_exit">退出</string>
+    <string name="action_allow">允许</string>
+    <string name="action_turn_on">开启</string>
+    <string name="action_open_app">打开 %1$s</string>
+    <string name="action_get_app">获取 %1$s</string>
+    <string name="action_check_connection">检查连接</string>
+    <string name="action_fix_address">修改地址</string>
+    <string name="action_open_battery">打开电池设置</string>
+    <string name="action_open_settings">打开设置</string>
+    <string name="action_test_connection">测试连接</string>
+    <string name="testing">正在测试…</string>
+    <string name="notification_access">通知使用权</string>
+    <string name="usage_access">使用情况访问权限</string>
+    <string name="battery_optimisation">电池优化</string>
+    <string name="allow_notification_access">允许通知使用权</string>
+    <string name="allow_usage_access">允许使用情况访问权限</string>
+    <string name="allowed">已允许</string>
+    <string name="done">完成</string>
+    <string name="not_set">未设置</string>
+    <string name="not_measured">未测量</string>
+    <string name="nothing_read_yet">尚未读取</string>
+    <string name="list_separator">"、"</string>
+    <string name="supported_names">%1$s。</string>
+    <string name="ago_never">从未</string>
+    <string name="ago_just_now">刚刚</string>
+    <string name="ago_yesterday">昨天</string>
+    <plurals name="ago_minutes">
+        <item quantity="other">%1$d 分钟前</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="other">%1$d 小时前</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="other">%1$d 天前</item>
+    </plurals>
+    <string name="for_a_moment">暂时</string>
+    <string name="for_yet">至今</string>
+    <string name="since_yesterday">自昨天起</string>
+    <plurals name="for_minutes">
+        <item quantity="other">已有 %1$d 分钟</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="other">已有 %1$d 小时</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="other">已有 %1$d 天</item>
+    </plurals>
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+    <plurals name="supported_sample">
+        <item quantity="other">%1$s 及另外 %2$d 个</item>
+    </plurals>
+    <string name="state_running">运行中</string>
+    <string name="state_stopped">已停止</string>
+    <string name="state_stopped_last_opened">已停止 · 上次打开于 %1$s</string>
+    <string name="state_unknown">无法查看</string>
+    <string name="state_disabled">未监视</string>
+    <string name="state_not_installed">未安装</string>
+    <string name="row_running_data">运行中 · 24 小时内 %1$s</string>
+    <string name="server_line_none">无服务器 · 所有数据都留在这部手机上</string>
+    <string name="server_line_needs_https">未发送到 %1$s · 需要 https://</string>
+    <string name="server_line_waiting">已与 %1$s 配对 · 正在等待第一份报告</string>
+    <string name="server_line_ok">上次报告 %1$s · 每 15 分钟发送一次</string>
+    <string name="server_line_late">上次报告 %1$s · 报告延迟</string>
+    <string name="server_line_failing_never">至今没有报告送达 %1$s</string>
+    <string name="server_line_failing">%2$s没有报告送达 %1$s</string>
+    <string name="verdict_one_running">你的应用正在运行</string>
+    <plurals name="verdict_all_running">
+        <item quantity="other">全部 %1$d 个应用都在运行</item>
+    </plurals>
+    <string name="verdict_none_title">没有监视任何应用</string>
+    <string name="verdict_none_sub">所有已安装的应用都已关闭监视。请在“设置”的“要监视的应用”中重新开启。</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="other">%2$d 个应用中有 %1$d 个已停止</item>
+    </plurals>
+    <string name="verdict_stopped_sub">打开已停止的应用通常就能让它重新运行。</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="other">%2$d 个应用中有 %1$d 个正在运行</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="other">在重新开启访问权限之前，CashPilot 无法查看其余 %1$d 个。</item>
+    </plurals>
+    <string name="verdict_server_sub">但你的服务器没有收到这部手机的报告。</string>
+    <string name="verdict_late_sub">但%1$s没有发出任何报告。</string>
+    <string name="verdict_ok_sub">目前无需你处理任何事。</string>
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s 已停止</string>
+    <string name="task_stopped_body">打开它通常就能让它重新运行。</string>
+    <string name="task_failing_title">报告未能送达</string>
+    <string name="task_failing_body_never">至今没有报告送达 %1$s。点按“检查连接”查看原因。</string>
+    <string name="task_failing_body">%2$s没有任何内容送达 %1$s。点按“检查连接”查看原因。</string>
+    <string name="task_late_title">报告延迟</string>
+    <string name="task_late_body">%1$s没有发出报告。Android 会推迟后台任务，开启电池优化或没有网络时更明显。</string>
+    <string name="task_https_title">报告未发送</string>
+    <string name="task_https_body">%1$s 位于公共互联网上，因此 CashPilot 只通过 https:// 发送密钥。</string>
+    <string name="task_notif_title">通知使用权已关闭</string>
+    <string name="task_notif_body">重新开启之前，CashPilot 无法判断哪些应用正在运行。</string>
+    <string name="task_usage_title">使用情况访问权限已关闭</string>
+    <string name="task_usage_body">重新开启之前，无法显示上次活动时间和数据用量。</string>
+    <string name="task_battery_title">报告可能延迟送达</string>
+    <string name="task_battery_body">CashPilot 开启了电池优化，因此屏幕关闭时 Android 可能会推迟报告。</string>
+    <plurals name="earnings_label">
+        <item quantity="other">你的服务器报告，最近 %1$d 天</item>
+    </plurals>
+    <string name="earnings_needs_server">添加服务器即可查看数据</string>
+    <string name="earnings_from">截至 %1$s</string>
+    <string name="shared_footnote">* 在你的多台设备上运行。提供商只报告该账户的总余额，因此这不只是这部手机的数据。</string>
+    <string name="no_reading_note">没有读数表示你的服务器尚未发送该提供商的数据，并不代表 0 美元。</string>
+    <string name="app_earnings_needs_server">需要服务器</string>
+    <string name="app_earnings_shared">%1$s *</string>
+    <string name="settings_server_none">所有数据都留在这部手机上 · 添加服务器即可查看数据</string>
+    <string name="settings_server_needs_https">未发送 · 此地址需要 https://</string>
+    <string name="settings_server_failing_never">无法送达 · 尚无报告</string>
+    <string name="settings_server_failing">无法送达 · 上次报告 %1$s</string>
+    <string name="settings_server_late">报告延迟 · 上次报告 %1$s</string>
+    <string name="settings_server_waiting">已配对 · 正在等待第一份报告</string>
+    <string name="settings_server_ok">每 15 分钟报告一次 · 上次报告 %1$s</string>
+    <string name="pair_testing_body">正在向 %1$s 发送一份报告。</string>
+    <string name="pair_ok_title">已连接</string>
+    <string name="pair_ok_body">你的服务器已响应并接受了密钥。这部手机在机群中显示为 %1$s。</string>
+    <string name="pair_key_refused_title">服务器拒绝了此 API 密钥</string>
+    <string name="pair_key_refused_body">地址正确：服务器已响应。请从“机群 → 显示 API 密钥”重新复制密钥。</string>
+    <string name="pair_unreachable_title">%1$s 没有响应</string>
+    <string name="pair_unreachable_body">请检查地址，并确认这部手机能访问它：在同一网络中，或通过你的 VPN。</string>
+    <string name="pair_url_refused_title">此地址需要 https://</string>
+    <string name="pair_url_refused_body">CashPilot 只在你自己的网络中通过 http:// 发送密钥：192.168.x.x、10.x.x.x、.local 或 .lan 名称，或 Tailscale。</string>
+    <string name="pair_rejected_title">服务器返回了错误</string>
+    <string name="pair_rejected_body">服务器可以访问，但没有接受报告。请确认它运行的是较新的 CashPilot 版本。</string>
+    <string name="pair_not_cashpilot_title">%1$s 有响应，但不是 CashPilot</string>
+    <string name="pair_not_cashpilot_body">此地址上响应的是其他内容，例如登录页面或其他应用。请使用你打开 CashPilot 仪表板的地址。</string>
+    <string name="pair_save_failed_title">无法保存详细信息</string>
+    <string name="pair_save_failed_body">Android 没有保存地址和密钥，因此没有发送任何内容。请重试。</string>
+    <plurals name="home_tasks_heading">
+        <item quantity="other">有 %1$d 件事需要你处理</item>
+    </plurals>
+    <string name="home_all_switched_off">所有已安装的应用都已在“设置”中关闭监视。</string>
+    <plurals name="home_other_supported">
+        <item quantity="other">另外 %1$d 个支持的应用</item>
+    </plurals>
+    <string name="detail_stopped">已停止。上次打开于 %1$s。</string>
+    <string name="detail_unknown">CashPilot 无法查看它是否在运行。</string>
+    <string name="detail_hint">Android 从内存中清除这些应用时，它们常常会停止。打开应用通常就能让它重新运行。</string>
+    <plurals name="detail_server_reports">
+        <item quantity="other">服务器报告，最近 %1$d 天</item>
+    </plurals>
+    <string name="detail_data_moved">数据传输量，最近 24 小时</string>
+    <string name="detail_last_opened">上次打开</string>
+    <string name="detail_watched">由 CashPilot 监视</string>
+    <string name="blind_title">CashPilot 还看不到你的应用</string>
+    <plurals name="blind_body">
+        <item quantity="other">你使用的 %1$d 个应用已安装，但在你允许两项权限之前，Android 不会让 CashPilot 看到它们是否在运行。每一项都会先说明它读取什么。</item>
+    </plurals>
+    <string name="no_apps_title">这部手机上还没有支持的应用</string>
+    <string name="no_apps_body">CashPilot 会监视你已在使用的被动收入应用（例如 EarnApp 或 Grass），并在某个应用停止运行时告诉你。安装后，它会自动出现在这里。</string>
+    <string name="no_apps_standalone_title">无需服务器也能使用</string>
+    <string name="no_apps_standalone_body">单独使用时，CashPilot 会显示哪些应用在运行、哪些已停止，并为你打开它们。CashPilot 服务器会增加收益数据，并把这部手机与你的其他机器一起列出。</string>
+    <string name="demo_start">使用示例数据查看演示</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="other">查看 %1$d 个支持的应用</item>
+    </plurals>
+    <string name="supported_title">支持的应用</string>
+    <string name="supported_intro_all">CashPilot 可以监视的应用。任何应用的收益都取决于提供商、你的网络连接和所在地区。</string>
+    <string name="supported_intro_missing">安装这些应用后，CashPilot 就可以监视它们。任何应用的收益都取决于提供商、你的网络连接和所在地区。</string>
+    <string name="supported_referral_note">标有“推荐”的链接包含 CashPilot 的推荐码，可支持 CashPilot 的开发。其他链接前往应用商店。</string>
+    <string name="supported_installed">已安装</string>
+    <string name="supported_referral">推荐 · 提供商的注册页面</string>
+    <string name="supported_store">应用商店页面</string>
+    <string name="demo_banner">演示 · 示例数据，此处内容均非真实</string>
+    <string name="onboard_step">第 %1$d 步，共 %2$d 步</string>
+    <string name="welcome_title">收益应用停止时及时知晓</string>
+    <string name="welcome_lead">CashPilot 会检查这部手机上的被动收入应用，告诉你哪些已停止，以及如何重新启动它们。</string>
+    <string name="welcome_start">开始使用</string>
+    <string name="welcome_fact_running_title">哪些应用正在运行</string>
+    <string name="welcome_fact_running_body">%1$s，每次打开 CashPilot 时都会检查。</string>
+    <string name="welcome_fact_stops_title">应用停止时该怎么做</string>
+    <string name="welcome_fact_stops_body">点按一下即可打开应用，让你重新启动它。</string>
+    <string name="welcome_fact_server_title">来自你服务器的数据（如果有）</string>
+    <string name="welcome_fact_server_body">CashPilot 服务器会报告每个应用的账户显示的内容。此项可选；每 15 分钟报告一次。</string>
+    <string name="welcome_fact_private_title">任何数据都不会离开这部手机</string>
+    <string name="welcome_fact_private_body">除非发送到你添加的自有服务器。没有广告，没有跟踪。</string>
+    <string name="permissions_title">让 CashPilot 看到你的应用</string>
+    <string name="permissions_lead">Android 会隐藏其他应用的状态。在系统设置中开启两个开关即可解决，之后会直接回到这里。</string>
+    <string name="permissions_without">两项都未允许时，CashPilot 无法区分运行中和已停止。你可以稍后在“设置”中允许。</string>
+    <string name="permissions_continue">继续</string>
+    <string name="permissions_continue_without">不授权，继续</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="other">这些应用运行时会保留一条通知。CashPilot 只针对 %1$d 个支持的应用检查这条通知是否存在。</item>
+    </plurals>
+    <string name="permissions_notif_not_read">从不读取通知文字。在 Android 询问之前，你会先看到它具体读取什么。</string>
+    <string name="permissions_usage_why">显示每个支持的应用上次运行的时间，以及它在过去 24 小时内传输了多少数据，以此表明它在工作。</string>
+    <string name="permissions_usage_not_read">从不查看其他应用或网站。你会先看到它具体读取什么。</string>
+    <string name="permissions_battery_why">CashPilot 每 15 分钟报告一次。开启电池优化后，屏幕关闭时 Android 可能会推迟这些报告。</string>
+    <string name="permissions_battery_not_read">可选。打开 Android 的电池列表：选择“所有应用”，然后选择 CashPilot，再选择“不优化”。</string>
+    <string name="server_address">服务器地址</string>
+    <string name="server_address_refused">此地址位于公共互联网上，因此需要 https://。CashPilot 绝不会在这种情况下通过普通 http:// 发送密钥。</string>
+    <string name="server_address_cleartext">在你自己的网络中使用普通 http://：密钥和应用列表会在该网络中以未加密形式传输。</string>
+    <string name="api_key">API 密钥</string>
+    <string name="api_key_where">在你的服务器上：机群 → 显示 API 密钥。只保存在这部手机上。</string>
+    <string name="server_address_hint">请使用 https://。普通 http:// 只适用于你自己网络中的地址，例如 192.168.x.x，或 .local 或 Tailscale 名称。</string>
+    <string name="server_title">连接你的服务器</string>
+    <string name="server_lead">可选。没有服务器时，你仍能看到哪些应用在运行、哪些已停止。服务器会增加其提供商账户显示的数据，并在你的机群中列出这部手机。</string>
+    <string name="server_finish">完成</string>
+    <string name="server_skip">不使用服务器</string>
+    <string name="disclose_title_notifications">开启通知使用权之前</string>
+    <string name="disclose_title_usage">开启使用情况访问权限之前</string>
+    <string name="disclose_lead">接下来 Android 会打开它的设置。以下是 CashPilot 如何使用这项权限。</string>
+    <string name="disclose_reads">CashPilot 读取</string>
+    <string name="disclose_never">它从不读取</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="other">只读取下方 %1$d 个应用中是否有应用此刻正在显示常驻通知。这些应用正是通过这条通知表明自己正在运行。</item>
+    </plurals>
+    <string name="disclose_notif_never">任何通知的文字，以及其他任何应用的任何内容。只有两项信息会发出，而且只会发往你自己的服务器（如果你添加了的话）：这些应用是否显示着那条通知，以及它们是否在运行。</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="other">仅限下方 %1$d 个应用：每个应用上次使用的时间，以及它在过去 24 小时内发送和接收了多少数据。</item>
+    </plurals>
+    <string name="disclose_usage_never">你使用的其他应用、你访问的网站，或任何应用的具体操作。结果会留在这部手机上，除非你添加了自己的服务器。</string>
+    <string name="disclose_continue">前往 Android 设置</string>
+    <string name="disclose_not_now">以后再说</string>
+    <string name="settings_section_server">服务器</string>
+    <string name="settings_no_server">无服务器</string>
+    <string name="settings_key_stored">%1$s · 只保存在这部手机上</string>
+    <string name="settings_test_hint">立即发送一份报告，并显示服务器的回应。</string>
+    <string name="settings_section_phone">这部手机</string>
+    <string name="settings_notif_off">关闭 · 无法查看运行中的应用</string>
+    <string name="settings_usage_off">关闭 · 无上次活动时间</string>
+    <string name="settings_battery_off">已为 CashPilot 关闭</string>
+    <string name="settings_battery_on">开启 · 报告可能延迟送达</string>
+    <string name="language">语言</string>
+    <string name="language_system">系统默认</string>
+    <string name="language_system_body">跟随手机的语言</string>
+    <string name="settings_section_apps">要监视的应用</string>
+    <plurals name="settings_all_supported">
+        <item quantity="other">全部 %1$d 个支持的应用</item>
+    </plurals>
+    <string name="settings_installed_count">已安装：%1$d · 未安装：%2$d</string>
+    <string name="settings_section_about">关于</string>
+    <string name="settings_about_app">CashPilot for Android %1$s</string>
+    <string name="settings_about_source">源代码和许可证 (GPL-3.0)</string>
+    <string name="settings_about_server">CashPilot 服务器</string>
+    <string name="settings_about_server_body">此应用向其报告的自托管仪表板</string>
+    <string name="settings_about_sponsor">赞助此项目</string>
+    <string name="settings_demo">演示模式</string>
+    <string name="settings_demo_body">使用示例数据展示各个界面</string>
+</resources>

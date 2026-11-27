@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Ayarlar</string>
+    <string name="back">Geri</string>
+    <string name="details">Ayrıntılar</string>
+    <string name="action_open">Aç</string>
+    <string name="action_get">Yükle</string>
+    <string name="action_exit">Çık</string>
+    <string name="action_allow">İzin ver</string>
+    <string name="action_turn_on">Etkinleştir</string>
+    <string name="action_open_app">%1$s uygulamasını aç</string>
+    <string name="action_get_app">%1$s uygulamasını yükle</string>
+    <string name="action_check_connection">Bağlantıyı denetle</string>
+    <string name="action_fix_address">Adresi düzelt</string>
+    <string name="action_open_battery">Pil ayarlarını aç</string>
+    <string name="action_open_settings">Ayarları aç</string>
+    <string name="action_test_connection">Bağlantıyı test et</string>
+    <string name="testing">Test ediliyor…</string>
+    <string name="notification_access">Bildirim erişimi</string>
+    <string name="usage_access">Kullanım erişimi</string>
+    <string name="battery_optimisation">Pil optimizasyonu</string>
+    <string name="allow_notification_access">Bildirim erişimine izin ver</string>
+    <string name="allow_usage_access">Kullanım erişimine izin ver</string>
+    <string name="allowed">İzin verildi</string>
+    <string name="done">Tamam</string>
+    <string name="not_set">Ayarlanmadı</string>
+    <string name="not_measured">Ölçülmedi</string>
+    <string name="nothing_read_yet">Henüz bir şey okunmadı</string>
+    <string name="list_separator">", "</string>
+    <string name="supported_names">%1$s.</string>
+
+    <string name="ago_never">hiç</string>
+    <string name="ago_just_now">az önce</string>
+    <string name="ago_yesterday">dün</string>
+    <plurals name="ago_minutes">
+        <item quantity="one">%1$d dk önce</item>
+        <item quantity="other">%1$d dk önce</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="one">%1$d sa önce</item>
+        <item quantity="other">%1$d sa önce</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="one">%1$d gün önce</item>
+        <item quantity="other">%1$d gün önce</item>
+    </plurals>
+
+    <string name="for_a_moment">kısa bir süredir</string>
+    <string name="for_yet">henüz</string>
+    <string name="since_yesterday">dünden beri</string>
+    <plurals name="for_minutes">
+        <item quantity="one">%1$d dakikadır</item>
+        <item quantity="other">%1$d dakikadır</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="one">%1$d saattir</item>
+        <item quantity="other">%1$d saattir</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="one">%1$d gündür</item>
+        <item quantity="other">%1$d gündür</item>
+    </plurals>
+
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+
+    <plurals name="supported_sample">
+        <item quantity="one">%1$s ve %2$d uygulama daha</item>
+        <item quantity="other">%1$s ve %2$d uygulama daha</item>
+    </plurals>
+
+    <string name="state_running">Çalışıyor</string>
+    <string name="state_stopped">Durdu</string>
+    <string name="state_stopped_last_opened">Durdu · son açılış %1$s</string>
+    <string name="state_unknown">Görülemiyor</string>
+    <string name="state_disabled">İzlenmiyor</string>
+    <string name="state_not_installed">Yüklü değil</string>
+    <string name="row_running_data">Çalışıyor · 24 saatte %1$s</string>
+
+    <string name="server_line_none">Sunucu yok · her şey bu telefonda kalır</string>
+    <string name="server_line_needs_https">%1$s adresine gönderilmiyor · https:// gerekli</string>
+    <string name="server_line_waiting">%1$s ile eşleşti · ilk rapor bekleniyor</string>
+    <string name="server_line_ok">Son rapor %1$s · 15 dakikada bir gönderilir</string>
+    <string name="server_line_late">Son rapor %1$s · raporlar gecikiyor</string>
+    <string name="server_line_failing_never">%1$s adresine henüz hiç rapor ulaşmadı</string>
+    <string name="server_line_failing">%1$s adresine %2$s hiç rapor ulaşmadı</string>
+
+    <string name="verdict_one_running">Uygulamanız çalışıyor</string>
+    <plurals name="verdict_all_running">
+        <item quantity="one">%1$d uygulamanın tümü çalışıyor</item>
+        <item quantity="other">%1$d uygulamanın tümü çalışıyor</item>
+    </plurals>
+    <string name="verdict_none_title">İzlenen uygulama yok</string>
+    <string name="verdict_none_sub">Yüklü tüm uygulamalar kapalı. Bunları Ayarlar → İzlenecek uygulamalar bölümünden yeniden açın.</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="one">%2$d uygulamadan %1$d tanesi durdu</item>
+        <item quantity="other">%2$d uygulamadan %1$d tanesi durdu</item>
+    </plurals>
+    <string name="verdict_stopped_sub">Durmuş bir uygulamayı açmak genellikle onu yeniden başlatır.</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="one">%2$d uygulamadan %1$d tanesi çalışıyor</item>
+        <item quantity="other">%2$d uygulamadan %1$d tanesi çalışıyor</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="one">CashPilot, erişimi yeniden açılana kadar diğer %1$d uygulamayı göremez.</item>
+        <item quantity="other">CashPilot, erişimi yeniden açılana kadar diğer %1$d uygulamayı göremez.</item>
+    </plurals>
+    <string name="verdict_server_sub">Ancak sunucunuz bu telefonun raporlarını almıyor.</string>
+    <string name="verdict_late_sub">Ancak %1$s hiç rapor gönderilmedi.</string>
+    <string name="verdict_ok_sub">Şu anda yapmanız gereken bir şey yok.</string>
+
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s durdu</string>
+    <string name="task_stopped_body">Açmak genellikle onu yeniden başlatır.</string>
+    <string name="task_failing_title">Raporlar ulaşmıyor</string>
+    <string name="task_failing_body_never">%1$s adresine henüz hiç rapor ulaşmadı. Nedenini «Bağlantıyı denetle» gösterir.</string>
+    <string name="task_failing_body">%1$s adresine %2$s hiçbir şey ulaşmadı. Nedenini «Bağlantıyı denetle» gösterir.</string>
+    <string name="task_late_title">Raporlar gecikiyor</string>
+    <string name="task_late_body">Telefondan %1$s hiç rapor gönderilmedi. Android arka plan işlerini geciktirir; pil optimizasyonu açıkken veya ağ yokken daha da fazla.</string>
+    <string name="task_https_title">Raporlar gönderilmiyor</string>
+    <string name="task_https_body">%1$s herkese açık internette, bu yüzden CashPilot anahtarı yalnızca https:// üzerinden gönderir.</string>
+    <string name="task_notif_title">Bildirim erişimi kapalı</string>
+    <string name="task_notif_body">Erişim yeniden açılana kadar CashPilot hangi uygulamaların çalıştığını bilemez.</string>
+    <string name="task_usage_title">Kullanım erişimi kapalı</string>
+    <string name="task_usage_body">Erişim yeniden açılana kadar son görülme zamanı ve veri kullanımı gösterilemez.</string>
+    <string name="task_battery_title">Raporlar gecikebilir</string>
+    <string name="task_battery_body">CashPilot için pil optimizasyonu açık, bu yüzden Android ekran kapalıyken raporları geciktirebilir.</string>
+
+    <plurals name="earnings_label">
+        <item quantity="one">Sunucunuzun raporu, son %1$d gün</item>
+        <item quantity="other">Sunucunuzun raporu, son %1$d gün</item>
+    </plurals>
+    <string name="earnings_needs_server">Rakamları görmek için bir sunucu ekleyin</string>
+    <string name="earnings_from">Veri: %1$s</string>
+    <string name="shared_footnote">* Birden fazla cihazınızda çalışıyor. Sağlayıcı hesap için tek bir bakiye bildirir, yani bu yalnızca bu telefona ait değil.</string>
+    <string name="no_reading_note">Değer yoksa sunucunuz bu sağlayıcı için hiç rakam göndermemiştir. Bu 0 $ demek değildir.</string>
+    <string name="app_earnings_needs_server">Sunucu gerekli</string>
+    <string name="app_earnings_shared">%1$s *</string>
+
+    <string name="settings_server_none">Her şey bu telefonda kalır · rakamlar için sunucu ekleyin</string>
+    <string name="settings_server_needs_https">Gönderilmiyor · bu adres https:// gerektirir</string>
+    <string name="settings_server_failing_never">Ulaşmıyor · henüz rapor yok</string>
+    <string name="settings_server_failing">Ulaşmıyor · son rapor %1$s</string>
+    <string name="settings_server_late">Raporlar gecikiyor · son rapor %1$s</string>
+    <string name="settings_server_waiting">Eşleşti · ilk rapor bekleniyor</string>
+    <string name="settings_server_ok">15 dakikada bir rapor · son rapor %1$s</string>
+
+    <string name="pair_testing_body">%1$s adresine bir rapor gönderiliyor.</string>
+    <string name="pair_ok_title">Bağlandı</string>
+    <string name="pair_ok_body">Sunucunuz yanıt verdi ve anahtarı kabul etti. Bu telefon Filo sayfasında %1$s olarak görünür.</string>
+    <string name="pair_key_refused_title">Sunucu bu API anahtarını reddetti</string>
+    <string name="pair_key_refused_body">Adres doğru: sunucu yanıt verdi. Anahtarı Filo → API anahtarını göster bölümünden yeniden kopyalayın.</string>
+    <string name="pair_unreachable_title">%1$s yanıt vermiyor</string>
+    <string name="pair_unreachable_body">Adresi ve bu telefonun ona erişebildiğini denetleyin: aynı ağda veya VPN üzerinden.</string>
+    <string name="pair_url_refused_title">Bu adres https:// gerektirir</string>
+    <string name="pair_url_refused_body">CashPilot anahtarı http:// üzerinden yalnızca kendi ağınıza gönderir: 192.168.x.x, 10.x.x.x, .local veya .lan adı ya da Tailscale.</string>
+    <string name="pair_rejected_title">Sunucu bir hatayla yanıt verdi</string>
+    <string name="pair_rejected_body">Sunucuya erişiliyor ama raporu kabul etmedi. Güncel bir CashPilot sürümü çalıştırdığını denetleyin.</string>
+    <string name="pair_not_cashpilot_title">%1$s yanıt verdi, ama CashPilot olarak değil</string>
+    <string name="pair_not_cashpilot_body">Bu adreste başka bir şey yanıt veriyor; örneğin bir giriş sayfası veya başka bir uygulama. CashPilot panosunu açtığınız adresi kullanın.</string>
+    <string name="pair_save_failed_title">Bilgiler kaydedilemedi</string>
+    <string name="pair_save_failed_body">Android adresi ve anahtarı kaydetmedi, bu yüzden hiçbir şey gönderilmedi. Yeniden deneyin.</string>
+
+    <plurals name="home_tasks_heading">
+        <item quantity="one">İlgilenmeniz gereken %1$d konu</item>
+        <item quantity="other">İlgilenmeniz gereken %1$d konu</item>
+    </plurals>
+    <string name="home_all_switched_off">Yüklü tüm uygulamalar Ayarlar bölümünde kapalı.</string>
+    <plurals name="home_other_supported">
+        <item quantity="one">Desteklenen %1$d uygulama daha</item>
+        <item quantity="other">Desteklenen %1$d uygulama daha</item>
+    </plurals>
+
+    <string name="detail_stopped">Durdu. Son açılış %1$s.</string>
+    <string name="detail_unknown">CashPilot çalışıp çalışmadığını göremiyor.</string>
+    <string name="detail_hint">Bu uygulamalar, Android onları bellekten temizlediğinde sık sık durur. Uygulamayı açmak genellikle onu yeniden başlatır.</string>
+    <plurals name="detail_server_reports">
+        <item quantity="one">Sunucu raporları, son %1$d gün</item>
+        <item quantity="other">Sunucu raporları, son %1$d gün</item>
+    </plurals>
+    <string name="detail_data_moved">Aktarılan veri, son 24 saat</string>
+    <string name="detail_last_opened">Son açılış</string>
+    <string name="detail_watched">CashPilot tarafından izleniyor</string>
+
+    <string name="blind_title">CashPilot uygulamalarınızı henüz göremiyor</string>
+    <plurals name="blind_body">
+        <item quantity="one">Kullandığınız %1$d uygulama yüklü, ancak iki şeye izin verene kadar Android bunun çalışıp çalışmadığını CashPilot ile paylaşmaz. Her biri önce neyi okuduğunu açıklar.</item>
+        <item quantity="other">Kullandığınız %1$d uygulama yüklü, ancak iki şeye izin verene kadar Android bunların çalışıp çalışmadığını CashPilot ile paylaşmaz. Her biri önce neyi okuduğunu açıklar.</item>
+    </plurals>
+
+    <string name="no_apps_title">Bu telefonda henüz desteklenen uygulama yok</string>
+    <string name="no_apps_body">CashPilot, zaten kullandığınız EarnApp veya Grass gibi pasif gelir uygulamalarını izler ve biri çalışmayı bıraktığında size haber verir. Biri yüklendiğinde burada kendiliğinden görünür.</string>
+    <string name="no_apps_standalone_title">Sunucu olmadan çalışır</string>
+    <string name="no_apps_standalone_body">CashPilot tek başına hangi uygulamaların çalıştığını, hangilerinin durduğunu gösterir ve onları sizin için açar. Bir CashPilot sunucusu kazanç rakamlarını ekler ve bu telefonu diğer makinelerinizle birlikte listeler.</string>
+    <string name="demo_start">Örnek verilerle demo göster</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="one">Desteklenen %1$d uygulamayı görün</item>
+        <item quantity="other">Desteklenen %1$d uygulamayı görün</item>
+    </plurals>
+
+    <string name="supported_title">Desteklenen uygulamalar</string>
+    <string name="supported_intro_all">CashPilot ile izlenebilen uygulamalar. Her birinin ne ödediği sağlayıcıya, bağlantınıza ve bölgenize bağlıdır.</string>
+    <string name="supported_intro_missing">Bu uygulamaları yüklerseniz CashPilot onları izleyebilir. Her birinin ne ödediği sağlayıcıya, bağlantınıza ve bölgenize bağlıdır.</string>
+    <string name="supported_referral_note">Referans olarak işaretli bağlantılar, CashPilot geliştirmesini destekleyen CashPilot referans kodunu içerir. Diğerleri uygulama mağazasına gider.</string>
+    <string name="supported_installed">Yüklü</string>
+    <string name="supported_referral">Referans · sağlayıcının kayıt sayfası</string>
+    <string name="supported_store">Uygulama mağazası sayfası</string>
+
+    <string name="demo_banner">Demo · örnek veriler, buradaki hiçbir şey gerçek değil</string>
+
+    <string name="onboard_step">Adım %1$d / %2$d</string>
+    <string name="welcome_title">Bir kazanç uygulaması durduğunda haberiniz olsun</string>
+    <string name="welcome_lead">CashPilot bu telefondaki pasif gelir uygulamalarını denetler ve hangilerinin durduğunu, onları nasıl yeniden başlatacağınızı gösterir.</string>
+    <string name="welcome_start">Başla</string>
+    <string name="welcome_fact_running_title">Hangi uygulamalar çalışıyor</string>
+    <string name="welcome_fact_running_body">%1$s; CashPilot her açıldığında denetlenir.</string>
+    <string name="welcome_fact_stops_title">Biri durduğunda ne yapmalı</string>
+    <string name="welcome_fact_stops_body">Tek dokunuş uygulamayı açar, böylece onu yeniden başlatabilirsiniz.</string>
+    <string name="welcome_fact_server_title">Varsa sunucunuzdan gelen rakamlar</string>
+    <string name="welcome_fact_server_body">Bir CashPilot sunucusu, her uygulamanın hesabının ne gösterdiğini bildirir. İsteğe bağlı; raporlar 15 dakikada bir gider.</string>
+    <string name="welcome_fact_private_title">Hiçbir şey bu telefondan çıkmaz</string>
+    <string name="welcome_fact_private_body">Eklerseniz kendi sunucunuz dışında. Reklam yok, izleme yok.</string>
+
+    <string name="permissions_title">CashPilot uygulamalarınızı görebilsin</string>
+    <string name="permissions_lead">Android diğer uygulamaların durumunu gizler. Sistem ayarlarındaki iki anahtar bunu düzeltir; hemen buraya geri dönersiniz.</string>
+    <string name="permissions_without">İkisi olmadan CashPilot çalışan ve durmuş uygulamaları ayırt edemez. Bunlara daha sonra Ayarlar bölümünden izin verebilirsiniz.</string>
+    <string name="permissions_continue">Devam</string>
+    <string name="permissions_continue_without">Bunlar olmadan devam</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="one">Bu uygulamalar çalışırken bir bildirim gösterir. CashPilot yalnızca desteklenen %1$d uygulama için bu bildirimin orada olup olmadığına bakar.</item>
+        <item quantity="other">Bu uygulamalar çalışırken bir bildirim gösterir. CashPilot yalnızca desteklenen %1$d uygulama için bu bildirimin orada olup olmadığına bakar.</item>
+    </plurals>
+    <string name="permissions_notif_not_read">Bildirim metinlerini asla okumaz. Android sormadan önce neyi okuduğunu tam olarak görürsünüz.</string>
+    <string name="permissions_usage_why">Desteklenen her uygulamanın en son ne zaman çalıştığını ve son 24 saatte ne kadar veri aktardığını gösterir; bu, uygulamanın çalıştığını kanıtlar.</string>
+    <string name="permissions_usage_not_read">Diğer uygulamalara veya web sitelerine asla bakmaz. Neyi okuduğunu önce tam olarak görürsünüz.</string>
+    <string name="permissions_battery_why">CashPilot 15 dakikada bir rapor gönderir. Pil optimizasyonu açıkken Android, ekran kapalıyken bu raporları geciktirebilir.</string>
+    <string name="permissions_battery_not_read">İsteğe bağlı. Android pil listesini açar: önce Tüm uygulamalar, sonra CashPilot, sonra Optimize etme seçeneğini seçin.</string>
+
+    <string name="server_address">Sunucu adresi</string>
+    <string name="server_address_refused">Bu adres herkese açık internette, bu yüzden https:// gerektirir. CashPilot anahtarı oraya asla düz http:// üzerinden göndermez.</string>
+    <string name="server_address_cleartext">Kendi ağınızda düz http://: anahtar ve uygulama listesi bu ağda şifrelenmeden gider.</string>
+    <string name="api_key">API anahtarı</string>
+    <string name="api_key_where">Sunucunuzda: Filo → API anahtarını göster. Yalnızca bu telefonda saklanır.</string>
+    <string name="server_address_hint">https:// kullanın. Düz http:// yalnızca kendi ağınızdaki bir adres için çalışır; örneğin 192.168.x.x ya da bir .local veya Tailscale adı.</string>
+
+    <string name="server_title">Sunucunuzu bağlayın</string>
+    <string name="server_lead">İsteğe bağlı. Sunucu olmadan da hangi uygulamaların çalıştığını ve hangilerinin durduğunu görürsünüz. Sunucu, sağlayıcı hesaplarınızın gösterdiği rakamları ekler ve bu telefonu filonuzda listeler.</string>
+    <string name="server_finish">Bitir</string>
+    <string name="server_skip">Sunucusuz kullan</string>
+
+    <string name="disclose_title_notifications">Bildirim erişimini açmadan önce</string>
+    <string name="disclose_title_usage">Kullanım erişimini açmadan önce</string>
+    <string name="disclose_lead">Şimdi Android kendi ayarlarını açacak. CashPilot bu erişimle şunu yapar.</string>
+    <string name="disclose_reads">CashPilot şunları okur</string>
+    <string name="disclose_never">Asla okumadıkları</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="one">Yalnızca aşağıdaki %1$d uygulamadan birinin şu anda sürekli bir bildirim gösterip göstermediği. Bu uygulamalar çalıştıklarını bu bildirimle gösterir.</item>
+        <item quantity="other">Yalnızca aşağıdaki %1$d uygulamadan birinin şu anda sürekli bir bildirim gösterip göstermediği. Bu uygulamalar çalıştıklarını bu bildirimle gösterir.</item>
+    </plurals>
+    <string name="disclose_notif_never">Herhangi bir bildirimin metni ve başka herhangi bir uygulamadan gelen herhangi bir şey. Dışarı yalnızca iki şey gider, o da yalnızca eklerseniz kendi sunucunuza: bu uygulamaların her birinde o bildirimin açık olup olmadığı ve çalışıp çalışmadığı.</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="one">Yalnızca aşağıdaki %1$d uygulama için: her birinin en son ne zaman kullanıldığı ve son 24 saatte ne kadar veri gönderip aldığı.</item>
+        <item quantity="other">Yalnızca aşağıdaki %1$d uygulama için: her birinin en son ne zaman kullanıldığı ve son 24 saatte ne kadar veri gönderip aldığı.</item>
+    </plurals>
+    <string name="disclose_usage_never">Başka hangi uygulamaları kullandığınız, hangi web sitelerini ziyaret ettiğiniz veya herhangi bir uygulamanın ne yaptığı. Kendi sunucunuzu eklemediğiniz sürece sonuçlar bu telefonda kalır.</string>
+    <string name="disclose_continue">Android ayarlarına devam et</string>
+    <string name="disclose_not_now">Şimdi değil</string>
+
+    <string name="settings_section_server">Sunucu</string>
+    <string name="settings_no_server">Sunucu yok</string>
+    <string name="settings_key_stored">%1$s · yalnızca bu telefonda saklanır</string>
+    <string name="settings_test_hint">Şimdi bir rapor gönderir ve sunucunun yanıtını gösterir.</string>
+    <string name="settings_section_phone">Bu telefon</string>
+    <string name="settings_notif_off">Kapalı · çalışan uygulamalar görülemiyor</string>
+    <string name="settings_usage_off">Kapalı · son görülme zamanı yok</string>
+    <string name="settings_battery_off">CashPilot için kapalı</string>
+    <string name="settings_battery_on">Açık · raporlar gecikebilir</string>
+    <string name="language">Dil</string>
+    <string name="language_system">Sistem varsayılanı</string>
+    <string name="language_system_body">Telefonunuzun dilini kullanır</string>
+    <string name="settings_section_apps">İzlenecek uygulamalar</string>
+    <plurals name="settings_all_supported">
+        <item quantity="one">Desteklenen %1$d uygulamanın tümü</item>
+        <item quantity="other">Desteklenen %1$d uygulamanın tümü</item>
+    </plurals>
+    <string name="settings_installed_count">Yüklü: %1$d · yüklü değil: %2$d</string>
+    <string name="settings_section_about">Hakkında</string>
+    <string name="settings_about_app">Android için CashPilot %1$s</string>
+    <string name="settings_about_source">Kaynak kodu ve lisans (GPL-3.0)</string>
+    <string name="settings_about_server">CashPilot sunucusu</string>
+    <string name="settings_about_server_body">Bu uygulamanın rapor gönderdiği, kendi barındırdığınız pano</string>
+    <string name="settings_about_sponsor">Projeye sponsor olun</string>
+    <string name="settings_demo">Demo modu</string>
+    <string name="settings_demo_body">Ekranları örnek verilerle gösterir</string>
+</resources>
