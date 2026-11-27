@@ -1,0 +1,20 @@
+Her kazanç uygulaması, her makine, tek bir görünüm. CashPilot, bant genişliği paylaşım ve DePIN uygulamalarınızdan hangilerinin bu telefonda yüklü, çalışır durumda ve etkin olduğunu gösterir. Root gerektirmez.
+
+EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash ve Wipter'ı izler. Her biri için uygulamanın yüklü olup olmadığını, çalışıp çalışmadığını ve en son ne zaman etkin olduğunu gösterir.
+
+Açtığınızda tek bir satır tüm uygulamaların çalışıp çalışmadığını söyler. Sizin müdahaleniz gereken bir şey varsa, ne olduğunu sırayla ve onu düzelten düğmeyle birlikte söyler; örneğin durmuş bir uygulama için Aç.
+
+Nasıl bilir:
+- Bildirim erişimi: bu uygulamaların çoğu çalışırken bir bildirimi açık tutar, bu yüzden CashPilot uygulamanın canlı olduğunu anlamak için bu bildirimi okur.
+- Kullanım erişimi: her uygulamanın en son ne zaman kullanıldığı.
+- Ağ kullanımı: her uygulamanın son zamanlarda ne kadar veri gönderip aldığı; böylece çalışan ama sessizleşen bir uygulama göze çarpar.
+
+Bunların hepsi telefonda okunur. Sunucu olmadan uygulama listesi uygulamanın tamamıdır.
+
+Kendi barındırdığınız bir CashPilot sunucusuyla (https://github.com/GeiserX/CashPilot) telefon filonuza da katılır. Uygulama, kalıcı bir bildirim olmadan, uygulamaların durumunu her 15 dakikada bir sunucunuza gönderir ve sunucudaki kazancınızı gösterir. Bağlantıyı test et bir rapor gönderir ve sunucunun yanıt verip vermediğini ve API anahtarınızı kabul edip etmediğini söyler. Telefon uygulama durumunu gönderir, bildirim içeriğini asla göndermez.
+
+Kurulum üç adımdan oluşur ve her izni Android istemeden önce açıklar. İzinleri veya sunucuyu atlayabilirsiniz. Uygulama 20 dilde kullanılabilir. Telefonun dilini izler; Ayarlar > Dil bölümünden başka bir dil seçebilirsiniz. Açık ve koyu temalar sistemi izler. Her kontrolün TalkBack'in okuduğu bir etiketi vardır ve ekranlar büyük metinle de sığar.
+
+Gizlilik: hesap yok, analiz yok, reklam yok. Veriler yalnızca belirlediğiniz sunucuya gider. Uygulama başka hiçbir istek yapmaz.
+
+CashPilot, GPL-3.0-or-later lisansı altında özgür bir yazılımdır.

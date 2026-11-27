@@ -1,0 +1,20 @@
+Bawat earner app, bawat makina, iisang view. Ipinapakita ng CashPilot kung alin sa iyong mga bandwidth-sharing at DePIN app ang naka-install, tumatakbo, at aktibo sa phone na ito. Hindi nito kailangan ng root.
+
+Binabantayan nito ang EarnApp, IPRoyal Pawns, MystNodes, Traffmonetizer, Bytelixir, ByteBenefit, Grass, Titan Network, Nodle Cash at Wipter. Para sa bawat isa, ipinapakita nito kung naka-install ang app, kung tumatakbo ito, at kung kailan ito huling naging aktibo.
+
+Pagbukas mo nito, may isang linya na nagsasabi kung tumatakbo ang lahat ng app. Kung may kailangan sa iyo, sinasabi nito kung ano, nang sunud-sunod, kasama ang button na aayos nito, gaya ng Buksan para sa app na huminto.
+
+Paano nito nalalaman:
+- Access sa notification: karamihan sa mga app na ito ay may notification habang tumatakbo, kaya binabasa ito ng CashPilot para malaman na buhay pa ang app.
+- Access sa paggamit: kung kailan huling ginamit ang bawat app.
+- Paggamit ng network: gaano karaming data ang ipinadala at natanggap ng bawat app kamakailan, para mapansin ang app na tumatakbo pero tumahimik na.
+
+Lahat ng ito ay binabasa sa phone. Kung walang server, ang listahan ng app na ang buong app.
+
+Kapag may self-hosted CashPilot server ka (https://github.com/GeiserX/CashPilot), sasali rin ang phone sa iyong fleet. Ipinapadala ng app ang status ng mga app sa iyong server kada 15 minuto, nang walang permanenteng notification, at ipinapakita ang iyong kita mula sa server. Ang Subukan ang koneksyon ay nagpapadala ng isang report at sinasabi kung sumagot ang server at tinanggap ang iyong API key. Status ng app ang ipinapadala ng phone, hindi kailanman ang laman ng notification.
+
+Tatlong hakbang ang setup at ipinapaliwanag nito ang bawat pahintulot bago ito hingin ng Android. Puwede mong laktawan ang mga pahintulot o ang server. Nasa 20 wika ang app. Sinusunod nito ang wika ng phone, at sa Mga Setting > Wika ka makakapili ng iba. Sinusunod ng light at dark theme ang system. May label ang bawat control na binabasa ng TalkBack, at kasya pa rin ang mga screen kahit mas malaki ang text.
+
+Privacy: walang account, walang analytics, walang ads. Sa server lang na itinakda mo napupunta ang data. Walang ibang request na ginagawa ang app.
+
+Ang CashPilot ay free software sa ilalim ng lisensyang GPL-3.0-or-later.
