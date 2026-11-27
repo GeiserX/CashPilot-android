@@ -1,15 +1,30 @@
 package com.cashpilot.android.util
 
+import java.text.NumberFormat
 import java.time.Instant
+import java.util.Currency
+import java.util.Locale
 
 /** Format byte counts into human-readable strings. */
 object FormatUtils {
 
-    fun formatBytes(bytes: Long): String = when {
-        bytes < 1024 -> "$bytes B"
-        bytes < 1024 * 1024 -> "${bytes / 1024} KB"
-        bytes < 1024 * 1024 * 1024 -> "${"%.1f".format(bytes / (1024.0 * 1024.0))} MB"
-        else -> "${"%.2f".format(bytes / (1024.0 * 1024.0 * 1024.0))} GB"
+    /** The four units [formatBytes] picks from, smallest first. */
+    enum class ByteUnit { B, KB, MB, GB }
+
+    /**
+     * A byte count with its unit. The number is written the [locale]'s way
+     * ("1,5" in German); [label] joins it to the unit, English by default, so
+     * the screens can pass the unit in the user's language.
+     */
+    fun formatBytes(
+        bytes: Long,
+        locale: Locale = Locale.US,
+        label: (String, ByteUnit) -> String = { n, u -> "$n ${u.name}" },
+    ): String = when {
+        bytes < 1024 -> label(String.format(locale, "%d", bytes), ByteUnit.B)
+        bytes < 1024 * 1024 -> label(String.format(locale, "%d", bytes / 1024), ByteUnit.KB)
+        bytes < 1024 * 1024 * 1024 -> label(String.format(locale, "%.1f", bytes / (1024.0 * 1024.0)), ByteUnit.MB)
+        else -> label(String.format(locale, "%.2f", bytes / (1024.0 * 1024.0 * 1024.0)), ByteUnit.GB)
     }
 
     fun parseIso(iso: String): Long =
@@ -33,7 +48,16 @@ object FormatUtils {
      *  - a platform whose app also runs on another machine cannot be attributed to
      *    this device, so the caller is told to say so rather than implying it.
      */
-    fun formatPlatformEarnings(usd: Double?): String = if (usd == null) "\u2014" else "$" + String.format("%.2f", usd)
+    fun formatPlatformEarnings(usd: Double?, locale: Locale = Locale.US): String =
+        if (usd == null) "\u2014" else usdFormat(locale).format(usd)
+
+    /** US dollars written the [locale]'s way: "$4.12" in the US, "4,12 $" in Germany. Always two decimals. */
+    private fun usdFormat(locale: Locale): NumberFormat =
+        NumberFormat.getCurrencyInstance(locale).apply {
+            currency = Currency.getInstance("USD")
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
 
     /**
      * The device-level total line, or null when there is nothing honest to show.

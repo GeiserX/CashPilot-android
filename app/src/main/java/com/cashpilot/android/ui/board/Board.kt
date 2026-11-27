@@ -1,5 +1,6 @@
 package com.cashpilot.android.ui.board
 
+import com.cashpilot.android.R
 import com.cashpilot.android.model.Earnings
 import com.cashpilot.android.model.KnownApps
 import com.cashpilot.android.model.Settings
@@ -155,57 +156,93 @@ data class Board(
 // ---------------------------------------------------------------------------
 
 object Words {
-    fun money(usd: Double?): String = FormatUtils.formatPlatformEarnings(usd)
+    fun money(s: Strings, usd: Double?): String = FormatUtils.formatPlatformEarnings(usd, s.locale)
 
-    fun apps(n: Int): String = if (n == 1) "1 app" else "$n apps"
+    fun bytes(s: Strings, bytes: Long): String = FormatUtils.formatBytes(bytes, s.locale) { n, unit ->
+        s.get(
+            when (unit) {
+                FormatUtils.ByteUnit.B -> R.string.bytes_b
+                FormatUtils.ByteUnit.KB -> R.string.bytes_kb
+                FormatUtils.ByteUnit.MB -> R.string.bytes_mb
+                FormatUtils.ByteUnit.GB -> R.string.bytes_gb
+            },
+            n,
+        )
+    }
 
-    fun ago(millis: Long?, now: Long): String {
-        if (millis == null || millis <= 0L) return "never"
+    /** How long ago, in whole units: what [ago] and [forHowLong] both count in. */
+    private sealed interface Age {
+        data object Never : Age
+        data object JustNow : Age
+        data object Yesterday : Age
+        data class Minutes(val n: Int) : Age
+        data class Hours(val n: Int) : Age
+        data class Days(val n: Int) : Age
+    }
+
+    private fun age(millis: Long?, now: Long): Age {
+        if (millis == null || millis <= 0L) return Age.Never
         val d = ((now - millis) / 1000).coerceAtLeast(0)
         return when {
-            d < 60 -> "just now"
-            d < 3600 -> "${d / 60} min ago"
-            d < 86_400 -> "${d / 3600} h ago"
-            d < 2 * 86_400 -> "yesterday"
-            else -> "${d / 86_400} days ago"
+            d < 60 -> Age.JustNow
+            d < 3600 -> Age.Minutes((d / 60).toInt())
+            d < 86_400 -> Age.Hours((d / 3600).toInt())
+            d < 2 * 86_400 -> Age.Yesterday
+            else -> Age.Days((d / 86_400).toInt())
         }
     }
 
+    fun ago(s: Strings, millis: Long?, now: Long): String = when (val a = age(millis, now)) {
+        Age.Never -> s.get(R.string.ago_never)
+        Age.JustNow -> s.get(R.string.ago_just_now)
+        Age.Yesterday -> s.get(R.string.ago_yesterday)
+        is Age.Minutes -> s.plural(R.plurals.ago_minutes, a.n, a.n)
+        is Age.Hours -> s.plural(R.plurals.ago_hours, a.n, a.n)
+        is Age.Days -> s.plural(R.plurals.ago_days, a.n, a.n)
+    }
+
     /** "for 25 min", "for 3 h": how long something has been wrong. */
-    fun forHowLong(millis: Long?, now: Long): String = when (val a = ago(millis, now)) {
-        "yesterday" -> "since yesterday"
-        "just now" -> "for a moment"
-        "never" -> "yet"
-        else -> "for " + a.removeSuffix(" ago")
+    fun forHowLong(s: Strings, millis: Long?, now: Long): String = when (val a = age(millis, now)) {
+        Age.Never -> s.get(R.string.for_yet)
+        Age.JustNow -> s.get(R.string.for_a_moment)
+        Age.Yesterday -> s.get(R.string.since_yesterday)
+        is Age.Minutes -> s.plural(R.plurals.for_minutes, a.n, a.n)
+        is Age.Hours -> s.plural(R.plurals.for_hours, a.n, a.n)
+        is Age.Days -> s.plural(R.plurals.for_days, a.n, a.n)
     }
 
     /** The last four characters of the key, the rest as dots. Never more. */
-    fun maskKey(key: String): String = when {
-        key.isBlank() -> "Not set"
+    fun maskKey(s: Strings, key: String): String = when {
+        key.isBlank() -> s.get(R.string.not_set)
         key.length <= 8 -> "••••"
         else -> "•••• •••• " + key.takeLast(4)
     }
 
     /** The well-known apps the welcome screen names, and how many more there are. */
-    fun supportedSample(): String {
+    fun supportedSample(s: Strings): String {
         val names = listOf("earnapp", "iproyal", "grass", "mysterium").mapNotNull { KnownApps.bySlug[it]?.displayName }
-        return names.joinToString(", ") + " and ${KnownApps.all.size - names.size} more"
+        val more = KnownApps.all.size - names.size
+        return s.plural(R.plurals.supported_sample, more, names.joinToString(s.get(R.string.list_separator)), more)
     }
+
+    /** The supported apps, by name, for the disclosures. */
+    fun supportedNames(s: Strings): String =
+        s.get(R.string.supported_names, KnownApps.all.joinToString(s.get(R.string.list_separator)) { it.displayName })
 }
 
-fun Board.ago(millis: Long?) = Words.ago(millis, now)
+fun Board.ago(s: Strings, millis: Long?) = Words.ago(s, millis, now)
 
-fun AppRow.stateWord(now: Long): String = when (state) {
-    AppState.RUNNING -> "Running"
-    AppState.STOPPED -> "Stopped" + (lastActive?.let { " · last opened " + Words.ago(it, now) } ?: "")
-    AppState.UNKNOWN -> "Can't see it"
-    AppState.DISABLED -> "Not watched"
-    AppState.NOT_INSTALLED -> "Not installed"
+fun AppRow.stateWord(s: Strings, now: Long): String = when (state) {
+    AppState.RUNNING -> s.get(R.string.state_running)
+    AppState.STOPPED -> lastActive?.let { s.get(R.string.state_stopped_last_opened, Words.ago(s, it, now)) } ?: s.get(R.string.state_stopped)
+    AppState.UNKNOWN -> s.get(R.string.state_unknown)
+    AppState.DISABLED -> s.get(R.string.state_disabled)
+    AppState.NOT_INSTALLED -> s.get(R.string.state_not_installed)
 }
 
 /** The second line of a board row. Data use is the last 24 hours, so it says so. */
-fun AppRow.rowLine(now: Long): String =
-    if (state == AppState.RUNNING && bytes24h > 0) "Running · ${FormatUtils.formatBytes(bytes24h)} in 24 h" else stateWord(now)
+fun AppRow.rowLine(s: Strings, now: Long): String =
+    if (state == AppState.RUNNING && bytes24h > 0) s.get(R.string.row_running_data, Words.bytes(s, bytes24h)) else stateWord(s, now)
 
 fun AppState.tone(): Tone = when (this) {
     AppState.RUNNING -> Tone.OK
@@ -217,48 +254,43 @@ fun AppState.tone(): Tone = when (this) {
 data class Line(val tone: Tone, val text: String)
 
 /** The one line about the server, the same words on every screen that shows it. */
-fun Board.serverLine(): Line = when (server) {
-    ServerState.NONE -> Line(Tone.MUTED, "No server · everything stays on this phone")
-    ServerState.NEEDS_HTTPS -> Line(Tone.WARN, "Not sending to $host · it needs https://")
+fun Board.serverLine(s: Strings): Line = when (server) {
+    ServerState.NONE -> Line(Tone.MUTED, s.get(R.string.server_line_none))
+    ServerState.NEEDS_HTTPS -> Line(Tone.WARN, s.get(R.string.server_line_needs_https, host))
     ServerState.OK -> if (lastReport <= 0L) {
-        Line(Tone.MUTED, "Paired with $host · waiting for the first report")
+        Line(Tone.MUTED, s.get(R.string.server_line_waiting, host))
     } else {
-        Line(Tone.OK, "Last report ${ago(lastReport)} · sent every 15 min")
+        Line(Tone.OK, s.get(R.string.server_line_ok, ago(s, lastReport)))
     }
-    ServerState.LATE -> Line(Tone.WARN, "Last report ${ago(lastReport)} · reports are late")
+    ServerState.LATE -> Line(Tone.WARN, s.get(R.string.server_line_late, ago(s, lastReport)))
     ServerState.FAILING -> if (lastReport <= 0L) {
-        Line(Tone.WARN, "No report has reached $host yet")
+        Line(Tone.WARN, s.get(R.string.server_line_failing_never, host))
     } else {
-        Line(Tone.WARN, "No report has reached $host ${Words.forHowLong(lastReport, now)}")
+        Line(Tone.WARN, s.get(R.string.server_line_failing, host, Words.forHowLong(s, lastReport, now)))
     }
 }
 
 /** The headline of the status board: the answer to "is everything running?". */
 data class Verdict(val tone: Tone, val count: Int?, val title: String, val sub: String)
 
-fun Board.verdict(): Verdict {
+fun Board.verdict(s: Strings): Verdict {
     val n = watched.size
-    val all = if (n == 1) "Your app is running" else "All $n apps running"
+    val all = if (n == 1) s.get(R.string.verdict_one_running) else s.plural(R.plurals.verdict_all_running, n, n)
     return when {
-        n == 0 -> Verdict(
-            Tone.MUTED, null, "No apps watched",
-            "Every installed app is switched off. Turn them back on in Settings, Apps to watch.",
-        )
+        n == 0 -> Verdict(Tone.MUTED, null, s.get(R.string.verdict_none_title), s.get(R.string.verdict_none_sub))
         stopped.isNotEmpty() -> Verdict(
-            Tone.BAD, stopped.size, "${stopped.size} of ${Words.apps(n)} stopped",
-            "Opening a stopped app usually starts it again.",
+            Tone.BAD, stopped.size, s.plural(R.plurals.verdict_stopped_title, n, stopped.size, n),
+            s.get(R.string.verdict_stopped_sub),
         )
         unknown.isNotEmpty() -> Verdict(
-            Tone.WARN, null, "${running.size} of ${Words.apps(n)} running",
-            "CashPilot can't see the other ${unknown.size} until its access is back on.",
+            Tone.WARN, null, s.plural(R.plurals.verdict_unknown_title, n, running.size, n),
+            s.plural(R.plurals.verdict_unknown_sub, unknown.size, unknown.size),
         )
-        server == ServerState.FAILING || server == ServerState.NEEDS_HTTPS -> Verdict(
-            Tone.WARN, null, all, "But your server isn't getting this phone's reports.",
-        )
-        server == ServerState.LATE -> Verdict(
-            Tone.WARN, null, all, "But no report has gone out ${Words.forHowLong(lastReport, now)}.",
-        )
-        else -> Verdict(Tone.OK, null, all, "Nothing needs you right now.")
+        server == ServerState.FAILING || server == ServerState.NEEDS_HTTPS ->
+            Verdict(Tone.WARN, null, all, s.get(R.string.verdict_server_sub))
+        server == ServerState.LATE ->
+            Verdict(Tone.WARN, null, all, s.get(R.string.verdict_late_sub, Words.forHowLong(s, lastReport, now)))
+        else -> Verdict(Tone.OK, null, all, s.get(R.string.verdict_ok_sub))
     }
 }
 
@@ -273,45 +305,49 @@ data class Task(val kind: TaskKind, val tone: Tone, val title: String, val body:
  *
  * Both accesses missing is the blind screen, not a pair of tasks.
  */
-fun Board.tasks(): List<Task> {
+fun Board.tasks(s: Strings): List<Task> {
     val out = mutableListOf<Task>()
     stopped.sortedBy { it.name }.forEach {
         out += Task(
             TaskKind.STOPPED_APP, Tone.BAD,
-            "${it.name} stopped",
-            "Opening it usually starts it again.", "Open ${it.name}", it.slug,
+            s.get(R.string.task_stopped_title, it.name),
+            s.get(R.string.task_stopped_body), s.get(R.string.action_open_app, it.name), it.slug,
         )
     }
+    val check = s.get(R.string.action_check_connection)
     when (server) {
         ServerState.FAILING -> out += Task(
-            TaskKind.SERVER, Tone.WARN, "Reports aren't getting through",
-            (if (lastReport <= 0L) "No report has reached $host yet." else "Nothing has reached $host ${Words.forHowLong(lastReport, now)}.") +
-                " Check connection says why.",
-            "Check connection",
+            TaskKind.SERVER, Tone.WARN, s.get(R.string.task_failing_title),
+            if (lastReport <= 0L) {
+                s.get(R.string.task_failing_body_never, host)
+            } else {
+                s.get(R.string.task_failing_body, host, Words.forHowLong(s, lastReport, now))
+            },
+            check,
         )
         ServerState.LATE -> out += Task(
-            TaskKind.SERVER, Tone.WARN, "Reports are late",
-            "No report has gone out ${Words.forHowLong(lastReport, now)}. Android holds background work back, more so with battery optimisation on or no network.",
-            "Check connection",
+            TaskKind.SERVER, Tone.WARN, s.get(R.string.task_late_title),
+            s.get(R.string.task_late_body, Words.forHowLong(s, lastReport, now)),
+            check,
         )
         ServerState.NEEDS_HTTPS -> out += Task(
-            TaskKind.SERVER, Tone.WARN, "Reports are not being sent",
-            "$host is on the public internet, so CashPilot sends the key only over https://.",
-            "Fix the address",
+            TaskKind.SERVER, Tone.WARN, s.get(R.string.task_https_title),
+            s.get(R.string.task_https_body, host),
+            s.get(R.string.action_fix_address),
         )
         else -> Unit
     }
     if (!blind && !notif) {
-        out += Task(TaskKind.NOTIFICATIONS, Tone.BAD, "Notification access is off", "CashPilot can't tell which apps are running until it's back on.", "Turn on")
+        out += Task(TaskKind.NOTIFICATIONS, Tone.BAD, s.get(R.string.task_notif_title), s.get(R.string.task_notif_body), s.get(R.string.action_turn_on))
     }
     if (!blind && !usage) {
-        out += Task(TaskKind.USAGE, Tone.WARN, "Usage access is off", "No last-seen times or data use until it's back on.", "Turn on")
+        out += Task(TaskKind.USAGE, Tone.WARN, s.get(R.string.task_usage_title), s.get(R.string.task_usage_body), s.get(R.string.action_turn_on))
     }
     if (!battery) {
         out += Task(
-            TaskKind.BATTERY, Tone.WARN, "Reports may arrive late",
-            "Battery optimisation is on for CashPilot, so Android can hold reports back while the screen is off.",
-            "Open battery settings",
+            TaskKind.BATTERY, Tone.WARN, s.get(R.string.task_battery_title),
+            s.get(R.string.task_battery_body),
+            s.get(R.string.action_open_battery),
         )
     }
     return out
@@ -324,8 +360,8 @@ fun Board.tasks(): List<Task> {
  * One stopped app: nothing extra, its row already carries the Open button.
  * One other problem: that one card on its own.
  */
-fun Board.tasksToShow(): List<Task> {
-    val all = tasks()
+fun Board.tasksToShow(s: Strings): List<Task> {
+    val all = tasks(s)
     return when {
         all.size >= 2 -> all
         all.size == 1 && all[0].kind != TaskKind.STOPPED_APP -> all
@@ -336,53 +372,55 @@ fun Board.tasksToShow(): List<Task> {
 /** The earnings strip: label, value and whether the value is a real figure. */
 data class EarningsLine(val label: String, val value: String, val isFigure: Boolean, val staleNote: String?)
 
-fun Board.earningsLine(): EarningsLine {
-    val label = "Your server reports, last $windowDays days"
+fun Board.earningsLine(s: Strings): EarningsLine {
+    val label = s.plural(R.plurals.earnings_label, windowDays, windowDays)
     return when (earningsMode) {
-        EarningsPresentation.Mode.NEEDS_SERVER -> EarningsLine(label, "Add a server to see figures", false, null)
-        EarningsPresentation.Mode.NOTHING_READ -> EarningsLine(label, "Nothing read yet", false, null)
+        EarningsPresentation.Mode.NEEDS_SERVER -> EarningsLine(label, s.get(R.string.earnings_needs_server), false, null)
+        EarningsPresentation.Mode.NOTHING_READ -> EarningsLine(label, s.get(R.string.nothing_read_yet), false, null)
         EarningsPresentation.Mode.FIGURE ->
-            EarningsLine(label, Words.money(total), true, if (stale) "From ${ago(earningsAsOf)}" else null)
+            EarningsLine(label, Words.money(s, total), true, if (stale) s.get(R.string.earnings_from, ago(s, earningsAsOf)) else null)
     }
 }
 
-/** The single footnote for figures that are a whole account's balance, not this phone's. */
-const val SHARED_FOOTNOTE =
-    "* Runs on more than one of your devices. The provider reports one balance for the account, so this is not this phone alone."
-
-/** A detail value with no reading behind it, so it is never shown as 0 B or "never". */
-const val NOT_MEASURED = "Not measured"
-
 /** Data use and last-opened time: only real readings, which need usage access and a detected app. */
-fun Board.measuredUse(a: AppRow): Pair<String, String> =
-    if (a.measured && usage) FormatUtils.formatBytes(a.bytes24h) to ago(a.lastActive) else NOT_MEASURED to NOT_MEASURED
+fun Board.measuredUse(s: Strings, a: AppRow): Pair<String, String> =
+    if (a.measured && usage) {
+        Words.bytes(s, a.bytes24h) to ago(s, a.lastActive)
+    } else {
+        s.get(R.string.not_measured) to s.get(R.string.not_measured)
+    }
 
-const val NO_READING_NOTE = "No reading means your server has sent no figure for that provider. It is not \$0."
-
-fun Board.footnotes(): List<String> = buildList {
-    if (earningsMode == EarningsPresentation.Mode.FIGURE && anyShared) add(SHARED_FOOTNOTE)
-    if (paired && withoutReading.isNotEmpty()) add(NO_READING_NOTE)
+/**
+ * The footnotes under the earnings strip: one for figures that are a whole
+ * account's balance, not this phone's, and one for providers with no reading.
+ */
+fun Board.footnotes(s: Strings): List<String> = buildList {
+    if (earningsMode == EarningsPresentation.Mode.FIGURE && anyShared) add(s.get(R.string.shared_footnote))
+    if (paired && withoutReading.isNotEmpty()) add(s.get(R.string.no_reading_note))
 }
 
 /** The value in the app detail's earnings row, starred when it is a whole account. */
-fun Board.appEarnings(a: AppRow): String = when {
-    !paired -> "Needs a server"
-    !EarningsPresentation.showsPerAppEarnings(a.state) -> "\u2014"
-    a.usd == null -> "Nothing read yet"
-    a.shared -> Words.money(a.usd) + " *"
-    else -> Words.money(a.usd)
+fun Board.appEarnings(s: Strings, a: AppRow): String = when {
+    !paired -> s.get(R.string.app_earnings_needs_server)
+    !EarningsPresentation.showsPerAppEarnings(a.state) -> "—"
+    a.usd == null -> s.get(R.string.nothing_read_yet)
+    a.shared -> s.get(R.string.app_earnings_shared, Words.money(s, a.usd))
+    else -> Words.money(s, a.usd)
 }
 
 /** The Server row at the top of Settings. */
-fun Board.serverSetting(): Line = when (server) {
-    ServerState.NONE -> Line(Tone.MUTED, "Everything stays on this phone · add a server for figures")
-    ServerState.NEEDS_HTTPS -> Line(Tone.WARN, "Not sending · this address needs https://")
-    ServerState.FAILING -> Line(Tone.WARN, if (lastReport <= 0L) "Not getting through · no report yet" else "Not getting through · last report ${ago(lastReport)}")
-    ServerState.LATE -> Line(Tone.WARN, "Reports are late · last report ${ago(lastReport)}")
+fun Board.serverSetting(s: Strings): Line = when (server) {
+    ServerState.NONE -> Line(Tone.MUTED, s.get(R.string.settings_server_none))
+    ServerState.NEEDS_HTTPS -> Line(Tone.WARN, s.get(R.string.settings_server_needs_https))
+    ServerState.FAILING -> Line(
+        Tone.WARN,
+        if (lastReport <= 0L) s.get(R.string.settings_server_failing_never) else s.get(R.string.settings_server_failing, ago(s, lastReport)),
+    )
+    ServerState.LATE -> Line(Tone.WARN, s.get(R.string.settings_server_late, ago(s, lastReport)))
     ServerState.OK -> if (lastReport <= 0L) {
-        Line(Tone.MUTED, "Paired · waiting for the first report")
+        Line(Tone.MUTED, s.get(R.string.settings_server_waiting))
     } else {
-        Line(Tone.OK, "Reports every 15 min · last report ${ago(lastReport)}")
+        Line(Tone.OK, s.get(R.string.settings_server_ok, ago(s, lastReport)))
     }
 }
 
@@ -404,32 +442,14 @@ fun pairResultOf(outcome: Heartbeat.Outcome): PairResult = when (outcome) {
 
 data class PairMessage(val tone: Tone, val title: String, val body: String)
 
-fun pairMessage(result: PairResult, host: String, deviceName: String): PairMessage? = when (result) {
+fun pairMessage(s: Strings, result: PairResult, host: String, deviceName: String): PairMessage? = when (result) {
     PairResult.NONE -> null
-    PairResult.TESTING -> PairMessage(Tone.MUTED, "Testing…", "Sending one report to $host.")
-    PairResult.OK -> PairMessage(Tone.OK, "Connected", "Your server answered and accepted the key. This phone appears in Fleet as $deviceName.")
-    PairResult.KEY_REFUSED -> PairMessage(
-        Tone.BAD, "The server refused this API key",
-        "The address is right: the server answered. Copy the key again from Fleet → Reveal API Key.",
-    )
-    PairResult.UNREACHABLE -> PairMessage(
-        Tone.BAD, "No answer from $host",
-        "Check the address, and that this phone can reach it: on the same network, or over your VPN.",
-    )
-    PairResult.URL_REFUSED -> PairMessage(
-        Tone.BAD, "This address needs https://",
-        "CashPilot sends the key over http:// only to your own network: 192.168.x.x, 10.x.x.x, a .local or .lan name, or Tailscale.",
-    )
-    PairResult.REJECTED -> PairMessage(
-        Tone.BAD, "The server answered with an error",
-        "It is reachable but did not accept the report. Check that it runs a recent CashPilot release.",
-    )
-    PairResult.NOT_CASHPILOT -> PairMessage(
-        Tone.BAD, "$host answered, but not as CashPilot",
-        "Something else answers at this address, such as a login page or another app. Use the address you open the CashPilot dashboard at.",
-    )
-    PairResult.SAVE_FAILED -> PairMessage(
-        Tone.BAD, "Couldn't save the details",
-        "Android didn't store the address and key, so nothing was sent. Try again.",
-    )
+    PairResult.TESTING -> PairMessage(Tone.MUTED, s.get(R.string.testing), s.get(R.string.pair_testing_body, host))
+    PairResult.OK -> PairMessage(Tone.OK, s.get(R.string.pair_ok_title), s.get(R.string.pair_ok_body, deviceName))
+    PairResult.KEY_REFUSED -> PairMessage(Tone.BAD, s.get(R.string.pair_key_refused_title), s.get(R.string.pair_key_refused_body))
+    PairResult.UNREACHABLE -> PairMessage(Tone.BAD, s.get(R.string.pair_unreachable_title, host), s.get(R.string.pair_unreachable_body))
+    PairResult.URL_REFUSED -> PairMessage(Tone.BAD, s.get(R.string.pair_url_refused_title), s.get(R.string.pair_url_refused_body))
+    PairResult.REJECTED -> PairMessage(Tone.BAD, s.get(R.string.pair_rejected_title), s.get(R.string.pair_rejected_body))
+    PairResult.NOT_CASHPILOT -> PairMessage(Tone.BAD, s.get(R.string.pair_not_cashpilot_title, host), s.get(R.string.pair_not_cashpilot_body))
+    PairResult.SAVE_FAILED -> PairMessage(Tone.BAD, s.get(R.string.pair_save_failed_title), s.get(R.string.pair_save_failed_body))
 }
