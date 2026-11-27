@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Einstellungen</string>
+    <string name="back">Zurück</string>
+    <string name="details">Details</string>
+    <string name="action_open">Öffnen</string>
+    <string name="action_get">Holen</string>
+    <string name="action_exit">Beenden</string>
+    <string name="action_allow">Erlauben</string>
+    <string name="action_turn_on">Einschalten</string>
+    <string name="action_open_app">%1$s öffnen</string>
+    <string name="action_get_app">%1$s holen</string>
+    <string name="action_check_connection">Verbindung prüfen</string>
+    <string name="action_fix_address">Adresse korrigieren</string>
+    <string name="action_open_battery">Akku-Einstellungen öffnen</string>
+    <string name="action_open_settings">Einstellungen öffnen</string>
+    <string name="action_test_connection">Verbindung testen</string>
+    <string name="testing">Teste…</string>
+    <string name="notification_access">Benachrichtigungszugriff</string>
+    <string name="usage_access">Nutzungszugriff</string>
+    <string name="battery_optimisation">Akkuoptimierung</string>
+    <string name="allow_notification_access">Benachrichtigungszugriff erlauben</string>
+    <string name="allow_usage_access">Nutzungszugriff erlauben</string>
+    <string name="allowed">Erlaubt</string>
+    <string name="done">Fertig</string>
+    <string name="not_set">Nicht festgelegt</string>
+    <string name="not_measured">Nicht gemessen</string>
+    <string name="nothing_read_yet">Noch nichts gelesen</string>
+    <string name="list_separator">", "</string>
+    <string name="supported_names">%1$s.</string>
+
+    <string name="ago_never">nie</string>
+    <string name="ago_just_now">gerade eben</string>
+    <string name="ago_yesterday">gestern</string>
+    <plurals name="ago_minutes">
+        <item quantity="one">vor %1$d Min.</item>
+        <item quantity="other">vor %1$d Min.</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="one">vor %1$d Std.</item>
+        <item quantity="other">vor %1$d Std.</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="one">vor %1$d Tag</item>
+        <item quantity="other">vor %1$d Tagen</item>
+    </plurals>
+
+    <string name="for_a_moment">seit kurzem</string>
+    <string name="for_yet">bisher</string>
+    <string name="since_yesterday">seit gestern</string>
+    <plurals name="for_minutes">
+        <item quantity="one">seit %1$d Min.</item>
+        <item quantity="other">seit %1$d Min.</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="one">seit %1$d Std.</item>
+        <item quantity="other">seit %1$d Std.</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="one">seit %1$d Tag</item>
+        <item quantity="other">seit %1$d Tagen</item>
+    </plurals>
+
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+
+    <plurals name="supported_sample">
+        <item quantity="one">%1$s und %2$d weitere</item>
+        <item quantity="other">%1$s und %2$d weitere</item>
+    </plurals>
+
+    <string name="state_running">Läuft</string>
+    <string name="state_stopped">Gestoppt</string>
+    <string name="state_stopped_last_opened">Gestoppt · zuletzt geöffnet %1$s</string>
+    <string name="state_unknown">Nicht sichtbar</string>
+    <string name="state_disabled">Nicht überwacht</string>
+    <string name="state_not_installed">Nicht installiert</string>
+    <string name="row_running_data">Läuft · %1$s in 24 Std.</string>
+
+    <string name="server_line_none">Kein Server · alles bleibt auf diesem Smartphone</string>
+    <string name="server_line_needs_https">Sendet nicht an %1$s · https:// erforderlich</string>
+    <string name="server_line_waiting">Gekoppelt mit %1$s · wartet auf den ersten Bericht</string>
+    <string name="server_line_ok">Letzter Bericht %1$s · wird alle 15 Min. gesendet</string>
+    <string name="server_line_late">Letzter Bericht %1$s · Berichte sind verspätet</string>
+    <string name="server_line_failing_never">Noch kein Bericht hat %1$s erreicht</string>
+    <string name="server_line_failing">Kein Bericht hat %1$s %2$s erreicht</string>
+
+    <string name="verdict_one_running">Deine App läuft</string>
+    <plurals name="verdict_all_running">
+        <item quantity="one">Alle %1$d Apps laufen</item>
+        <item quantity="other">Alle %1$d Apps laufen</item>
+    </plurals>
+    <string name="verdict_none_title">Keine Apps überwacht</string>
+    <string name="verdict_none_sub">Jede installierte App ist ausgeschaltet. Schalte sie in den Einstellungen unter „Zu überwachende Apps“ wieder ein.</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="one">%1$d von %2$d App gestoppt</item>
+        <item quantity="other">%1$d von %2$d Apps gestoppt</item>
+    </plurals>
+    <string name="verdict_stopped_sub">Eine gestoppte App startet meist wieder, wenn du sie öffnest.</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="one">%1$d von %2$d App aktiv</item>
+        <item quantity="other">%1$d von %2$d Apps aktiv</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="one">CashPilot sieht %1$d weitere App erst wieder, wenn der Zugriff wieder an ist.</item>
+        <item quantity="other">CashPilot sieht %1$d weitere Apps erst wieder, wenn der Zugriff wieder an ist.</item>
+    </plurals>
+    <string name="verdict_server_sub">Aber dein Server bekommt die Berichte dieses Smartphones nicht.</string>
+    <string name="verdict_late_sub">Aber %1$s wurde kein Bericht gesendet.</string>
+    <string name="verdict_ok_sub">Gerade ist nichts zu tun.</string>
+
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s gestoppt</string>
+    <string name="task_stopped_body">Öffnen startet sie meist wieder.</string>
+    <string name="task_failing_title">Berichte kommen nicht an</string>
+    <string name="task_failing_body_never">Noch kein Bericht hat %1$s erreicht. „Verbindung prüfen“ zeigt, warum.</string>
+    <string name="task_failing_body">Nichts hat %1$s %2$s erreicht. „Verbindung prüfen“ zeigt, warum.</string>
+    <string name="task_late_title">Berichte sind verspätet</string>
+    <string name="task_late_body">Kein Bericht wurde %1$s gesendet. Android hält Hintergrundarbeit zurück, besonders mit Akkuoptimierung oder ohne Netz.</string>
+    <string name="task_https_title">Berichte werden nicht gesendet</string>
+    <string name="task_https_body">%1$s ist im öffentlichen Internet, daher sendet CashPilot den Schlüssel nur über https://.</string>
+    <string name="task_notif_title">Benachrichtigungszugriff ist aus</string>
+    <string name="task_notif_body">CashPilot erkennt erst wieder, welche Apps laufen, wenn er wieder an ist.</string>
+    <string name="task_usage_title">Nutzungszugriff ist aus</string>
+    <string name="task_usage_body">Keine Zeiten der letzten Nutzung und kein Datenverbrauch, bis er wieder an ist.</string>
+    <string name="task_battery_title">Berichte kommen eventuell verspätet</string>
+    <string name="task_battery_body">Die Akkuoptimierung ist für CashPilot an, daher kann Android Berichte bei ausgeschaltetem Bildschirm zurückhalten.</string>
+
+    <plurals name="earnings_label">
+        <item quantity="one">Laut deinem Server, letzter %1$d Tag</item>
+        <item quantity="other">Laut deinem Server, letzte %1$d Tage</item>
+    </plurals>
+    <string name="earnings_needs_server">Füge einen Server hinzu, um Zahlen zu sehen</string>
+    <string name="earnings_from">Stand: %1$s</string>
+    <string name="shared_footnote">* Läuft auf mehr als einem deiner Geräte. Der Anbieter meldet ein Guthaben für das ganze Konto, also nicht nur für dieses Smartphone.</string>
+    <string name="no_reading_note">Kein Wert heißt: Dein Server hat für diesen Anbieter keine Zahl gesendet. Es bedeutet nicht 0 $.</string>
+    <string name="app_earnings_needs_server">Braucht einen Server</string>
+    <string name="app_earnings_shared">%1$s *</string>
+
+    <string name="settings_server_none">Alles bleibt auf diesem Smartphone · füge für Zahlen einen Server hinzu</string>
+    <string name="settings_server_needs_https">Sendet nicht · diese Adresse braucht https://</string>
+    <string name="settings_server_failing_never">Kommt nicht durch · noch kein Bericht</string>
+    <string name="settings_server_failing">Kommt nicht durch · letzter Bericht %1$s</string>
+    <string name="settings_server_late">Berichte verspätet · letzter Bericht %1$s</string>
+    <string name="settings_server_waiting">Gekoppelt · wartet auf den ersten Bericht</string>
+    <string name="settings_server_ok">Berichte alle 15 Min. · letzter Bericht %1$s</string>
+
+    <string name="pair_testing_body">Sende einen Bericht an %1$s.</string>
+    <string name="pair_ok_title">Verbunden</string>
+    <string name="pair_ok_body">Dein Server hat geantwortet und den Schlüssel akzeptiert. Dieses Smartphone erscheint in der Flotte als %1$s.</string>
+    <string name="pair_key_refused_title">Der Server hat diesen API-Schlüssel abgelehnt</string>
+    <string name="pair_key_refused_body">Die Adresse stimmt: Der Server hat geantwortet. Kopiere den Schlüssel erneut unter Flotte → API-Schlüssel anzeigen.</string>
+    <string name="pair_unreachable_title">Keine Antwort von %1$s</string>
+    <string name="pair_unreachable_body">Prüfe die Adresse und ob dieses Smartphone sie erreicht: im selben Netzwerk oder über dein VPN.</string>
+    <string name="pair_url_refused_title">Diese Adresse braucht https://</string>
+    <string name="pair_url_refused_body">CashPilot sendet den Schlüssel über http:// nur in dein eigenes Netzwerk: 192.168.x.x, 10.x.x.x, einen .local- oder .lan-Namen oder Tailscale.</string>
+    <string name="pair_rejected_title">Der Server hat mit einem Fehler geantwortet</string>
+    <string name="pair_rejected_body">Er ist erreichbar, hat den Bericht aber nicht angenommen. Prüfe, ob er eine aktuelle CashPilot-Version nutzt.</string>
+    <string name="pair_not_cashpilot_title">%1$s hat geantwortet, aber nicht als CashPilot</string>
+    <string name="pair_not_cashpilot_body">Unter dieser Adresse antwortet etwas anderes, etwa eine Anmeldeseite oder eine andere App. Nutze die Adresse, unter der du das CashPilot-Dashboard öffnest.</string>
+    <string name="pair_save_failed_title">Daten konnten nicht gespeichert werden</string>
+    <string name="pair_save_failed_body">Android hat Adresse und Schlüssel nicht gespeichert, daher wurde nichts gesendet. Versuche es erneut.</string>
+
+    <plurals name="home_tasks_heading">
+        <item quantity="one">%1$d Punkt braucht dich</item>
+        <item quantity="other">%1$d Punkte brauchen dich</item>
+    </plurals>
+    <string name="home_all_switched_off">Jede installierte App ist in den Einstellungen ausgeschaltet.</string>
+    <plurals name="home_other_supported">
+        <item quantity="one">%1$d weitere unterstützte App</item>
+        <item quantity="other">%1$d weitere unterstützte Apps</item>
+    </plurals>
+
+    <string name="detail_stopped">Gestoppt. Zuletzt geöffnet %1$s.</string>
+    <string name="detail_unknown">CashPilot sieht nicht, ob sie läuft.</string>
+    <string name="detail_hint">Diese Apps stoppen oft, wenn Android sie aus dem Speicher entfernt. Öffnen startet die App meist wieder.</string>
+    <plurals name="detail_server_reports">
+        <item quantity="one">Server-Berichte, letzter %1$d Tag</item>
+        <item quantity="other">Server-Berichte, letzte %1$d Tage</item>
+    </plurals>
+    <string name="detail_data_moved">Übertragene Daten, letzte 24 Std.</string>
+    <string name="detail_last_opened">Zuletzt geöffnet</string>
+    <string name="detail_watched">Von CashPilot überwacht</string>
+
+    <string name="blind_title">CashPilot sieht deine Apps noch nicht</string>
+    <plurals name="blind_body">
+        <item quantity="one">%1$d App, die du nutzt, ist installiert, aber Android zeigt CashPilot erst, ob sie läuft, wenn du zwei Dinge erlaubst. Jedes erklärt vorher, was es liest.</item>
+        <item quantity="other">%1$d Apps, die du nutzt, sind installiert, aber Android zeigt CashPilot erst, ob sie laufen, wenn du zwei Dinge erlaubst. Jedes erklärt vorher, was es liest.</item>
+    </plurals>
+
+    <string name="no_apps_title">Noch keine unterstützte App auf diesem Smartphone</string>
+    <string name="no_apps_body">CashPilot überwacht Apps für passives Einkommen, die du schon nutzt, etwa EarnApp oder Grass, und sagt dir, wenn eine nicht mehr läuft. Sobald eine installiert ist, erscheint sie hier von selbst.</string>
+    <string name="no_apps_standalone_title">Funktioniert ohne Server</string>
+    <string name="no_apps_standalone_body">Allein zeigt CashPilot, welche Apps laufen und welche gestoppt sind, und öffnet sie für dich. Ein CashPilot-Server ergänzt Zahlen zu den Einnahmen und führt dieses Smartphone mit deinen anderen Rechnern auf.</string>
+    <string name="demo_start">Demo mit Beispieldaten zeigen</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="one">Die %1$d unterstützte App ansehen</item>
+        <item quantity="other">Die %1$d unterstützten Apps ansehen</item>
+    </plurals>
+
+    <string name="supported_title">Unterstützte Apps</string>
+    <string name="supported_intro_all">Die Apps, die CashPilot überwachen kann. Was jede davon zahlt, hängt vom Anbieter, deiner Verbindung und deiner Region ab.</string>
+    <string name="supported_intro_missing">CashPilot kann diese Apps überwachen, wenn du sie installierst. Was jede davon zahlt, hängt vom Anbieter, deiner Verbindung und deiner Region ab.</string>
+    <string name="supported_referral_note">Links mit „Empfehlung“ enthalten den Empfehlungscode von CashPilot, der die Entwicklung von CashPilot unterstützt. Die anderen führen zum App-Store.</string>
+    <string name="supported_installed">Installiert</string>
+    <string name="supported_referral">Empfehlung · Registrierungsseite des Anbieters</string>
+    <string name="supported_store">App-Store-Seite</string>
+
+    <string name="demo_banner">Demo · Beispieldaten, nichts hier ist echt</string>
+
+    <string name="onboard_step">Schritt %1$d von %2$d</string>
+    <string name="welcome_title">Erfahre, wenn eine Verdienst-App stoppt</string>
+    <string name="welcome_lead">CashPilot prüft die Apps für passives Einkommen auf diesem Smartphone und zeigt dir, welche gestoppt sind und wie du sie wieder startest.</string>
+    <string name="welcome_start">Loslegen</string>
+    <string name="welcome_fact_running_title">Welche Apps laufen</string>
+    <string name="welcome_fact_running_body">%1$s, geprüft bei jedem Öffnen von CashPilot.</string>
+    <string name="welcome_fact_stops_title">Was tun, wenn eine stoppt</string>
+    <string name="welcome_fact_stops_body">Ein Tippen öffnet die App, damit du sie wieder startest.</string>
+    <string name="welcome_fact_server_title">Zahlen von deinem Server, falls du einen hast</string>
+    <string name="welcome_fact_server_body">Ein CashPilot-Server meldet, was das Konto jeder App zeigt. Optional; Berichte gehen alle 15 Minuten raus.</string>
+    <string name="welcome_fact_private_title">Nichts verlässt dieses Smartphone</string>
+    <string name="welcome_fact_private_body">Außer an deinen eigenen Server, falls du einen hinzufügst. Keine Werbung, kein Tracking.</string>
+
+    <string name="permissions_title">Lass CashPilot deine Apps sehen</string>
+    <string name="permissions_lead">Android verbirgt den Status anderer Apps. Zwei Schalter in den Systemeinstellungen ändern das; danach bist du sofort wieder hier.</string>
+    <string name="permissions_without">Ohne beide kann CashPilot laufende und gestoppte Apps nicht unterscheiden. Du kannst sie später in den Einstellungen erlauben.</string>
+    <string name="permissions_continue">Weiter</string>
+    <string name="permissions_continue_without">Ohne weiter</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="one">Diese Apps zeigen eine Benachrichtigung, solange sie laufen. CashPilot prüft, ob sie da ist, nur für %1$d unterstützte App.</item>
+        <item quantity="other">Diese Apps zeigen eine Benachrichtigung, solange sie laufen. CashPilot prüft, ob sie da ist, nur für die %1$d unterstützten Apps.</item>
+    </plurals>
+    <string name="permissions_notif_not_read">Liest nie den Text von Benachrichtigungen. Du siehst genau, was CashPilot liest, bevor Android fragt.</string>
+    <string name="permissions_usage_why">Zeigt, wann jede unterstützte App zuletzt lief und wie viele Daten sie in den letzten 24 Stunden übertragen hat. Das zeigt, dass sie arbeitet.</string>
+    <string name="permissions_usage_not_read">Sieht sich nie andere Apps oder Websites an. Du siehst vorher genau, was CashPilot liest.</string>
+    <string name="permissions_battery_why">CashPilot sendet alle 15 Minuten einen Bericht. Mit Akkuoptimierung kann Android diese Berichte bei ausgeschaltetem Bildschirm zurückhalten.</string>
+    <string name="permissions_battery_not_read">Optional. Öffnet die Akkuliste von Android: Wähle „Alle Apps“, dann CashPilot, dann „Nicht optimieren“.</string>
+
+    <string name="server_address">Serveradresse</string>
+    <string name="server_address_refused">Diese Adresse ist im öffentlichen Internet und braucht daher https://. CashPilot sendet den Schlüssel dorthin nie über einfaches http://.</string>
+    <string name="server_address_cleartext">Einfaches http:// im eigenen Netzwerk: Schlüssel und App-Liste werden dort unverschlüsselt übertragen.</string>
+    <string name="api_key">API-Schlüssel</string>
+    <string name="api_key_where">Auf deinem Server: Flotte → API-Schlüssel anzeigen. Nur auf diesem Smartphone gespeichert.</string>
+    <string name="server_address_hint">Nutze https://. Einfaches http:// geht nur für eine Adresse in deinem eigenen Netzwerk, etwa 192.168.x.x oder einen .local- oder Tailscale-Namen.</string>
+
+    <string name="server_title">Verbinde deinen Server</string>
+    <string name="server_lead">Optional. Auch ohne Server siehst du, welche Apps laufen und welche gestoppt sind. Ein Server ergänzt die Zahlen aus deinen Konten bei den Anbietern und führt dieses Smartphone in deiner Flotte auf.</string>
+    <string name="server_finish">Fertig</string>
+    <string name="server_skip">Ohne Server nutzen</string>
+
+    <string name="disclose_title_notifications">Bevor du den Benachrichtigungszugriff einschaltest</string>
+    <string name="disclose_title_usage">Bevor du den Nutzungszugriff einschaltest</string>
+    <string name="disclose_lead">Als Nächstes öffnet Android seine Einstellungen. So nutzt CashPilot den Zugriff.</string>
+    <string name="disclose_reads">CashPilot liest</string>
+    <string name="disclose_never">Es liest nie</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="one">Nur, ob die %1$d App unten gerade eine laufende Benachrichtigung zeigt. Mit dieser Benachrichtigung zeigt die App, dass sie läuft.</item>
+        <item quantity="other">Nur, ob eine der %1$d Apps unten gerade eine laufende Benachrichtigung zeigt. Mit dieser Benachrichtigung zeigen diese Apps, dass sie laufen.</item>
+    </plurals>
+    <string name="disclose_notif_never">Den Text einer Benachrichtigung und alles von anderen Apps. Nur zwei Dinge gehen raus, und nur an deinen eigenen Server, falls du einen hinzufügst: ob jede dieser Apps diese Benachrichtigung zeigt und ob sie läuft.</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="one">Nur für die %1$d App unten: wann sie zuletzt genutzt wurde und wie viele Daten sie in den letzten 24 Stunden gesendet und empfangen hat.</item>
+        <item quantity="other">Nur für die %1$d Apps unten: wann jede zuletzt genutzt wurde und wie viele Daten sie in den letzten 24 Stunden gesendet und empfangen hat.</item>
+    </plurals>
+    <string name="disclose_usage_never">Welche anderen Apps du nutzt, welche Websites du besuchst oder was eine App tut. Die Ergebnisse bleiben auf diesem Smartphone, außer du fügst deinen eigenen Server hinzu.</string>
+    <string name="disclose_continue">Weiter zu den Android-Einstellungen</string>
+    <string name="disclose_not_now">Nicht jetzt</string>
+
+    <string name="settings_section_server">Server</string>
+    <string name="settings_no_server">Kein Server</string>
+    <string name="settings_key_stored">%1$s · nur auf diesem Smartphone gespeichert</string>
+    <string name="settings_test_hint">Sendet jetzt einen Bericht und zeigt, was der Server geantwortet hat.</string>
+    <string name="settings_section_phone">Dieses Smartphone</string>
+    <string name="settings_notif_off">Aus · sieht keine laufenden Apps</string>
+    <string name="settings_usage_off">Aus · keine Zeiten der letzten Nutzung</string>
+    <string name="settings_battery_off">Aus für CashPilot</string>
+    <string name="settings_battery_on">An · Berichte kommen eventuell verspätet</string>
+    <string name="language">Sprache</string>
+    <string name="language_system">Systemstandard</string>
+    <string name="language_system_body">Folgt der Sprache deines Smartphones</string>
+    <string name="settings_section_apps">Zu überwachende Apps</string>
+    <plurals name="settings_all_supported">
+        <item quantity="one">Alle %1$d unterstützten Apps</item>
+        <item quantity="other">Alle %1$d unterstützten Apps</item>
+    </plurals>
+    <string name="settings_installed_count">Installiert: %1$d · nicht installiert: %2$d</string>
+    <string name="settings_section_about">Über</string>
+    <string name="settings_about_app">CashPilot für Android %1$s</string>
+    <string name="settings_about_source">Quellcode und Lizenz (GPL-3.0)</string>
+    <string name="settings_about_server">CashPilot-Server</string>
+    <string name="settings_about_server_body">Das selbst gehostete Dashboard, an das diese App berichtet</string>
+    <string name="settings_about_sponsor">Projekt unterstützen</string>
+    <string name="settings_demo">Demo-Modus</string>
+    <string name="settings_demo_body">Zeigt die Bildschirme mit Beispieldaten</string>
+</resources>

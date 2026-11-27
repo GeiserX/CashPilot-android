@@ -55,6 +55,18 @@ jobs:
       - name: No credentials in tracked files
         run: ./scripts/check-no-committed-credentials.sh
 
+      # Every English string exists in all 19 translations with the same
+      # placeholders and plural "other" form. scripts/i18n_check.py is the
+      # shared CashPilot check, copied unchanged from the CashPilot repo.
+      # A translation whose English changed since it was written is reported
+      # as stale (a warning): the hashes in i18n/ record what it translated.
+      - name: Translations match the English strings
+        run: |
+          python3 scripts/i18n_check.py app/src/main/res/values/strings.xml \
+            app/src/main/res/values-*/strings.xml --hashes-dir i18n/source-hashes
+          python3 scripts/i18n_check.py fastlane/metadata/android/en-US \
+            fastlane/metadata/android/*/ --hashes-dir i18n/fastlane-hashes --ignore 'changelogs/*'
+
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         if: github.event_name != 'pull_request' || steps.filter.outputs.code == 'true'
         with:

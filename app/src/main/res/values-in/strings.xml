@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Setelan</string>
+    <string name="back">Kembali</string>
+    <string name="details">Detail</string>
+    <string name="action_open">Buka</string>
+    <string name="action_get">Dapatkan</string>
+    <string name="action_exit">Keluar</string>
+    <string name="action_allow">Izinkan</string>
+    <string name="action_turn_on">Aktifkan</string>
+    <string name="action_open_app">Buka %1$s</string>
+    <string name="action_get_app">Dapatkan %1$s</string>
+    <string name="action_check_connection">Cek koneksi</string>
+    <string name="action_fix_address">Perbaiki alamat</string>
+    <string name="action_open_battery">Buka setelan baterai</string>
+    <string name="action_open_settings">Buka setelan</string>
+    <string name="action_test_connection">Uji koneksi</string>
+    <string name="testing">Menguji…</string>
+    <string name="notification_access">Akses notifikasi</string>
+    <string name="usage_access">Akses penggunaan</string>
+    <string name="battery_optimisation">Pengoptimalan baterai</string>
+    <string name="allow_notification_access">Izinkan akses notifikasi</string>
+    <string name="allow_usage_access">Izinkan akses penggunaan</string>
+    <string name="allowed">Diizinkan</string>
+    <string name="done">Selesai</string>
+    <string name="not_set">Belum diatur</string>
+    <string name="not_measured">Belum diukur</string>
+    <string name="nothing_read_yet">Belum ada yang dibaca</string>
+    <string name="list_separator">", "</string>
+    <string name="supported_names">%1$s.</string>
+    <string name="ago_never">tidak pernah</string>
+    <string name="ago_just_now">baru saja</string>
+    <string name="ago_yesterday">kemarin</string>
+    <plurals name="ago_minutes">
+        <item quantity="other">%1$d mnt lalu</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="other">%1$d jam lalu</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="other">%1$d hari lalu</item>
+    </plurals>
+    <string name="for_a_moment">selama beberapa saat</string>
+    <string name="for_yet">sejauh ini</string>
+    <string name="since_yesterday">sejak kemarin</string>
+    <plurals name="for_minutes">
+        <item quantity="other">selama %1$d mnt</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="other">selama %1$d jam</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="other">selama %1$d hari</item>
+    </plurals>
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+    <plurals name="supported_sample">
+        <item quantity="other">%1$s dan %2$d lainnya</item>
+    </plurals>
+    <string name="state_running">Berjalan</string>
+    <string name="state_stopped">Berhenti</string>
+    <string name="state_stopped_last_opened">Berhenti · terakhir dibuka %1$s</string>
+    <string name="state_unknown">Tidak terlihat</string>
+    <string name="state_disabled">Tidak dipantau</string>
+    <string name="state_not_installed">Tidak terpasang</string>
+    <string name="row_running_data">Berjalan · %1$s dalam 24 jam</string>
+    <string name="server_line_none">Tanpa server · semuanya tetap di ponsel ini</string>
+    <string name="server_line_needs_https">Tidak mengirim ke %1$s · perlu https://</string>
+    <string name="server_line_waiting">Dipasangkan dengan %1$s · menunggu laporan pertama</string>
+    <string name="server_line_ok">Laporan terakhir %1$s · dikirim setiap 15 mnt</string>
+    <string name="server_line_late">Laporan terakhir %1$s · laporan terlambat</string>
+    <string name="server_line_failing_never">Belum ada laporan yang sampai ke %1$s</string>
+    <string name="server_line_failing">Tidak ada laporan yang sampai ke %1$s %2$s</string>
+    <string name="verdict_one_running">Aplikasi Anda berjalan</string>
+    <plurals name="verdict_all_running">
+        <item quantity="other">Semua %1$d aplikasi berjalan</item>
+    </plurals>
+    <string name="verdict_none_title">Tidak ada aplikasi yang dipantau</string>
+    <string name="verdict_none_sub">Semua aplikasi yang terpasang dimatikan. Aktifkan lagi di Setelan, Aplikasi yang dipantau.</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="other">%1$d dari %2$d aplikasi berhenti</item>
+    </plurals>
+    <string name="verdict_stopped_sub">Membuka aplikasi yang berhenti biasanya akan menjalankannya lagi.</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="other">%1$d dari %2$d aplikasi berjalan</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="other">CashPilot tidak bisa melihat %1$d lainnya sampai aksesnya aktif lagi.</item>
+    </plurals>
+    <string name="verdict_server_sub">Namun server Anda tidak menerima laporan dari ponsel ini.</string>
+    <string name="verdict_late_sub">Namun tidak ada laporan yang terkirim %1$s.</string>
+    <string name="verdict_ok_sub">Tidak ada yang perlu Anda lakukan saat ini.</string>
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s berhenti</string>
+    <string name="task_stopped_body">Membukanya biasanya akan menjalankannya lagi.</string>
+    <string name="task_failing_title">Laporan tidak sampai</string>
+    <string name="task_failing_body_never">Belum ada laporan yang sampai ke %1$s. Cek koneksi akan menunjukkan alasannya.</string>
+    <string name="task_failing_body">Tidak ada yang sampai ke %1$s %2$s. Cek koneksi akan menunjukkan alasannya.</string>
+    <string name="task_late_title">Laporan terlambat</string>
+    <string name="task_late_body">Tidak ada laporan yang terkirim %1$s. Android menahan pekerjaan di latar belakang, terlebih jika pengoptimalan baterai aktif atau tidak ada jaringan.</string>
+    <string name="task_https_title">Laporan tidak dikirim</string>
+    <string name="task_https_body">%1$s ada di internet publik, jadi CashPilot hanya mengirim kunci lewat https://.</string>
+    <string name="task_notif_title">Akses notifikasi nonaktif</string>
+    <string name="task_notif_body">CashPilot tidak bisa mengetahui aplikasi mana yang berjalan sampai akses ini aktif lagi.</string>
+    <string name="task_usage_title">Akses penggunaan nonaktif</string>
+    <string name="task_usage_body">Waktu terakhir terlihat dan penggunaan data tidak tersedia sampai akses ini aktif lagi.</string>
+    <string name="task_battery_title">Laporan mungkin terlambat</string>
+    <string name="task_battery_body">Pengoptimalan baterai aktif untuk CashPilot, jadi Android bisa menahan laporan saat layar mati.</string>
+    <plurals name="earnings_label">
+        <item quantity="other">Laporan server Anda, %1$d hari terakhir</item>
+    </plurals>
+    <string name="earnings_needs_server">Tambahkan server untuk melihat angka</string>
+    <string name="earnings_from">Data dari %1$s</string>
+    <string name="shared_footnote">* Berjalan di lebih dari satu perangkat Anda. Penyedia melaporkan satu saldo untuk akun ini, jadi angka ini bukan dari ponsel ini saja.</string>
+    <string name="no_reading_note">Tanpa data berarti server Anda belum mengirim angka untuk penyedia itu. Itu bukan US$0.</string>
+    <string name="app_earnings_needs_server">Perlu server</string>
+    <string name="app_earnings_shared">%1$s *</string>
+    <string name="settings_server_none">Semuanya tetap di ponsel ini · tambahkan server untuk melihat angka</string>
+    <string name="settings_server_needs_https">Tidak mengirim · alamat ini perlu https://</string>
+    <string name="settings_server_failing_never">Tidak sampai · belum ada laporan</string>
+    <string name="settings_server_failing">Tidak sampai · laporan terakhir %1$s</string>
+    <string name="settings_server_late">Laporan terlambat · laporan terakhir %1$s</string>
+    <string name="settings_server_waiting">Dipasangkan · menunggu laporan pertama</string>
+    <string name="settings_server_ok">Laporan setiap 15 mnt · laporan terakhir %1$s</string>
+    <string name="pair_testing_body">Mengirim satu laporan ke %1$s.</string>
+    <string name="pair_ok_title">Terhubung</string>
+    <string name="pair_ok_body">Server Anda menjawab dan menerima kunci. Ponsel ini muncul di Armada sebagai %1$s.</string>
+    <string name="pair_key_refused_title">Server menolak kunci API ini</string>
+    <string name="pair_key_refused_body">Alamatnya benar: server menjawab. Salin lagi kuncinya dari Armada → Tampilkan kunci API.</string>
+    <string name="pair_unreachable_title">Tidak ada jawaban dari %1$s</string>
+    <string name="pair_unreachable_body">Periksa alamatnya, dan pastikan ponsel ini bisa menjangkaunya: di jaringan yang sama, atau lewat VPN Anda.</string>
+    <string name="pair_url_refused_title">Alamat ini perlu https://</string>
+    <string name="pair_url_refused_body">CashPilot mengirim kunci lewat http:// hanya ke jaringan Anda sendiri: 192.168.x.x, 10.x.x.x, nama .local atau .lan, atau Tailscale.</string>
+    <string name="pair_rejected_title">Server menjawab dengan error</string>
+    <string name="pair_rejected_body">Server bisa dijangkau tetapi tidak menerima laporan. Pastikan server menjalankan rilis CashPilot yang baru.</string>
+    <string name="pair_not_cashpilot_title">%1$s menjawab, tetapi bukan sebagai CashPilot</string>
+    <string name="pair_not_cashpilot_body">Ada hal lain yang menjawab di alamat ini, misalnya halaman login atau aplikasi lain. Gunakan alamat yang Anda pakai untuk membuka dasbor CashPilot.</string>
+    <string name="pair_save_failed_title">Tidak dapat menyimpan detail</string>
+    <string name="pair_save_failed_body">Android tidak menyimpan alamat dan kunci, jadi tidak ada yang dikirim. Coba lagi.</string>
+    <plurals name="home_tasks_heading">
+        <item quantity="other">%1$d hal perlu perhatian Anda</item>
+    </plurals>
+    <string name="home_all_switched_off">Semua aplikasi yang terpasang dimatikan di Setelan.</string>
+    <plurals name="home_other_supported">
+        <item quantity="other">%1$d aplikasi lain yang didukung</item>
+    </plurals>
+    <string name="detail_stopped">Berhenti. Terakhir dibuka %1$s.</string>
+    <string name="detail_unknown">CashPilot tidak bisa melihat apakah aplikasi ini berjalan.</string>
+    <string name="detail_hint">Aplikasi seperti ini sering berhenti saat Android menghapusnya dari memori. Membuka aplikasi biasanya akan menjalankannya lagi.</string>
+    <plurals name="detail_server_reports">
+        <item quantity="other">Laporan server, %1$d hari terakhir</item>
+    </plurals>
+    <string name="detail_data_moved">Data yang berpindah, 24 jam terakhir</string>
+    <string name="detail_last_opened">Terakhir dibuka</string>
+    <string name="detail_watched">Dipantau oleh CashPilot</string>
+    <string name="blind_title">CashPilot belum bisa melihat aplikasi Anda</string>
+    <plurals name="blind_body">
+        <item quantity="other">%1$d aplikasi yang Anda gunakan sudah terpasang, tetapi Android tidak akan menunjukkan kepada CashPilot apakah aplikasi itu berjalan sampai Anda mengizinkan dua hal. Masing-masing menjelaskan dulu apa yang dibacanya.</item>
+    </plurals>
+    <string name="no_apps_title">Belum ada aplikasi yang didukung di ponsel ini</string>
+    <string name="no_apps_body">CashPilot memantau aplikasi penghasilan pasif yang sudah Anda gunakan, seperti EarnApp atau Grass, dan memberi tahu Anda saat salah satunya berhenti. Setelah terpasang, aplikasi akan muncul di sini dengan sendirinya.</string>
+    <string name="no_apps_standalone_title">Berfungsi tanpa server</string>
+    <string name="no_apps_standalone_body">Tanpa server, CashPilot menunjukkan aplikasi mana yang berjalan, mana yang berhenti, dan membukakannya untuk Anda. Server CashPilot menambahkan angka penghasilan dan mencantumkan ponsel ini bersama mesin Anda yang lain.</string>
+    <string name="demo_start">Tampilkan demo dengan data contoh</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="other">Lihat %1$d aplikasi yang didukung</item>
+    </plurals>
+    <string name="supported_title">Aplikasi yang didukung</string>
+    <string name="supported_intro_all">Aplikasi yang dapat dipantau CashPilot. Berapa yang dibayar tiap aplikasi bergantung pada penyedia, koneksi, dan wilayah Anda.</string>
+    <string name="supported_intro_missing">CashPilot dapat memantau aplikasi ini jika Anda memasangnya. Berapa yang dibayar tiap aplikasi bergantung pada penyedia, koneksi, dan wilayah Anda.</string>
+    <string name="supported_referral_note">Tautan bertanda Referal menyertakan kode referal CashPilot, yang mendukung pengembangan CashPilot. Tautan lainnya mengarah ke toko aplikasi.</string>
+    <string name="supported_installed">Terpasang</string>
+    <string name="supported_referral">Referal · halaman pendaftaran penyedia</string>
+    <string name="supported_store">Halaman toko aplikasi</string>
+    <string name="demo_banner">Demo · data contoh, tidak ada yang nyata di sini</string>
+    <string name="onboard_step">Langkah %1$d dari %2$d</string>
+    <string name="welcome_title">Ketahui saat aplikasi penghasil berhenti</string>
+    <string name="welcome_lead">CashPilot memeriksa aplikasi penghasilan pasif di ponsel ini dan menunjukkan mana yang berhenti, serta cara menjalankannya lagi.</string>
+    <string name="welcome_start">Mulai</string>
+    <string name="welcome_fact_running_title">Aplikasi mana yang berjalan</string>
+    <string name="welcome_fact_running_body">%1$s, diperiksa setiap kali Anda membuka CashPilot.</string>
+    <string name="welcome_fact_stops_title">Apa yang dilakukan saat salah satunya berhenti</string>
+    <string name="welcome_fact_stops_body">Satu ketukan membuka aplikasinya agar Anda bisa menjalankannya lagi.</string>
+    <string name="welcome_fact_server_title">Angka dari server Anda, jika ada</string>
+    <string name="welcome_fact_server_body">Server CashPilot melaporkan apa yang ditunjukkan akun tiap aplikasi. Opsional; laporan dikirim setiap 15 menit.</string>
+    <string name="welcome_fact_private_title">Tidak ada yang keluar dari ponsel ini</string>
+    <string name="welcome_fact_private_body">Kecuali ke server Anda sendiri, jika Anda menambahkannya. Tanpa iklan, tanpa pelacakan.</string>
+    <string name="permissions_title">Izinkan CashPilot melihat aplikasi Anda</string>
+    <string name="permissions_lead">Android menyembunyikan status aplikasi lain. Dua sakelar di setelan sistem mengatasinya; Anda akan langsung kembali ke sini.</string>
+    <string name="permissions_without">Tanpa keduanya, CashPilot tidak bisa membedakan aplikasi yang berjalan dan yang berhenti. Anda dapat mengizinkannya nanti dari Setelan.</string>
+    <string name="permissions_continue">Lanjutkan</string>
+    <string name="permissions_continue_without">Lanjutkan tanpa izin</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="other">Aplikasi ini menampilkan notifikasi selama berjalan. CashPilot memeriksa apakah notifikasi itu ada, hanya untuk %1$d aplikasi yang didukung.</item>
+    </plurals>
+    <string name="permissions_notif_not_read">Tidak pernah membaca teks notifikasi. Anda akan melihat persis apa yang dibacanya sebelum Android meminta izin.</string>
+    <string name="permissions_usage_why">Menunjukkan kapan tiap aplikasi yang didukung terakhir berjalan dan berapa banyak data yang dipindahkannya dalam 24 jam terakhir, yang menunjukkan aplikasi itu bekerja.</string>
+    <string name="permissions_usage_not_read">Tidak pernah melihat aplikasi atau situs web lain. Anda akan melihat dulu persis apa yang dibacanya.</string>
+    <string name="permissions_battery_why">CashPilot melapor setiap 15 menit. Jika pengoptimalan baterai aktif, Android bisa menahan laporan itu saat layar mati.</string>
+    <string name="permissions_battery_not_read">Opsional. Membuka daftar baterai Android: pilih Semua aplikasi, lalu CashPilot, lalu Jangan optimalkan.</string>
+    <string name="server_address">Alamat server</string>
+    <string name="server_address_refused">Alamat ini ada di internet publik, jadi perlu https://. CashPilot tidak pernah mengirim kunci lewat http:// biasa ke sana.</string>
+    <string name="server_address_cleartext">http:// biasa di jaringan Anda sendiri: kunci dan daftar aplikasi dikirim tanpa enkripsi di jaringan itu.</string>
+    <string name="api_key">Kunci API</string>
+    <string name="api_key_where">Di server Anda: Armada → Tampilkan kunci API. Hanya disimpan di ponsel ini.</string>
+    <string name="server_address_hint">Gunakan https://. http:// biasa hanya berfungsi untuk alamat di jaringan Anda sendiri, seperti 192.168.x.x atau nama .local atau Tailscale.</string>
+    <string name="server_title">Hubungkan server Anda</string>
+    <string name="server_lead">Opsional. Tanpa server, Anda tetap melihat aplikasi mana yang berjalan dan mana yang berhenti. Server menambahkan angka yang ditunjukkan akun di penyedianya, dan mencantumkan ponsel ini di armada Anda.</string>
+    <string name="server_finish">Selesai</string>
+    <string name="server_skip">Gunakan tanpa server</string>
+    <string name="disclose_title_notifications">Sebelum Anda mengaktifkan akses notifikasi</string>
+    <string name="disclose_title_usage">Sebelum Anda mengaktifkan akses penggunaan</string>
+    <string name="disclose_lead">Selanjutnya Android akan membuka setelannya. Inilah yang dilakukan CashPilot dengan akses itu.</string>
+    <string name="disclose_reads">Yang dibaca CashPilot</string>
+    <string name="disclose_never">Yang tidak pernah dibacanya</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="other">Hanya apakah salah satu dari %1$d aplikasi di bawah sedang menampilkan notifikasi berkelanjutan saat ini. Dengan notifikasi itulah aplikasi tersebut menunjukkan bahwa ia berjalan.</item>
+    </plurals>
+    <string name="disclose_notif_never">Teks notifikasi apa pun, dan apa pun dari aplikasi lain. Hanya dua hal yang dikirim, dan hanya ke server Anda sendiri jika Anda menambahkannya: apakah tiap aplikasi ini menampilkan notifikasi tersebut, dan apakah aplikasi itu berjalan.</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="other">Hanya untuk %1$d aplikasi di bawah: kapan masing-masing terakhir digunakan, dan berapa banyak data yang dikirim dan diterimanya dalam 24 jam terakhir.</item>
+    </plurals>
+    <string name="disclose_usage_never">Aplikasi lain yang Anda gunakan, situs web yang Anda kunjungi, atau apa yang dilakukan aplikasi mana pun. Hasilnya tetap di ponsel ini, kecuali Anda menambahkan server sendiri.</string>
+    <string name="disclose_continue">Lanjutkan ke setelan Android</string>
+    <string name="disclose_not_now">Nanti saja</string>
+    <string name="settings_section_server">Server</string>
+    <string name="settings_no_server">Tanpa server</string>
+    <string name="settings_key_stored">%1$s · hanya disimpan di ponsel ini</string>
+    <string name="settings_test_hint">Mengirim laporan sekarang dan menunjukkan jawaban server.</string>
+    <string name="settings_section_phone">Ponsel ini</string>
+    <string name="settings_notif_off">Nonaktif · tidak bisa melihat aplikasi yang berjalan</string>
+    <string name="settings_usage_off">Nonaktif · tanpa waktu terakhir terlihat</string>
+    <string name="settings_battery_off">Nonaktif untuk CashPilot</string>
+    <string name="settings_battery_on">Aktif · laporan mungkin terlambat</string>
+    <string name="language">Bahasa</string>
+    <string name="language_system">Default sistem</string>
+    <string name="language_system_body">Mengikuti bahasa ponsel Anda</string>
+    <string name="settings_section_apps">Aplikasi yang dipantau</string>
+    <plurals name="settings_all_supported">
+        <item quantity="other">Semua %1$d aplikasi yang didukung</item>
+    </plurals>
+    <string name="settings_installed_count">Terpasang: %1$d · Tidak terpasang: %2$d</string>
+    <string name="settings_section_about">Tentang</string>
+    <string name="settings_about_app">CashPilot untuk Android %1$s</string>
+    <string name="settings_about_source">Kode sumber dan lisensi (GPL-3.0)</string>
+    <string name="settings_about_server">Server CashPilot</string>
+    <string name="settings_about_server_body">Dasbor self-hosted yang menerima laporan dari aplikasi ini</string>
+    <string name="settings_about_sponsor">Sponsori proyek ini</string>
+    <string name="settings_demo">Mode demo</string>
+    <string name="settings_demo_body">Menampilkan layar dengan data contoh</string>
+</resources>

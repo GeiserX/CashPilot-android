@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">การตั้งค่า</string>
+    <string name="back">กลับ</string>
+    <string name="details">รายละเอียด</string>
+    <string name="action_open">เปิด</string>
+    <string name="action_get">ดาวน์โหลด</string>
+    <string name="action_exit">ออก</string>
+    <string name="action_allow">อนุญาต</string>
+    <string name="action_turn_on">เปิด</string>
+    <string name="action_open_app">เปิด %1$s</string>
+    <string name="action_get_app">ดาวน์โหลด %1$s</string>
+    <string name="action_check_connection">ตรวจสอบการเชื่อมต่อ</string>
+    <string name="action_fix_address">แก้ไขที่อยู่</string>
+    <string name="action_open_battery">เปิดการตั้งค่าแบตเตอรี่</string>
+    <string name="action_open_settings">เปิดการตั้งค่า</string>
+    <string name="action_test_connection">ทดสอบการเชื่อมต่อ</string>
+    <string name="testing">กำลังทดสอบ…</string>
+    <string name="notification_access">การเข้าถึงการแจ้งเตือน</string>
+    <string name="usage_access">การเข้าถึงข้อมูลการใช้งาน</string>
+    <string name="battery_optimisation">การเพิ่มประสิทธิภาพแบตเตอรี่</string>
+    <string name="allow_notification_access">อนุญาตการเข้าถึงการแจ้งเตือน</string>
+    <string name="allow_usage_access">อนุญาตการเข้าถึงข้อมูลการใช้งาน</string>
+    <string name="allowed">อนุญาตแล้ว</string>
+    <string name="done">เสร็จสิ้น</string>
+    <string name="not_set">ยังไม่ได้ตั้งค่า</string>
+    <string name="not_measured">ยังไม่ได้วัด</string>
+    <string name="nothing_read_yet">ยังไม่มีข้อมูลที่อ่านได้</string>
+    <string name="list_separator">", "</string>
+    <string name="supported_names">%1$s</string>
+    <string name="ago_never">ไม่เคย</string>
+    <string name="ago_just_now">เมื่อสักครู่</string>
+    <string name="ago_yesterday">เมื่อวาน</string>
+    <plurals name="ago_minutes">
+        <item quantity="other">%1$d นาทีที่แล้ว</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="other">%1$d ชม. ที่แล้ว</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="other">%1$d วันที่แล้ว</item>
+    </plurals>
+    <string name="for_a_moment">มาสักครู่แล้ว</string>
+    <string name="for_yet">จนถึงตอนนี้</string>
+    <string name="since_yesterday">ตั้งแต่เมื่อวาน</string>
+    <plurals name="for_minutes">
+        <item quantity="other">มา %1$d นาทีแล้ว</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="other">มา %1$d ชม. แล้ว</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="other">มา %1$d วันแล้ว</item>
+    </plurals>
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+    <plurals name="supported_sample">
+        <item quantity="other">%1$s และอีก %2$d แอป</item>
+    </plurals>
+    <string name="state_running">กำลังทำงาน</string>
+    <string name="state_stopped">หยุดแล้ว</string>
+    <string name="state_stopped_last_opened">หยุดแล้ว · เปิดล่าสุด %1$s</string>
+    <string name="state_unknown">มองไม่เห็น</string>
+    <string name="state_disabled">ไม่ได้ติดตาม</string>
+    <string name="state_not_installed">ไม่ได้ติดตั้ง</string>
+    <string name="row_running_data">กำลังทำงาน · %1$s ใน 24 ชม.</string>
+    <string name="server_line_none">ไม่มีเซิร์ฟเวอร์ · ทุกอย่างอยู่ในโทรศัพท์เครื่องนี้</string>
+    <string name="server_line_needs_https">ไม่ได้ส่งไปยัง %1$s · ต้องใช้ https://</string>
+    <string name="server_line_waiting">จับคู่กับ %1$s แล้ว · กำลังรอรายงานแรก</string>
+    <string name="server_line_ok">รายงานล่าสุด %1$s · ส่งทุก 15 นาที</string>
+    <string name="server_line_late">รายงานล่าสุด %1$s · รายงานล่าช้า</string>
+    <string name="server_line_failing_never">ยังไม่มีรายงานไปถึง %1$s</string>
+    <string name="server_line_failing">ไม่มีรายงานไปถึง %1$s %2$s</string>
+    <string name="verdict_one_running">แอปของคุณกำลังทำงาน</string>
+    <plurals name="verdict_all_running">
+        <item quantity="other">แอปทั้ง %1$d แอปกำลังทำงาน</item>
+    </plurals>
+    <string name="verdict_none_title">ไม่มีแอปที่ติดตาม</string>
+    <string name="verdict_none_sub">แอปที่ติดตั้งไว้ถูกปิดทั้งหมด เปิดกลับได้ที่การตั้งค่า แอปที่ติดตาม</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="other">%1$d จาก %2$d แอปหยุดทำงาน</item>
+    </plurals>
+    <string name="verdict_stopped_sub">การเปิดแอปที่หยุดอยู่มักจะทำให้แอปเริ่มทำงานอีกครั้ง</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="other">%1$d จาก %2$d แอปกำลังทำงาน</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="other">CashPilot มองไม่เห็นอีก %1$d แอปจนกว่าจะเปิดสิทธิ์เข้าถึงอีกครั้ง</item>
+    </plurals>
+    <string name="verdict_server_sub">แต่เซิร์ฟเวอร์ไม่ได้รับรายงานจากโทรศัพท์เครื่องนี้</string>
+    <string name="verdict_late_sub">แต่ไม่มีรายงานส่งออกไป %1$s</string>
+    <string name="verdict_ok_sub">ตอนนี้ไม่มีอะไรต้องจัดการ</string>
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s หยุดทำงาน</string>
+    <string name="task_stopped_body">การเปิดแอปมักจะทำให้แอปเริ่มทำงานอีกครั้ง</string>
+    <string name="task_failing_title">รายงานส่งไม่ถึง</string>
+    <string name="task_failing_body_never">ยังไม่มีรายงานไปถึง %1$s แตะตรวจสอบการเชื่อมต่อเพื่อดูสาเหตุ</string>
+    <string name="task_failing_body">ไม่มีอะไรไปถึง %1$s %2$s แตะตรวจสอบการเชื่อมต่อเพื่อดูสาเหตุ</string>
+    <string name="task_late_title">รายงานล่าช้า</string>
+    <string name="task_late_body">ไม่มีรายงานส่งออกไป %1$s Android จะชะลองานเบื้องหลัง โดยเฉพาะเมื่อเปิดการเพิ่มประสิทธิภาพแบตเตอรี่หรือไม่มีเครือข่าย</string>
+    <string name="task_https_title">ไม่ได้ส่งรายงาน</string>
+    <string name="task_https_body">%1$s อยู่บนอินเทอร์เน็ตสาธารณะ CashPilot จึงส่งคีย์ผ่าน https:// เท่านั้น</string>
+    <string name="task_notif_title">การเข้าถึงการแจ้งเตือนปิดอยู่</string>
+    <string name="task_notif_body">CashPilot บอกไม่ได้ว่าแอปใดกำลังทำงานจนกว่าจะเปิดสิทธิ์นี้อีกครั้ง</string>
+    <string name="task_usage_title">การเข้าถึงข้อมูลการใช้งานปิดอยู่</string>
+    <string name="task_usage_body">ไม่มีเวลาที่เห็นล่าสุดหรือปริมาณข้อมูลที่ใช้จนกว่าจะเปิดสิทธิ์นี้อีกครั้ง</string>
+    <string name="task_battery_title">รายงานอาจมาถึงช้า</string>
+    <string name="task_battery_body">การเพิ่มประสิทธิภาพแบตเตอรี่เปิดอยู่สำหรับ CashPilot ดังนั้น Android อาจชะลอรายงานขณะที่หน้าจอปิด</string>
+    <plurals name="earnings_label">
+        <item quantity="other">รายงานจากเซิร์ฟเวอร์ %1$d วันที่ผ่านมา</item>
+    </plurals>
+    <string name="earnings_needs_server">เพิ่มเซิร์ฟเวอร์เพื่อดูตัวเลข</string>
+    <string name="earnings_from">ข้อมูลเมื่อ %1$s</string>
+    <string name="shared_footnote">* ทำงานบนอุปกรณ์มากกว่าหนึ่งเครื่อง ผู้ให้บริการรายงานยอดคงเหลือเดียวสำหรับทั้งบัญชี ตัวเลขนี้จึงไม่ใช่ของโทรศัพท์เครื่องนี้เพียงเครื่องเดียว</string>
+    <string name="no_reading_note">ไม่มีค่าหมายความว่าเซิร์ฟเวอร์ยังไม่ได้ส่งตัวเลขของผู้ให้บริการรายนั้น ไม่ได้หมายถึง 0 ดอลลาร์</string>
+    <string name="app_earnings_needs_server">ต้องมีเซิร์ฟเวอร์</string>
+    <string name="app_earnings_shared">%1$s *</string>
+    <string name="settings_server_none">ทุกอย่างอยู่ในโทรศัพท์เครื่องนี้ · เพิ่มเซิร์ฟเวอร์เพื่อดูตัวเลข</string>
+    <string name="settings_server_needs_https">ไม่ได้ส่ง · ที่อยู่นี้ต้องใช้ https://</string>
+    <string name="settings_server_failing_never">ส่งไม่ถึง · ยังไม่มีรายงาน</string>
+    <string name="settings_server_failing">ส่งไม่ถึง · รายงานล่าสุด %1$s</string>
+    <string name="settings_server_late">รายงานล่าช้า · รายงานล่าสุด %1$s</string>
+    <string name="settings_server_waiting">จับคู่แล้ว · กำลังรอรายงานแรก</string>
+    <string name="settings_server_ok">รายงานทุก 15 นาที · รายงานล่าสุด %1$s</string>
+    <string name="pair_testing_body">กำลังส่งรายงานหนึ่งรายการไปยัง %1$s</string>
+    <string name="pair_ok_title">เชื่อมต่อแล้ว</string>
+    <string name="pair_ok_body">เซิร์ฟเวอร์ตอบกลับและยอมรับคีย์แล้ว โทรศัพท์เครื่องนี้จะแสดงในกลุ่มเครื่องเป็น %1$s</string>
+    <string name="pair_key_refused_title">เซิร์ฟเวอร์ปฏิเสธคีย์ API นี้</string>
+    <string name="pair_key_refused_body">ที่อยู่ถูกต้อง เพราะเซิร์ฟเวอร์ตอบกลับแล้ว คัดลอกคีย์อีกครั้งจาก กลุ่มเครื่อง → แสดงคีย์ API</string>
+    <string name="pair_unreachable_title">ไม่มีการตอบกลับจาก %1$s</string>
+    <string name="pair_unreachable_body">ตรวจสอบที่อยู่ และดูว่าโทรศัพท์เครื่องนี้เข้าถึงได้ โดยอยู่ในเครือข่ายเดียวกันหรือผ่าน VPN</string>
+    <string name="pair_url_refused_title">ที่อยู่นี้ต้องใช้ https://</string>
+    <string name="pair_url_refused_body">CashPilot ส่งคีย์ผ่าน http:// เฉพาะในเครือข่ายของคุณเองเท่านั้น ได้แก่ 192.168.x.x, 10.x.x.x, ชื่อ .local หรือ .lan หรือ Tailscale</string>
+    <string name="pair_rejected_title">เซิร์ฟเวอร์ตอบกลับพร้อมข้อผิดพลาด</string>
+    <string name="pair_rejected_body">เข้าถึงเซิร์ฟเวอร์ได้แต่เซิร์ฟเวอร์ไม่รับรายงาน ตรวจสอบว่าเซิร์ฟเวอร์ใช้ CashPilot รุ่นล่าสุด</string>
+    <string name="pair_not_cashpilot_title">%1$s ตอบกลับ แต่ไม่ใช่ CashPilot</string>
+    <string name="pair_not_cashpilot_body">มีบางอย่างอื่นตอบกลับที่ที่อยู่นี้ เช่น หน้าเข้าสู่ระบบหรือแอปอื่น ใช้ที่อยู่เดียวกับที่ใช้เปิดแดชบอร์ด CashPilot</string>
+    <string name="pair_save_failed_title">บันทึกรายละเอียดไม่ได้</string>
+    <string name="pair_save_failed_body">Android ไม่ได้บันทึกที่อยู่และคีย์ จึงยังไม่มีการส่งข้อมูล ลองอีกครั้ง</string>
+    <plurals name="home_tasks_heading">
+        <item quantity="other">มี %1$d เรื่องที่ต้องจัดการ</item>
+    </plurals>
+    <string name="home_all_switched_off">แอปที่ติดตั้งไว้ถูกปิดทั้งหมดในการตั้งค่า</string>
+    <plurals name="home_other_supported">
+        <item quantity="other">แอปอื่นที่รองรับ %1$d แอป</item>
+    </plurals>
+    <string name="detail_stopped">หยุดแล้ว เปิดล่าสุด %1$s</string>
+    <string name="detail_unknown">CashPilot มองไม่เห็นว่าแอปนี้ทำงานอยู่หรือไม่</string>
+    <string name="detail_hint">แอปเหล่านี้มักหยุดเมื่อ Android ล้างแอปออกจากหน่วยความจำ การเปิดแอปมักจะทำให้แอปเริ่มทำงานอีกครั้ง</string>
+    <plurals name="detail_server_reports">
+        <item quantity="other">รายงานจากเซิร์ฟเวอร์ %1$d วันที่ผ่านมา</item>
+    </plurals>
+    <string name="detail_data_moved">ข้อมูลที่รับส่ง 24 ชม. ที่ผ่านมา</string>
+    <string name="detail_last_opened">เปิดล่าสุด</string>
+    <string name="detail_watched">ติดตามโดย CashPilot</string>
+    <string name="blind_title">CashPilot ยังมองไม่เห็นแอปของคุณ</string>
+    <plurals name="blind_body">
+        <item quantity="other">มีแอปที่ใช้อยู่ติดตั้งไว้ %1$d แอป แต่ Android จะไม่บอก CashPilot ว่าแอปทำงานอยู่หรือไม่จนกว่าจะอนุญาตสองอย่าง แต่ละอย่างจะอธิบายก่อนว่าอ่านอะไรบ้าง</item>
+    </plurals>
+    <string name="no_apps_title">ยังไม่มีแอปที่รองรับในโทรศัพท์เครื่องนี้</string>
+    <string name="no_apps_body">CashPilot ติดตามแอปรายได้แบบพาสซีฟที่ใช้อยู่แล้ว เช่น EarnApp หรือ Grass และแจ้งเมื่อแอปใดหยุดทำงาน เมื่อติดตั้งแอปแล้ว แอปจะปรากฏที่นี่เอง</string>
+    <string name="no_apps_standalone_title">ใช้ได้โดยไม่ต้องมีเซิร์ฟเวอร์</string>
+    <string name="no_apps_standalone_body">เมื่อใช้งานเดี่ยว CashPilot จะแสดงว่าแอปใดทำงาน แอปใดหยุดแล้ว และเปิดแอปให้ได้ทันที เซิร์ฟเวอร์ CashPilot จะเพิ่มตัวเลขรายได้และแสดงโทรศัพท์เครื่องนี้รวมกับเครื่องอื่นๆ</string>
+    <string name="demo_start">แสดงเดโมด้วยข้อมูลตัวอย่าง</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="other">ดูแอปที่รองรับ %1$d แอป</item>
+    </plurals>
+    <string name="supported_title">แอปที่รองรับ</string>
+    <string name="supported_intro_all">แอปที่ CashPilot ติดตามได้ จำนวนเงินที่แต่ละแอปจ่ายขึ้นอยู่กับผู้ให้บริการ การเชื่อมต่อ และภูมิภาคของคุณ</string>
+    <string name="supported_intro_missing">CashPilot ติดตามแอปเหล่านี้ได้หากติดตั้งไว้ จำนวนเงินที่แต่ละแอปจ่ายขึ้นอยู่กับผู้ให้บริการ การเชื่อมต่อ และภูมิภาคของคุณ</string>
+    <string name="supported_referral_note">ลิงก์ที่มีป้าย การแนะนำ จะมีรหัสแนะนำของ CashPilot ซึ่งช่วยสนับสนุนการพัฒนา CashPilot ลิงก์อื่นจะไปที่ร้านค้าแอป</string>
+    <string name="supported_installed">ติดตั้งแล้ว</string>
+    <string name="supported_referral">การแนะนำ · หน้าสมัครของผู้ให้บริการ</string>
+    <string name="supported_store">หน้าในร้านค้าแอป</string>
+    <string name="demo_banner">เดโม · ข้อมูลตัวอย่าง ไม่มีข้อมูลจริงในหน้านี้</string>
+    <string name="onboard_step">ขั้นตอนที่ %1$d จาก %2$d</string>
+    <string name="welcome_title">รู้ทันทีเมื่อแอปหารายได้หยุดทำงาน</string>
+    <string name="welcome_lead">CashPilot ตรวจสอบแอปรายได้แบบพาสซีฟในโทรศัพท์เครื่องนี้ และแสดงว่าแอปใดหยุดทำงาน พร้อมวิธีเริ่มใหม่</string>
+    <string name="welcome_start">เริ่มต้นใช้งาน</string>
+    <string name="welcome_fact_running_title">แอปใดกำลังทำงาน</string>
+    <string name="welcome_fact_running_body">%1$s ตรวจสอบทุกครั้งที่เปิด CashPilot</string>
+    <string name="welcome_fact_stops_title">ต้องทำอย่างไรเมื่อแอปหยุด</string>
+    <string name="welcome_fact_stops_body">แตะครั้งเดียวเพื่อเปิดแอปและเริ่มทำงานอีกครั้ง</string>
+    <string name="welcome_fact_server_title">ตัวเลขจากเซิร์ฟเวอร์ ถ้ามี</string>
+    <string name="welcome_fact_server_body">เซิร์ฟเวอร์ CashPilot รายงานสิ่งที่บัญชีของแต่ละแอปแสดง ไม่บังคับ รายงานจะส่งทุก 15 นาที</string>
+    <string name="welcome_fact_private_title">ไม่มีข้อมูลใดออกจากโทรศัพท์เครื่องนี้</string>
+    <string name="welcome_fact_private_body">ยกเว้นไปยังเซิร์ฟเวอร์ของคุณเอง ถ้าเพิ่มไว้ ไม่มีโฆษณา ไม่มีการติดตาม</string>
+    <string name="permissions_title">ให้ CashPilot มองเห็นแอปของคุณ</string>
+    <string name="permissions_lead">Android ซ่อนสถานะของแอปอื่น สวิตช์สองตัวในการตั้งค่าระบบจะแก้ปัญหานี้ แล้วจะกลับมาที่นี่ทันที</string>
+    <string name="permissions_without">หากไม่มีทั้งสองอย่าง CashPilot จะแยกไม่ออกว่าแอปทำงานอยู่หรือหยุดแล้ว อนุญาตภายหลังได้ในการตั้งค่า</string>
+    <string name="permissions_continue">ดำเนินการต่อ</string>
+    <string name="permissions_continue_without">ข้ามไปก่อน</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="other">แอปเหล่านี้แสดงการแจ้งเตือนค้างไว้ขณะทำงาน CashPilot ตรวจสอบว่ามีการแจ้งเตือนนั้นหรือไม่ เฉพาะแอปที่รองรับ %1$d แอปเท่านั้น</item>
+    </plurals>
+    <string name="permissions_notif_not_read">ไม่อ่านข้อความในการแจ้งเตือน จะได้เห็นว่าอ่านอะไรบ้างก่อนที่ Android จะขอสิทธิ์</string>
+    <string name="permissions_usage_why">แสดงเวลาที่แอปที่รองรับแต่ละแอปทำงานล่าสุด และปริมาณข้อมูลที่รับส่งใน 24 ชั่วโมงที่ผ่านมา ซึ่งบอกว่าแอปกำลังทำงาน</string>
+    <string name="permissions_usage_not_read">ไม่ดูแอปหรือเว็บไซต์อื่น จะได้เห็นก่อนว่าอ่านอะไรบ้าง</string>
+    <string name="permissions_battery_why">CashPilot ส่งรายงานทุก 15 นาที หากเปิดการเพิ่มประสิทธิภาพแบตเตอรี่ Android อาจชะลอรายงานเหล่านั้นขณะที่หน้าจอปิด</string>
+    <string name="permissions_battery_not_read">ไม่บังคับ เปิดรายการแบตเตอรี่ของ Android แล้วเลือก แอปทั้งหมด จากนั้นเลือก CashPilot แล้วเลือก ไม่ต้องเพิ่มประสิทธิภาพ</string>
+    <string name="server_address">ที่อยู่เซิร์ฟเวอร์</string>
+    <string name="server_address_refused">ที่อยู่นี้อยู่บนอินเทอร์เน็ตสาธารณะ จึงต้องใช้ https:// CashPilot ไม่ส่งคีย์ผ่าน http:// ธรรมดาไปที่นั่น</string>
+    <string name="server_address_cleartext">http:// ธรรมดาในเครือข่ายของคุณเอง: คีย์และรายการแอปจะส่งผ่านเครือข่ายนั้นโดยไม่เข้ารหัส</string>
+    <string name="api_key">คีย์ API</string>
+    <string name="api_key_where">บนเซิร์ฟเวอร์: กลุ่มเครื่อง → แสดงคีย์ API เก็บไว้ในโทรศัพท์เครื่องนี้เท่านั้น</string>
+    <string name="server_address_hint">ใช้ https:// โดย http:// ธรรมดาใช้ได้เฉพาะที่อยู่ในเครือข่ายของคุณเอง เช่น 192.168.x.x หรือชื่อ .local หรือ Tailscale</string>
+    <string name="server_title">เชื่อมต่อเซิร์ฟเวอร์</string>
+    <string name="server_lead">ไม่บังคับ แม้ไม่มีเซิร์ฟเวอร์ก็ยังเห็นว่าแอปใดทำงานและแอปใดหยุดแล้ว เซิร์ฟเวอร์จะเพิ่มตัวเลขที่บัญชีของผู้ให้บริการแสดง และแสดงโทรศัพท์เครื่องนี้ในกลุ่มเครื่อง</string>
+    <string name="server_finish">เสร็จสิ้น</string>
+    <string name="server_skip">ใช้โดยไม่มีเซิร์ฟเวอร์</string>
+    <string name="disclose_title_notifications">ก่อนเปิดการเข้าถึงการแจ้งเตือน</string>
+    <string name="disclose_title_usage">ก่อนเปิดการเข้าถึงข้อมูลการใช้งาน</string>
+    <string name="disclose_lead">ถัดไป Android จะเปิดการตั้งค่าของระบบ นี่คือสิ่งที่ CashPilot ทำกับสิทธิ์นี้</string>
+    <string name="disclose_reads">สิ่งที่ CashPilot อ่าน</string>
+    <string name="disclose_never">สิ่งที่ไม่อ่านเลย</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="other">อ่านเพียงว่าแอปใดใน %1$d แอปด้านล่างกำลังแสดงการแจ้งเตือนต่อเนื่องอยู่ในขณะนี้หรือไม่ การแจ้งเตือนนั้นคือวิธีที่แอปเหล่านี้แสดงว่ากำลังทำงาน</item>
+    </plurals>
+    <string name="disclose_notif_never">ข้อความของการแจ้งเตือนใดๆ และข้อมูลใดๆ จากแอปอื่น มีเพียงสองอย่างที่ส่งออกไป และส่งไปยังเซิร์ฟเวอร์ของคุณเองเท่านั้นถ้าเพิ่มไว้ คือแต่ละแอปเหล่านี้แสดงการแจ้งเตือนนั้นอยู่หรือไม่ และกำลังทำงานอยู่หรือไม่</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="other">เฉพาะ %1$d แอปด้านล่าง: เวลาที่แต่ละแอปใช้งานล่าสุด และปริมาณข้อมูลที่ส่งและรับใน 24 ชั่วโมงที่ผ่านมา</item>
+    </plurals>
+    <string name="disclose_usage_never">แอปอื่นที่ใช้ เว็บไซต์ที่เข้าชม หรือสิ่งที่แอปใดๆ ทำ ผลลัพธ์จะอยู่ในโทรศัพท์เครื่องนี้ เว้นแต่จะเพิ่มเซิร์ฟเวอร์ของคุณเอง</string>
+    <string name="disclose_continue">ไปที่การตั้งค่า Android</string>
+    <string name="disclose_not_now">ไว้ทีหลัง</string>
+    <string name="settings_section_server">เซิร์ฟเวอร์</string>
+    <string name="settings_no_server">ไม่มีเซิร์ฟเวอร์</string>
+    <string name="settings_key_stored">%1$s · เก็บไว้ในโทรศัพท์เครื่องนี้เท่านั้น</string>
+    <string name="settings_test_hint">ส่งรายงานทันทีและแสดงสิ่งที่เซิร์ฟเวอร์ตอบกลับ</string>
+    <string name="settings_section_phone">โทรศัพท์เครื่องนี้</string>
+    <string name="settings_notif_off">ปิด · มองไม่เห็นแอปที่กำลังทำงาน</string>
+    <string name="settings_usage_off">ปิด · ไม่มีเวลาที่เห็นล่าสุด</string>
+    <string name="settings_battery_off">ปิดสำหรับ CashPilot</string>
+    <string name="settings_battery_on">เปิด · รายงานอาจมาถึงช้า</string>
+    <string name="language">ภาษา</string>
+    <string name="language_system">ค่าเริ่มต้นของระบบ</string>
+    <string name="language_system_body">ใช้ภาษาเดียวกับโทรศัพท์</string>
+    <string name="settings_section_apps">แอปที่ติดตาม</string>
+    <plurals name="settings_all_supported">
+        <item quantity="other">แอปที่รองรับทั้งหมด %1$d แอป</item>
+    </plurals>
+    <string name="settings_installed_count">ติดตั้งแล้ว: %1$d · ยังไม่ติดตั้ง: %2$d</string>
+    <string name="settings_section_about">เกี่ยวกับ</string>
+    <string name="settings_about_app">CashPilot สำหรับ Android %1$s</string>
+    <string name="settings_about_source">ซอร์สโค้ดและสัญญาอนุญาต (GPL-3.0)</string>
+    <string name="settings_about_server">เซิร์ฟเวอร์ CashPilot</string>
+    <string name="settings_about_server_body">แดชบอร์ดแบบโฮสต์เองที่แอปนี้ส่งรายงานไป</string>
+    <string name="settings_about_sponsor">สนับสนุนโปรเจกต์</string>
+    <string name="settings_demo">โหมดเดโม</string>
+    <string name="settings_demo_body">แสดงหน้าจอด้วยข้อมูลตัวอย่าง</string>
+</resources>

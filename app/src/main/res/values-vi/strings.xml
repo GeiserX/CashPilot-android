@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Cài đặt</string>
+    <string name="back">Quay lại</string>
+    <string name="details">Chi tiết</string>
+    <string name="action_open">Mở</string>
+    <string name="action_get">Tải</string>
+    <string name="action_exit">Thoát</string>
+    <string name="action_allow">Cho phép</string>
+    <string name="action_turn_on">Bật</string>
+    <string name="action_open_app">Mở %1$s</string>
+    <string name="action_get_app">Tải %1$s</string>
+    <string name="action_check_connection">Kiểm tra kết nối</string>
+    <string name="action_fix_address">Sửa địa chỉ</string>
+    <string name="action_open_battery">Mở cài đặt pin</string>
+    <string name="action_open_settings">Mở cài đặt</string>
+    <string name="action_test_connection">Thử kết nối</string>
+    <string name="testing">Đang thử…</string>
+    <string name="notification_access">Quyền truy cập thông báo</string>
+    <string name="usage_access">Quyền truy cập dữ liệu sử dụng</string>
+    <string name="battery_optimisation">Tối ưu hóa pin</string>
+    <string name="allow_notification_access">Cho phép truy cập thông báo</string>
+    <string name="allow_usage_access">Cho phép truy cập dữ liệu sử dụng</string>
+    <string name="allowed">Đã cho phép</string>
+    <string name="done">Xong</string>
+    <string name="not_set">Chưa đặt</string>
+    <string name="not_measured">Chưa đo</string>
+    <string name="nothing_read_yet">Chưa đọc được gì</string>
+    <string name="list_separator">", "</string>
+    <string name="supported_names">%1$s.</string>
+    <string name="ago_never">chưa bao giờ</string>
+    <string name="ago_just_now">vừa xong</string>
+    <string name="ago_yesterday">hôm qua</string>
+    <plurals name="ago_minutes">
+        <item quantity="other">%1$d phút trước</item>
+    </plurals>
+    <plurals name="ago_hours">
+        <item quantity="other">%1$d giờ trước</item>
+    </plurals>
+    <plurals name="ago_days">
+        <item quantity="other">%1$d ngày trước</item>
+    </plurals>
+    <string name="for_a_moment">trong ít phút qua</string>
+    <string name="for_yet">cho đến nay</string>
+    <string name="since_yesterday">từ hôm qua</string>
+    <plurals name="for_minutes">
+        <item quantity="other">trong %1$d phút qua</item>
+    </plurals>
+    <plurals name="for_hours">
+        <item quantity="other">trong %1$d giờ qua</item>
+    </plurals>
+    <plurals name="for_days">
+        <item quantity="other">trong %1$d ngày qua</item>
+    </plurals>
+    <string name="bytes_b">%1$s B</string>
+    <string name="bytes_kb">%1$s KB</string>
+    <string name="bytes_mb">%1$s MB</string>
+    <string name="bytes_gb">%1$s GB</string>
+    <plurals name="supported_sample">
+        <item quantity="other">%1$s và %2$d ứng dụng khác</item>
+    </plurals>
+    <string name="state_running">Đang chạy</string>
+    <string name="state_stopped">Đã dừng</string>
+    <string name="state_stopped_last_opened">Đã dừng · mở lần cuối %1$s</string>
+    <string name="state_unknown">Không thấy được</string>
+    <string name="state_disabled">Không theo dõi</string>
+    <string name="state_not_installed">Chưa cài đặt</string>
+    <string name="row_running_data">Đang chạy · %1$s trong 24 giờ</string>
+    <string name="server_line_none">Không có máy chủ · mọi thứ ở lại trên điện thoại này</string>
+    <string name="server_line_needs_https">Không gửi đến %1$s · cần https://</string>
+    <string name="server_line_waiting">Đã ghép nối với %1$s · đang chờ báo cáo đầu tiên</string>
+    <string name="server_line_ok">Báo cáo gần nhất %1$s · gửi mỗi 15 phút</string>
+    <string name="server_line_late">Báo cáo gần nhất %1$s · báo cáo đang trễ</string>
+    <string name="server_line_failing_never">Chưa có báo cáo nào đến được %1$s</string>
+    <string name="server_line_failing">Không có báo cáo nào đến được %1$s %2$s</string>
+    <string name="verdict_one_running">Ứng dụng của bạn đang chạy</string>
+    <plurals name="verdict_all_running">
+        <item quantity="other">Cả %1$d ứng dụng đều đang chạy</item>
+    </plurals>
+    <string name="verdict_none_title">Không theo dõi ứng dụng nào</string>
+    <string name="verdict_none_sub">Mọi ứng dụng đã cài đều đang tắt. Hãy bật lại trong Cài đặt, Ứng dụng cần theo dõi.</string>
+    <plurals name="verdict_stopped_title">
+        <item quantity="other">%1$d/%2$d ứng dụng đã dừng</item>
+    </plurals>
+    <string name="verdict_stopped_sub">Mở một ứng dụng đã dừng thường sẽ khởi động lại nó.</string>
+    <plurals name="verdict_unknown_title">
+        <item quantity="other">%1$d/%2$d ứng dụng đang chạy</item>
+    </plurals>
+    <plurals name="verdict_unknown_sub">
+        <item quantity="other">CashPilot không thấy được %1$d ứng dụng còn lại cho đến khi quyền truy cập được bật lại.</item>
+    </plurals>
+    <string name="verdict_server_sub">Nhưng máy chủ của bạn không nhận được báo cáo từ điện thoại này.</string>
+    <string name="verdict_late_sub">Nhưng không có báo cáo nào được gửi đi %1$s.</string>
+    <string name="verdict_ok_sub">Hiện không có gì cần bạn xử lý.</string>
+    <string name="task_numbered">%1$d. %2$s</string>
+    <string name="task_stopped_title">%1$s đã dừng</string>
+    <string name="task_stopped_body">Mở ứng dụng thường sẽ khởi động lại nó.</string>
+    <string name="task_failing_title">Báo cáo không đến được máy chủ</string>
+    <string name="task_failing_body_never">Chưa có báo cáo nào đến được %1$s. Kiểm tra kết nối sẽ cho biết lý do.</string>
+    <string name="task_failing_body">Không có gì đến được %1$s %2$s. Kiểm tra kết nối sẽ cho biết lý do.</string>
+    <string name="task_late_title">Báo cáo đang trễ</string>
+    <string name="task_late_body">Không có báo cáo nào được gửi đi %1$s. Android trì hoãn tác vụ chạy nền, nhất là khi bật tối ưu hóa pin hoặc không có mạng.</string>
+    <string name="task_https_title">Báo cáo không được gửi</string>
+    <string name="task_https_body">%1$s nằm trên internet công cộng, nên CashPilot chỉ gửi khóa qua https://.</string>
+    <string name="task_notif_title">Quyền truy cập thông báo đang tắt</string>
+    <string name="task_notif_body">CashPilot không biết ứng dụng nào đang chạy cho đến khi quyền này được bật lại.</string>
+    <string name="task_usage_title">Quyền truy cập dữ liệu sử dụng đang tắt</string>
+    <string name="task_usage_body">Không có thời điểm hoạt động gần nhất hay mức dùng dữ liệu cho đến khi quyền này được bật lại.</string>
+    <string name="task_battery_title">Báo cáo có thể đến trễ</string>
+    <string name="task_battery_body">Tối ưu hóa pin đang bật cho CashPilot, nên Android có thể trì hoãn báo cáo khi màn hình tắt.</string>
+    <plurals name="earnings_label">
+        <item quantity="other">Máy chủ của bạn báo cáo, %1$d ngày qua</item>
+    </plurals>
+    <string name="earnings_needs_server">Thêm máy chủ để xem số liệu</string>
+    <string name="earnings_from">Số liệu từ %1$s</string>
+    <string name="shared_footnote">* Chạy trên nhiều thiết bị của bạn. Nhà cung cấp báo một số dư chung cho tài khoản, nên con số này không chỉ của riêng điện thoại này.</string>
+    <string name="no_reading_note">Không có số liệu nghĩa là máy chủ của bạn chưa gửi con số nào cho nhà cung cấp đó. Không phải là 0 đô la.</string>
+    <string name="app_earnings_needs_server">Cần máy chủ</string>
+    <string name="app_earnings_shared">%1$s *</string>
+    <string name="settings_server_none">Mọi thứ ở lại trên điện thoại này · thêm máy chủ để xem số liệu</string>
+    <string name="settings_server_needs_https">Không gửi · địa chỉ này cần https://</string>
+    <string name="settings_server_failing_never">Không đến được · chưa có báo cáo</string>
+    <string name="settings_server_failing">Không đến được · báo cáo gần nhất %1$s</string>
+    <string name="settings_server_late">Báo cáo đang trễ · báo cáo gần nhất %1$s</string>
+    <string name="settings_server_waiting">Đã ghép nối · đang chờ báo cáo đầu tiên</string>
+    <string name="settings_server_ok">Báo cáo mỗi 15 phút · báo cáo gần nhất %1$s</string>
+    <string name="pair_testing_body">Đang gửi một báo cáo đến %1$s.</string>
+    <string name="pair_ok_title">Đã kết nối</string>
+    <string name="pair_ok_body">Máy chủ của bạn đã phản hồi và chấp nhận khóa. Điện thoại này xuất hiện trong Đội máy với tên %1$s.</string>
+    <string name="pair_key_refused_title">Máy chủ đã từ chối khóa API này</string>
+    <string name="pair_key_refused_body">Địa chỉ đúng: máy chủ đã phản hồi. Hãy sao chép lại khóa từ Đội máy → Hiện khóa API.</string>
+    <string name="pair_unreachable_title">Không có phản hồi từ %1$s</string>
+    <string name="pair_unreachable_body">Hãy kiểm tra địa chỉ, và xem điện thoại này có kết nối tới được không: cùng mạng, hoặc qua VPN của bạn.</string>
+    <string name="pair_url_refused_title">Địa chỉ này cần https://</string>
+    <string name="pair_url_refused_body">CashPilot chỉ gửi khóa qua http:// trong mạng của riêng bạn: 192.168.x.x, 10.x.x.x, tên .local hoặc .lan, hoặc Tailscale.</string>
+    <string name="pair_rejected_title">Máy chủ phản hồi bằng một lỗi</string>
+    <string name="pair_rejected_body">Máy chủ kết nối được nhưng không chấp nhận báo cáo. Hãy kiểm tra máy chủ có đang chạy bản phát hành CashPilot mới không.</string>
+    <string name="pair_not_cashpilot_title">%1$s đã phản hồi, nhưng không phải CashPilot</string>
+    <string name="pair_not_cashpilot_body">Có thứ khác đang phản hồi ở địa chỉ này, như trang đăng nhập hoặc một ứng dụng khác. Hãy dùng địa chỉ bạn dùng để mở bảng điều khiển CashPilot.</string>
+    <string name="pair_save_failed_title">Không lưu được thông tin</string>
+    <string name="pair_save_failed_body">Android chưa lưu địa chỉ và khóa, nên chưa có gì được gửi. Hãy thử lại.</string>
+    <plurals name="home_tasks_heading">
+        <item quantity="other">%1$d việc cần bạn xử lý</item>
+    </plurals>
+    <string name="home_all_switched_off">Mọi ứng dụng đã cài đều đang tắt trong Cài đặt.</string>
+    <plurals name="home_other_supported">
+        <item quantity="other">%1$d ứng dụng được hỗ trợ khác</item>
+    </plurals>
+    <string name="detail_stopped">Đã dừng. Mở lần cuối %1$s.</string>
+    <string name="detail_unknown">CashPilot không thấy được ứng dụng này có đang chạy không.</string>
+    <string name="detail_hint">Những ứng dụng này thường dừng khi Android xóa chúng khỏi bộ nhớ. Mở ứng dụng thường sẽ khởi động lại nó.</string>
+    <plurals name="detail_server_reports">
+        <item quantity="other">Máy chủ báo cáo, %1$d ngày qua</item>
+    </plurals>
+    <string name="detail_data_moved">Dữ liệu truyền tải, 24 giờ qua</string>
+    <string name="detail_last_opened">Mở lần cuối</string>
+    <string name="detail_watched">CashPilot theo dõi</string>
+    <string name="blind_title">CashPilot chưa thấy được ứng dụng của bạn</string>
+    <plurals name="blind_body">
+        <item quantity="other">Đã cài %1$d ứng dụng bạn dùng, nhưng Android sẽ không cho CashPilot biết chúng có đang chạy không cho đến khi bạn cho phép hai thứ. Mỗi thứ sẽ giải thích trước những gì nó đọc.</item>
+    </plurals>
+    <string name="no_apps_title">Chưa có ứng dụng được hỗ trợ nào trên điện thoại này</string>
+    <string name="no_apps_body">CashPilot theo dõi các ứng dụng thu nhập thụ động bạn đang dùng, như EarnApp hoặc Grass, và báo cho bạn khi một ứng dụng ngừng chạy. Khi một ứng dụng được cài, nó sẽ tự xuất hiện ở đây.</string>
+    <string name="no_apps_standalone_title">Hoạt động không cần máy chủ</string>
+    <string name="no_apps_standalone_body">Khi dùng riêng, CashPilot cho thấy ứng dụng nào đang chạy, ứng dụng nào đã dừng, và mở chúng giúp bạn. Máy chủ CashPilot bổ sung số liệu thu nhập và liệt kê điện thoại này cùng các máy khác của bạn.</string>
+    <string name="demo_start">Xem bản demo với dữ liệu mẫu</string>
+    <plurals name="no_apps_see_supported">
+        <item quantity="other">Xem %1$d ứng dụng được hỗ trợ</item>
+    </plurals>
+    <string name="supported_title">Ứng dụng được hỗ trợ</string>
+    <string name="supported_intro_all">Các ứng dụng CashPilot có thể theo dõi. Mức chi trả của mỗi ứng dụng tùy thuộc vào nhà cung cấp, kết nối và khu vực của bạn.</string>
+    <string name="supported_intro_missing">CashPilot có thể theo dõi các ứng dụng này nếu bạn cài chúng. Mức chi trả của mỗi ứng dụng tùy thuộc vào nhà cung cấp, kết nối và khu vực của bạn.</string>
+    <string name="supported_referral_note">Các liên kết có nhãn Giới thiệu chứa mã giới thiệu của CashPilot, giúp hỗ trợ việc phát triển CashPilot. Các liên kết khác dẫn đến cửa hàng ứng dụng.</string>
+    <string name="supported_installed">Đã cài đặt</string>
+    <string name="supported_referral">Giới thiệu · trang đăng ký của nhà cung cấp</string>
+    <string name="supported_store">Trang cửa hàng ứng dụng</string>
+    <string name="demo_banner">Demo · dữ liệu mẫu, không có gì ở đây là thật</string>
+    <string name="onboard_step">Bước %1$d/%2$d</string>
+    <string name="welcome_title">Biết khi nào ứng dụng kiếm tiền ngừng chạy</string>
+    <string name="welcome_lead">CashPilot kiểm tra các ứng dụng thu nhập thụ động trên điện thoại này, cho bạn biết ứng dụng nào đã dừng và cách khởi động lại.</string>
+    <string name="welcome_start">Bắt đầu</string>
+    <string name="welcome_fact_running_title">Ứng dụng nào đang chạy</string>
+    <string name="welcome_fact_running_body">%1$s, được kiểm tra mỗi khi bạn mở CashPilot.</string>
+    <string name="welcome_fact_stops_title">Phải làm gì khi một ứng dụng dừng</string>
+    <string name="welcome_fact_stops_body">Một lần chạm sẽ mở ứng dụng để bạn khởi động lại.</string>
+    <string name="welcome_fact_server_title">Số liệu từ máy chủ của bạn, nếu có</string>
+    <string name="welcome_fact_server_body">Máy chủ CashPilot báo cáo những gì tài khoản của mỗi ứng dụng hiển thị. Không bắt buộc; báo cáo được gửi mỗi 15 phút.</string>
+    <string name="welcome_fact_private_title">Không có gì rời khỏi điện thoại này</string>
+    <string name="welcome_fact_private_body">Ngoại trừ đến máy chủ của riêng bạn, nếu bạn thêm. Không quảng cáo, không theo dõi.</string>
+    <string name="permissions_title">Cho phép CashPilot thấy ứng dụng của bạn</string>
+    <string name="permissions_lead">Android ẩn trạng thái của các ứng dụng khác. Hai công tắc trong cài đặt hệ thống sẽ khắc phục điều đó; bạn sẽ quay lại ngay đây.</string>
+    <string name="permissions_without">Thiếu cả hai, CashPilot không phân biệt được ứng dụng đang chạy với ứng dụng đã dừng. Bạn có thể cho phép sau trong Cài đặt.</string>
+    <string name="permissions_continue">Tiếp tục</string>
+    <string name="permissions_continue_without">Tiếp tục mà không cấp</string>
+    <plurals name="permissions_notif_why">
+        <item quantity="other">Các ứng dụng này luôn hiện một thông báo khi đang chạy. CashPilot kiểm tra thông báo đó có hiện hay không, chỉ với %1$d ứng dụng được hỗ trợ.</item>
+    </plurals>
+    <string name="permissions_notif_not_read">Không bao giờ đọc nội dung thông báo. Bạn sẽ thấy chính xác những gì nó đọc trước khi Android hỏi.</string>
+    <string name="permissions_usage_why">Cho biết lần cuối mỗi ứng dụng được hỗ trợ chạy và lượng dữ liệu nó truyền trong 24 giờ qua, cho thấy ứng dụng đang hoạt động.</string>
+    <string name="permissions_usage_not_read">Không bao giờ xem các ứng dụng hay trang web khác. Bạn sẽ thấy trước chính xác những gì nó đọc.</string>
+    <string name="permissions_battery_why">CashPilot gửi báo cáo mỗi 15 phút. Khi bật tối ưu hóa pin, Android có thể trì hoãn các báo cáo đó khi màn hình tắt.</string>
+    <string name="permissions_battery_not_read">Không bắt buộc. Mở danh sách pin của Android: chọn Tất cả ứng dụng, rồi CashPilot, rồi Không tối ưu hóa.</string>
+    <string name="server_address">Địa chỉ máy chủ</string>
+    <string name="server_address_refused">Địa chỉ này nằm trên internet công cộng, nên cần https://. CashPilot không bao giờ gửi khóa qua http:// thông thường đến đó.</string>
+    <string name="server_address_cleartext">http:// thông thường trong mạng của riêng bạn: khóa và danh sách ứng dụng được truyền không mã hóa trong mạng đó.</string>
+    <string name="api_key">Khóa API</string>
+    <string name="api_key_where">Trên máy chủ của bạn: Đội máy → Hiện khóa API. Chỉ được lưu trên điện thoại này.</string>
+    <string name="server_address_hint">Hãy dùng https://. http:// thông thường chỉ hoạt động với địa chỉ trong mạng của riêng bạn, như 192.168.x.x hoặc tên .local hay Tailscale.</string>
+    <string name="server_title">Kết nối máy chủ của bạn</string>
+    <string name="server_lead">Không bắt buộc. Không có máy chủ, bạn vẫn thấy ứng dụng nào đang chạy và ứng dụng nào đã dừng. Máy chủ bổ sung số liệu mà tài khoản nhà cung cấp hiển thị, và liệt kê điện thoại này trong đội máy của bạn.</string>
+    <string name="server_finish">Hoàn tất</string>
+    <string name="server_skip">Dùng không cần máy chủ</string>
+    <string name="disclose_title_notifications">Trước khi bạn bật quyền truy cập thông báo</string>
+    <string name="disclose_title_usage">Trước khi bạn bật quyền truy cập dữ liệu sử dụng</string>
+    <string name="disclose_lead">Tiếp theo Android sẽ mở phần cài đặt của nó. Đây là những gì CashPilot làm với quyền này.</string>
+    <string name="disclose_reads">CashPilot đọc</string>
+    <string name="disclose_never">Không bao giờ đọc</string>
+    <plurals name="disclose_notif_reads">
+        <item quantity="other">Chỉ việc một trong %1$d ứng dụng dưới đây có đang hiện thông báo liên tục ngay lúc này hay không. Thông báo đó là cách các ứng dụng này cho biết chúng đang chạy.</item>
+    </plurals>
+    <string name="disclose_notif_never">Nội dung của bất kỳ thông báo nào, và mọi thứ từ bất kỳ ứng dụng nào khác. Chỉ hai thông tin được gửi đi, và chỉ đến máy chủ của riêng bạn nếu bạn thêm: mỗi ứng dụng này có đang hiện thông báo đó không, và nó có đang chạy không.</string>
+    <plurals name="disclose_usage_reads">
+        <item quantity="other">Chỉ với %1$d ứng dụng dưới đây: lần cuối mỗi ứng dụng được dùng, và lượng dữ liệu nó đã gửi và nhận trong 24 giờ qua.</item>
+    </plurals>
+    <string name="disclose_usage_never">Bạn dùng những ứng dụng nào khác, truy cập những trang web nào, hay bất kỳ ứng dụng nào làm gì. Kết quả ở lại trên điện thoại này, trừ khi bạn thêm máy chủ của riêng mình.</string>
+    <string name="disclose_continue">Tiếp tục đến cài đặt Android</string>
+    <string name="disclose_not_now">Để sau</string>
+    <string name="settings_section_server">Máy chủ</string>
+    <string name="settings_no_server">Không có máy chủ</string>
+    <string name="settings_key_stored">%1$s · chỉ lưu trên điện thoại này</string>
+    <string name="settings_test_hint">Gửi một báo cáo ngay và cho thấy máy chủ đã trả lời gì.</string>
+    <string name="settings_section_phone">Điện thoại này</string>
+    <string name="settings_notif_off">Tắt · không thấy ứng dụng đang chạy</string>
+    <string name="settings_usage_off">Tắt · không có thời điểm hoạt động gần nhất</string>
+    <string name="settings_battery_off">Tắt cho CashPilot</string>
+    <string name="settings_battery_on">Bật · báo cáo có thể đến trễ</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="language_system">Mặc định của hệ thống</string>
+    <string name="language_system_body">Theo ngôn ngữ của điện thoại</string>
+    <string name="settings_section_apps">Ứng dụng cần theo dõi</string>
+    <plurals name="settings_all_supported">
+        <item quantity="other">Cả %1$d ứng dụng được hỗ trợ</item>
+    </plurals>
+    <string name="settings_installed_count">Đã cài: %1$d · Chưa cài: %2$d</string>
+    <string name="settings_section_about">Thông tin</string>
+    <string name="settings_about_app">CashPilot cho Android %1$s</string>
+    <string name="settings_about_source">Mã nguồn và giấy phép (GPL-3.0)</string>
+    <string name="settings_about_server">Máy chủ CashPilot</string>
+    <string name="settings_about_server_body">Bảng điều khiển tự lưu trữ mà ứng dụng này gửi báo cáo đến</string>
+    <string name="settings_about_sponsor">Tài trợ cho dự án</string>
+    <string name="settings_demo">Chế độ demo</string>
+    <string name="settings_demo_body">Hiển thị các màn hình với dữ liệu mẫu</string>
+</resources>
